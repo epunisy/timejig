@@ -288,7 +288,20 @@ export default function Main({ data, setData, onGoExport }) {
           )}
         </div>
         <div className="tj-action-row">
-          <img src="/logo.png" alt="TimeJig" className="tj-logo-top" />
+          <svg className="tj-logo-top" viewBox="0 0 130 30" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="22" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#1A1A1A" letterSpacing="-1">T</text>
+            <text x="14" y="22" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#1A1A1A" letterSpacing="-1">i</text>
+            <rect x="17" y="3" width="3.5" height="3.5" fill="#D5D5D0"/>
+            <rect x="17" y="8" width="3.5" height="3.5" fill="#A5A5A0"/>
+            <rect x="17" y="13" width="3.5" height="3.5" fill="#1A1A1A"/>
+            <text x="22" y="22" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#1A1A1A" letterSpacing="-1">me</text>
+            <text x="58" y="26" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#5B8FE0" letterSpacing="-1">J</text>
+            <text x="71" y="26" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#5B8FE0" letterSpacing="-1">i</text>
+            <rect x="74" y="7" width="3.5" height="3.5" fill="#D5E3F5"/>
+            <rect x="74" y="12" width="3.5" height="3.5" fill="#9DBFE8"/>
+            <rect x="74" y="17" width="3.5" height="3.5" fill="#5B8FE0"/>
+            <text x="79" y="26" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#5B8FE0" letterSpacing="-1">g</text>
+          </svg> />
           <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
           <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>⚙</button>
         </div>
