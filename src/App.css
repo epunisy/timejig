@@ -43,7 +43,7 @@
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   text-align: center;
 }
 
@@ -130,26 +130,22 @@
   gap: 3px;
 }
 
-/* 파스텔 모드 활성 탭 */
 .tj-tab.active.accent-pastel {
   background: #B5D4F4;
   color: #1a2a3a;
 }
 
-/* 흑백 모드 활성 탭 */
 .tj-tab.active.accent-mono {
   background: #222;
   color: #fff;
 }
 
-/* 없음 모드 활성 탭 */
 .tj-tab.active.accent-none {
   background: transparent;
   color: #222;
   border: 0.5px solid #888;
 }
 
-/* 비활성 탭은 어떤 모드든 동일 */
 .tj-tab:not(.active) {
   background: transparent;
   color: #888;
@@ -173,11 +169,9 @@
   text-align: center;
 }
 
-.tj-tab .tab-btn:hover {
-  opacity: 1;
-}
+.tj-tab .tab-btn:hover { opacity: 1; }
 
-/* + 버튼 — 진짜 평평 */
+/* + 버튼 — 평평 */
 .tj-tab-add {
   background: transparent;
   color: #999;
@@ -192,11 +186,8 @@
 
 .tj-tab-add:hover { color: #222; }
 
-/* 우측 액션 버튼들 — 진짜 평평 */
-.tj-action-row { 
-  display: flex; 
-  gap: 4px; 
-}
+/* 우측 액션 버튼들 — 평평 */
+.tj-action-row { display: flex; gap: 4px; }
 
 .tj-cta,
 .tj-icon-btn {
@@ -214,39 +205,6 @@
 
 .tj-cta:hover,
 .tj-icon-btn:hover { color: #000; }
-
-/* 인라인 시간표 추가 입력 */
-.tj-inline-add {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.tj-inline-add input {
-  padding: 6px 8px;
-  border: 0.5px solid #d8d8d8;
-  font-size: 13px;
-  font-family: inherit;
-  background: #fff;
-  color: #222;
-  width: 100px;
-  min-width: 0;
-}
-
-.tj-inline-add button {
-  padding: 6px 9px;
-  background: #222;
-  color: #fff;
-  border: none;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.tj-inline-add button.cancel {
-  background: transparent;
-  color: #666;
-  border: 0.5px solid #d8d8d8;
-}
 
 /* ===== 메인 레이아웃 ===== */
 .tj-layout {
@@ -372,7 +330,7 @@
   line-height: 1.2;
 }
 
-/* ===== 과목 팔레트 ===== */
+/* ===== 과목 팔레트 — 컴퓨터/폰 모두 정사각형 카드 ===== */
 .tj-palette {
   background: #fff;
   border: 0.5px solid #d8d8d8;
@@ -392,7 +350,7 @@
   font-weight: 500;
 }
 
-/* 팔레트 + 버튼도 같은 평평 스타일 */
+/* 팔레트 + 버튼 — 평평 */
 .tj-add-btn {
   background: transparent;
   color: #999;
@@ -407,40 +365,34 @@
 
 .tj-add-btn:hover { color: #222; }
 
+/* 모든 화면: 가로 스크롤 + 정사각형 카드 */
 .tj-pal-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 6px;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 폰: 정사각형 카드 가로 스크롤 */
+/* 폰에서는 가로 스크롤 */
 @media (max-width: 768px) {
   .tj-pal-list {
-    flex-direction: row;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    gap: 6px;
     padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
   }
-  .tj-pal-item {
-    flex-shrink: 0;
-    width: 64px;
-    height: 64px;
-    flex-direction: column;
-    gap: 2px;
-    padding: 4px;
-    justify-content: center;
-    align-items: center;
-  }
-  .tj-pal-name { font-size: 12px; white-space: nowrap; }
-  .tj-pal-dur { font-size: 10px; }
 }
 
 .tj-pal-item {
-  display: flex;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
+  display: flex;
   border: 0.5px solid #aaa;
   background: #fff;
   color: #222;
@@ -459,12 +411,13 @@
 }
 
 .tj-pal-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tj-pal-dur {
-  font-size: 11px;
+  font-size: 10px;
   color: #666;
 }
 
@@ -475,6 +428,7 @@
   padding: 16px 0;
   line-height: 1.6;
   white-space: pre-line;
+  width: 100%;
 }
 
 /* ===== 드래그 ===== */
