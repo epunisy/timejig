@@ -22,7 +22,6 @@ export default function Main({ data, setData, onGoExport }) {
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
   
-  // 색띠 모드에 따른 탭 클래스
   const accentClass = 'accent-' + data.config.accent;
   
   function updateTimetable(updater) {
@@ -68,7 +67,7 @@ export default function Main({ data, setData, onGoExport }) {
     const tt = data.timetables.find(t => t.id === id);
     setConfirmDialog({
       title: '시간표 삭제',
-      message: `${tt.name} 시간표를 삭제할까요?<br><span style="color:#888; font-size:12px;">배치된 블록도 함께 사라집니다.</span>`,
+      message: `${tt.name} 시간표를 삭제할까요?<br><span style="color:#888; font-size:11px;">배치된 블록도 함께 사라집니다.</span>`,
       onYes: () => {
         const newTTs = data.timetables.filter(t => t.id !== id);
         setData({
@@ -96,7 +95,7 @@ export default function Main({ data, setData, onGoExport }) {
     setConfirmDialog({
       title: '과목 삭제',
       message: `${s.name} 과목을 삭제할까요?` + 
-        (placedCount > 0 ? `<br><span style="color:#A32D2D; font-size:12px;">배치된 ${placedCount}개의 블록도 사라집니다.</span>` : ''),
+        (placedCount > 0 ? `<br><span style="color:#C77575; font-size:11px;">배치된 ${placedCount}개의 블록도 사라집니다.</span>` : ''),
       onYes: () => {
         setData({
           ...data,
@@ -246,8 +245,8 @@ export default function Main({ data, setData, onGoExport }) {
           )}
         </div>
         <div className="tj-action-row">
-          <button className="tj-cta" onClick={onGoExport}>🖼 배경</button>
-          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>⚙ 설정</button>
+          <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
+          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>설정</button>
         </div>
       </div>
       
