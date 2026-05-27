@@ -23,8 +23,8 @@ export default function Tutorial({ onClose }) {
         <div className="tj-tutorial-step">
           <div className="tj-tutorial-num">3</div>
           <div className="tj-tutorial-text">
-            <b>카드를 길게 누르면 편집</b>
-            <span className="sub">과목 카드를 0.5초 이상 누르면 편집 창이 떠요. 이름·시간·색·삭제·복제 가능.</span>
+            <b>과목 카드를 길게 누르면 편집</b>
+            <span className="sub">카드를 0.5초 이상 누르면 편집 창. 이름·시간·색·삭제·복제 가능.</span>
           </div>
         </div>
         
@@ -39,8 +39,16 @@ export default function Tutorial({ onClose }) {
         <div className="tj-tutorial-step">
           <div className="tj-tutorial-num">5</div>
           <div className="tj-tutorial-text">
-            <b>시간표 여러 개 관리</b>
-            <span className="sub">상단 + 로 새 시간표, ⎘ 로 복제. 설정에서 요일·시간·색띠 변경.</span>
+            <b>시간표 관리 — 이름 옆 아이콘</b>
+            <span className="sub">✎ 이름 수정 · ⧉ 시간표 복제 · × 삭제. 상단 + 로 새 시간표 추가.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">6</div>
+          <div className="tj-tutorial-text">
+            <b>전체 설정</b>
+            <span className="sub">우측 ⚙ 톱니바퀴 → 요일 범위, 시간 범위, 색띠 변경.</span>
           </div>
         </div>
         
