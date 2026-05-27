@@ -1,134 +1,65 @@
-import { useRef, useEffect } from 'react';
-import { t } from '../i18n';
-import { getAccents } from '../App';
-
-const LONG_PRESS_MS = 500;
-const MOVE_THRESHOLD = 8;
-
-export default function Palette({
-  config,
-  subjects,
-  onAddSubject,
-  onEditSubject,
-  onDragStart,
-}) {
-  const accents = getAccents(config.accent);
-  const itemRefs = useRef({});
-  
-  useEffect(() => {
-    const cleanups = [];
-    
-    subjects.forEach(subject => {
-      const el = itemRefs.current[subject.id];
-      if (!el) return;
-      
-      let longPressTimer = null;
-      let startX = 0, startY = 0;
-      let triggered = false;
-      
-      function getPoint(e) {
-        if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        if (e.changedTouches && e.changedTouches[0]) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
-        return { x: e.clientX, y: e.clientY };
-      }
-      
-      function startLongPress() {
-        if (triggered) return;
-        triggered = true;
-        el.classList.add('pressed');
-        onEditSubject(subject.id);
-      }
-      
-      function handleStart(e) {
-        if (!subject.active) return;
-        e.preventDefault();
-        const p = getPoint(e);
-        startX = p.x;
-        startY = p.y;
-        triggered = false;
-        
-        longPressTimer = setTimeout(startLongPress, LONG_PRESS_MS);
-        
-        document.addEventListener('mousemove', handleMoveDuringPress);
-        document.addEventListener('mouseup', handleEndDuringPress);
-        document.addEventListener('touchmove', handleMoveDuringPress, { passive: false });
-        document.addEventListener('touchend', handleEndDuringPress);
-        document.addEventListener('touchcancel', handleEndDuringPress);
-      }
-      
-      function handleMoveDuringPress(e) {
-        if (triggered) return;
-        const p = getPoint(e);
-        const dx = Math.abs(p.x - startX);
-        const dy = Math.abs(p.y - startY);
-        
-        if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD) {
-          clearTimeout(longPressTimer);
-          triggered = true;
-          cleanupListeners();
-          onDragStart(subject);
-        }
-      }
-      
-      function handleEndDuringPress() {
-        if (longPressTimer) clearTimeout(longPressTimer);
-        cleanupListeners();
-        el.classList.remove('pressed');
-      }
-      
-      function cleanupListeners() {
-        document.removeEventListener('mousemove', handleMoveDuringPress);
-        document.removeEventListener('mouseup', handleEndDuringPress);
-        document.removeEventListener('touchmove', handleMoveDuringPress);
-        document.removeEventListener('touchend', handleEndDuringPress);
-        document.removeEventListener('touchcancel', handleEndDuringPress);
-      }
-      
-      el.addEventListener('mousedown', handleStart);
-      el.addEventListener('touchstart', handleStart, { passive: false });
-      
-      cleanups.push(() => {
-        el.removeEventListener('mousedown', handleStart);
-        el.removeEventListener('touchstart', handleStart);
-        cleanupListeners();
-        if (longPressTimer) clearTimeout(longPressTimer);
-      });
-    });
-    
-    return () => cleanups.forEach(fn => fn());
-  }, [subjects, onDragStart, onEditSubject]);
-  
+export default function Tutorial({ onClose }) {
   return (
-    <div className="tj-palette">
-      <div className="tj-pal-head">
-        <h3>{t('subjects')}</h3>
-        <button className="tj-add-btn" onClick={onAddSubject}>+</button>
-      </div>
-      <div className="tj-pal-list">
-        {subjects.length === 0 ? (
-          <div className="tj-empty">{t('emptySubjects')}</div>
-        ) : (
-          subjects.map(s => {
-            const style = {};
-            let className = 'tj-pal-item';
-            if (!s.active) className += ' inactive';
-            if (accents) {
-              style.borderLeftColor = accents[s.colorIndex % accents.length];
-              className += ' with-accent';
-            }
-            return (
-              <div 
-                key={s.id} 
-                className={className} 
-                style={style}
-                ref={(el) => { if (el) itemRefs.current[s.id] = el; }}
-              >
-                <div className="tj-pal-name">{s.name}</div>
-                <div className="tj-pal-dur">{s.duration}분</div>
-              </div>
-            );
-          })
-        )}
+    <div className="tj-tutorial-bg" onClick={() => onClose(false)}>
+      <div className="tj-tutorial" onClick={(e) => e.stopPropagation()}>
+        <h3>👋 시작하기 전에</h3>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">1</div>
+          <div className="tj-tutorial-text">
+            <b>과목 추가</b>
+            <span className="sub">우측 + 버튼으로 새 과목을 만들어요. 기본으로 국어, 영어, 수학이 있어요.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">2</div>
+          <div className="tj-tutorial-text">
+            <b>드래그로 시간표 배치</b>
+            <span className="sub">과목 카드를 끌어서 시간표로 놓으면 10분 단위로 자동 정렬돼요.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">3</div>
+          <div className="tj-tutorial-text">
+            <b>과목 카드를 길게 누르면 편집</b>
+            <span className="sub">카드를 0.5초 이상 누르면 편집 창. 이름·시간·색·삭제·복제 가능.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">4</div>
+          <div className="tj-tutorial-text">
+            <b>이동·삭제</b>
+            <span className="sub">시간표에 놓은 블록도 끌어서 옮길 수 있어요. 하단 휴지통으로 끌면 삭제.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">5</div>
+          <div className="tj-tutorial-text">
+            <b>시간표 관리 — 이름 옆 아이콘</b>
+            <span className="sub">✎ 이름 수정 · ⧉ 시간표 복제 · × 삭제. 상단 + 로 새 시간표 추가.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">6</div>
+          <div className="tj-tutorial-text">
+            <b>전체 설정</b>
+            <span className="sub">우측 ⚙ 톱니바퀴 → 요일 범위, 시간 범위, 색띠 변경.</span>
+          </div>
+        </div>
+        
+        <div className="tj-tutorial-actions">
+          <button className="skip" onClick={() => onClose(true)}>
+            다시 보지 않기
+          </button>
+          <button className="tj-cta" onClick={() => onClose(false)}>
+            알겠어요
+          </button>
+        </div>
       </div>
     </div>
   );

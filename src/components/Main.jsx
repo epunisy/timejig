@@ -16,8 +16,11 @@ export default function Main({ data, setData, onGoExport }) {
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [showTutorial, setShowTutorial] = useState(!data.tutorialDone);
   const [addingTT, setAddingTT] = useState(false);
+  const [renamingTT, setRenamingTT] = useState(null); // 이름 수정 중인 시간표 id
   const newTTInputRef = useRef(null);
+  const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
+  const renameComposingRef = useRef(false);
   
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
@@ -43,6 +46,18 @@ export default function Main({ data, setData, onGoExport }) {
       activeTT: newId,
     });
     setAddingTT(false);
+  }
+  
+  function handleRenameTimetable(id) {
+    const name = renameInputRef.current?.value.trim();
+    if (!name) { setRenamingTT(null); return; }
+    setData({
+      ...data,
+      timetables: data.timetables.map(t =>
+        t.id === id ? { ...t, name } : t
+      ),
+    });
+    setRenamingTT(null);
   }
   
   function handleDuplicate(id) {
@@ -200,6 +215,30 @@ export default function Main({ data, setData, onGoExport }) {
             const isActive = tt.id === data.activeTT;
             let cls = 'tj-tab';
             if (isActive) cls += ' active ' + accentClass;
+            
+            // 이름 수정 모드
+            if (renamingTT === tt.id) {
+              return (
+                <span key={tt.id} className="tj-inline-add">
+                  <input
+                    ref={renameInputRef}
+                    type="text"
+                    defaultValue={tt.name}
+                    autoFocus
+                    autoComplete="off"
+                    onCompositionStart={() => { renameComposingRef.current = true; }}
+                    onCompositionEnd={() => { renameComposingRef.current = false; }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !renameComposingRef.current) handleRenameTimetable(tt.id);
+                      if (e.key === 'Escape') setRenamingTT(null);
+                    }}
+                  />
+                  <button onClick={() => handleRenameTimetable(tt.id)}>저장</button>
+                  <button className="cancel" onClick={() => setRenamingTT(null)}>취소</button>
+                </span>
+              );
+            }
+            
             return (
               <div
                 key={tt.id}
@@ -209,9 +248,14 @@ export default function Main({ data, setData, onGoExport }) {
                 <span className="tab-name">{tt.name}</span>
                 <span 
                   className="tab-btn" 
+                  title="이름 수정"
+                  onClick={(e) => { e.stopPropagation(); setRenamingTT(tt.id); }}
+                >✎</span>
+                <span 
+                  className="tab-btn" 
                   title="복제"
                   onClick={(e) => { e.stopPropagation(); handleDuplicate(tt.id); }}
-                >복제</span>
+                >⧉</span>
                 {data.timetables.length > 1 && (
                   <span 
                     className="tab-btn"
