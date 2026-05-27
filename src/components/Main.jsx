@@ -301,7 +301,7 @@ export default function Main({ data, setData, onGoExport }) {
             <rect x="74" y="12" width="3.5" height="3.5" fill="#9DBFE8"/>
             <rect x="74" y="17" width="3.5" height="3.5" fill="#5B8FE0"/>
             <text x="79" y="26" fontFamily="-apple-system, 'Apple SD Gothic Neo', sans-serif" fontSize="22" fontWeight="900" fill="#5B8FE0" letterSpacing="-1">g</text>
-          </svg> />
+          </svg>
           <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
           <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>⚙</button>
         </div>
