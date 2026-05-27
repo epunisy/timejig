@@ -125,7 +125,7 @@ html, body {
   min-width: 0;
 }
 
-/* ===== 시간표 탭 — 색띠 모드별 ===== */
+/* 시간표 탭 — 색띠 모드별 */
 .tj-tab {
   padding: 5px 7px 5px 9px;
   font-size: 12px;
@@ -136,27 +136,10 @@ html, body {
   gap: 3px;
 }
 
-.tj-tab.active.accent-pastel {
-  background: #B5D4F4;
-  color: #1a2a3a;
-}
-
-.tj-tab.active.accent-mono {
-  background: #222;
-  color: #fff;
-}
-
-.tj-tab.active.accent-none {
-  background: transparent;
-  color: #222;
-  border: 0.5px solid #888;
-}
-
-.tj-tab:not(.active) {
-  background: transparent;
-  color: #888;
-  border: 0.5px solid #d8d8d8;
-}
+.tj-tab.active.accent-pastel { background: #B5D4F4; color: #1a2a3a; }
+.tj-tab.active.accent-mono { background: #222; color: #fff; }
+.tj-tab.active.accent-none { background: transparent; color: #222; border: 0.5px solid #888; }
+.tj-tab:not(.active) { background: transparent; color: #888; border: 0.5px solid #d8d8d8; }
 
 .tj-tab .tab-name {
   padding-right: 3px;
@@ -192,11 +175,42 @@ html, body {
 
 .tj-tab-add:hover { color: #222; }
 
-/* 우측 액션 버튼들 — 평평, "모바일 배경화면" 작게 */
+.tj-inline-add {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tj-inline-add input {
+  padding: 6px 8px;
+  border: 0.5px solid #d8d8d8;
+  font-size: 12px;
+  font-family: inherit;
+  background: #fff;
+  color: #222;
+  width: 100px;
+  min-width: 0;
+}
+
+.tj-inline-add button {
+  padding: 6px 9px;
+  background: #222;
+  color: #fff;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.tj-inline-add button.cancel {
+  background: transparent;
+  color: #666;
+  border: 0.5px solid #d8d8d8;
+}
+
+/* 우측 액션 버튼 — 평평, 작은 글씨 */
 .tj-action-row { display: flex; gap: 6px; align-items: center; }
 
-.tj-cta,
-.tj-icon-btn {
+.tj-cta, .tj-icon-btn {
   background: transparent;
   border: none;
   color: #666;
@@ -209,8 +223,7 @@ html, body {
   gap: 3px;
 }
 
-.tj-cta:hover,
-.tj-icon-btn:hover { color: #000; }
+.tj-cta:hover, .tj-icon-btn:hover { color: #000; }
 
 /* ===== 메인 레이아웃 ===== */
 .tj-layout {
@@ -227,7 +240,7 @@ html, body {
   }
 }
 
-/* ===== 시간표 그리드 ===== */
+/* ===== 시간표 ===== */
 .tj-grid {
   background: #fff;
   border: 0.5px solid #d8d8d8;
@@ -239,10 +252,7 @@ html, body {
   touch-action: none;
 }
 
-.tj-grid-header,
-.tj-grid-body {
-  max-width: 100%;
-}
+.tj-grid-header, .tj-grid-body { max-width: 100%; }
 
 .tj-grid-header {
   display: grid;
@@ -329,20 +339,10 @@ html, body {
   padding-left: 2px;
 }
 
-.tj-block .nm {
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 1.2;
-}
+.tj-block .nm { font-weight: 500; font-size: 10px; line-height: 1.2; }
+.tj-block .tm { font-size: 8px; color: #666; margin-top: 1px; line-height: 1.2; }
 
-.tj-block .tm {
-  font-size: 8px;
-  color: #666;
-  margin-top: 1px;
-  line-height: 1.2;
-}
-
-/* ===== 과목 팔레트 — 정사각형 카드 (모든 화면) ===== */
+/* ===== 과목 팔레트 — 정사각형 카드 ===== */
 .tj-palette {
   background: #fff;
   border: 0.5px solid #d8d8d8;
@@ -356,11 +356,7 @@ html, body {
   margin-bottom: 7px;
 }
 
-.tj-pal-head h3 {
-  margin: 0;
-  font-size: 11px;
-  font-weight: 500;
-}
+.tj-pal-head h3 { margin: 0; font-size: 11px; font-weight: 500; }
 
 .tj-add-btn {
   background: transparent;
@@ -376,13 +372,11 @@ html, body {
 
 .tj-add-btn:hover { color: #222; }
 
-/* 정사각형 카드 — 모든 화면 동일 */
 .tj-pal-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 6px;
-  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 768px) {
@@ -390,6 +384,7 @@ html, body {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -420,16 +415,8 @@ html, body {
   border-color: #222;
 }
 
-.tj-pal-name {
-  font-size: 11px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.tj-pal-dur {
-  font-size: 9px;
-  color: #666;
-}
+.tj-pal-name { font-size: 11px; font-weight: 500; white-space: nowrap; }
+.tj-pal-dur { font-size: 9px; color: #666; }
 
 .tj-empty {
   font-size: 11px;
@@ -501,7 +488,7 @@ html, body {
   transform: scale(1.02);
 }
 
-/* ===== 모달 공통 ===== */
+/* ===== 모달 ===== */
 .tj-modal-bg {
   position: fixed;
   inset: 0;
@@ -528,11 +515,7 @@ html, body {
 
 .tj-modal.lg { width: 420px; }
 
-.tj-modal h3 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-}
+.tj-modal h3 { margin: 0; font-size: 13px; font-weight: 500; }
 
 .tj-modal label {
   display: flex;
@@ -542,8 +525,7 @@ html, body {
   color: #666;
 }
 
-.tj-modal input,
-.tj-modal select {
+.tj-modal input, .tj-modal select {
   padding: 7px 9px;
   border: 0.5px solid #d8d8d8;
   font-size: 13px;
@@ -552,7 +534,7 @@ html, body {
   color: #222;
 }
 
-/* 드롭다운 옵션 가운데 정렬 */
+/* 드롭다운 가운데 정렬 */
 .tj-modal select {
   text-align: center;
   text-align-last: center;
@@ -562,8 +544,7 @@ html, body {
   text-align: center;
 }
 
-.tj-modal input:focus,
-.tj-modal select:focus {
+.tj-modal input:focus, .tj-modal select:focus {
   outline: none;
   border-color: #378ADD;
 }
@@ -592,7 +573,7 @@ html, body {
   border-color: #222;
 }
 
-/* 삭제 버튼 — 옅은 레드 */
+/* 삭제 — 옅은 레드 */
 .tj-modal-actions button.danger {
   color: #C77575;
   border-color: #E8A5A5;
@@ -693,12 +674,7 @@ html, body {
   min-width: 20px;
 }
 
-.tj-tutorial-text {
-  font-size: 12px;
-  line-height: 1.5;
-  color: #333;
-}
-
+.tj-tutorial-text { font-size: 12px; line-height: 1.5; color: #333; }
 .tj-tutorial-text b { color: #000; font-weight: 500; font-size: 12px; }
 .tj-tutorial-text .sub { color: #888; display: block; margin-top: 2px; font-size: 11px; }
 

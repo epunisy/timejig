@@ -7,8 +7,6 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 
-function pad(n) { return String(n).padStart(2, '0'); }
-
 export default function Main({ data, setData, onGoExport }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
@@ -23,6 +21,8 @@ export default function Main({ data, setData, onGoExport }) {
   
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
+  
+  const accentClass = 'accent-' + data.config.accent;
   
   function updateTimetable(updater) {
     setData({
@@ -66,8 +66,8 @@ export default function Main({ data, setData, onGoExport }) {
   function handleDeleteTimetable(id) {
     const tt = data.timetables.find(t => t.id === id);
     setConfirmDialog({
-      title: t('deleteTimetable'),
-      message: `${t('timetableDeleteConfirm', tt.name)}<br><span style="color:#888; font-size:12px;">${t('timetableDeleteWarn')}</span>`,
+      title: '시간표 삭제',
+      message: `${tt.name} 시간표를 삭제할까요?<br><span style="color:#888; font-size:11px;">배치된 블록도 함께 사라집니다.</span>`,
       onYes: () => {
         const newTTs = data.timetables.filter(t => t.id !== id);
         setData({
@@ -89,22 +89,13 @@ export default function Main({ data, setData, onGoExport }) {
     setShowSubjectModal(true);
   }
   
-  function handleToggleSubject(id) {
-    setData({
-      ...data,
-      subjects: data.subjects.map(s =>
-        s.id === id ? { ...s, active: !s.active } : s
-      ),
-    });
-  }
-  
   function handleDeleteSubject(id) {
     const s = data.subjects.find(x => x.id === id);
     const placedCount = activeTT.blocks.filter(b => b.subjectId === id).length;
     setConfirmDialog({
-      title: t('delete'),
-      message: t('subjectDeleteConfirm', s.name) + 
-        (placedCount > 0 ? `<br><span style="color:#A32D2D; font-size:12px;">${t('subjectDeleteWarn', placedCount)}</span>` : ''),
+      title: '과목 삭제',
+      message: `${s.name} 과목을 삭제할까요?` + 
+        (placedCount > 0 ? `<br><span style="color:#C77575; font-size:11px;">배치된 ${placedCount}개의 블록도 사라집니다.</span>` : ''),
       onYes: () => {
         setData({
           ...data,
@@ -136,6 +127,20 @@ export default function Main({ data, setData, onGoExport }) {
         }],
       });
     }
+    setShowSubjectModal(false);
+  }
+  
+  function handleSubjectDuplicate(subjectData) {
+    setData({
+      ...data,
+      subjects: [...data.subjects, {
+        id: Date.now(),
+        name: subjectData.name + ' 복사본',
+        duration: subjectData.duration,
+        colorIndex: subjectData.colorIndex,
+        active: true,
+      }],
+    });
     setShowSubjectModal(false);
   }
   
@@ -191,33 +196,38 @@ export default function Main({ data, setData, onGoExport }) {
     <div className="tj-app">
       <div className="tj-topbar">
         <div className="tj-tabs">
-          {data.timetables.map(tt => (
-            <div
-              key={tt.id}
-              className={'tj-tab' + (tt.id === data.activeTT ? ' active' : '')}
-              onClick={() => setData({ ...data, activeTT: tt.id })}
-            >
-              <span className="tab-name">{tt.name}</span>
-              <span 
-                className="tab-btn" 
-                title={t('duplicate')}
-                onClick={(e) => { e.stopPropagation(); handleDuplicate(tt.id); }}
-              >⎘</span>
-              {data.timetables.length > 1 && (
+          {data.timetables.map(tt => {
+            const isActive = tt.id === data.activeTT;
+            let cls = 'tj-tab';
+            if (isActive) cls += ' active ' + accentClass;
+            return (
+              <div
+                key={tt.id}
+                className={cls}
+                onClick={() => setData({ ...data, activeTT: tt.id })}
+              >
+                <span className="tab-name">{tt.name}</span>
                 <span 
-                  className="tab-btn"
-                  title={t('delete')}
-                  onClick={(e) => { e.stopPropagation(); handleDeleteTimetable(tt.id); }}
-                >×</span>
-              )}
-            </div>
-          ))}
+                  className="tab-btn" 
+                  title="복제"
+                  onClick={(e) => { e.stopPropagation(); handleDuplicate(tt.id); }}
+                >⎘</span>
+                {data.timetables.length > 1 && (
+                  <span 
+                    className="tab-btn"
+                    title="삭제"
+                    onClick={(e) => { e.stopPropagation(); handleDeleteTimetable(tt.id); }}
+                  >×</span>
+                )}
+              </div>
+            );
+          })}
           {addingTT ? (
             <span className="tj-inline-add">
               <input
                 ref={newTTInputRef}
                 type="text"
-                placeholder={t('timetableName')}
+                placeholder="시간표 이름"
                 autoFocus
                 autoComplete="off"
                 onCompositionStart={() => { newTTComposingRef.current = true; }}
@@ -227,28 +237,17 @@ export default function Main({ data, setData, onGoExport }) {
                   if (e.key === 'Escape') setAddingTT(false);
                 }}
               />
-              <button onClick={handleAddTimetable}>{t('addSubject').replace('+ ', '')}</button>
-              <button className="cancel" onClick={() => setAddingTT(false)}>{t('cancel')}</button>
+              <button onClick={handleAddTimetable}>추가</button>
+              <button className="cancel" onClick={() => setAddingTT(false)}>취소</button>
             </span>
           ) : (
             <button className="tj-tab-add" onClick={() => setAddingTT(true)}>+</button>
           )}
         </div>
         <div className="tj-action-row">
-          <button className="tj-cta" onClick={onGoExport}>{t('backgroundButton')}</button>
-          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>{t('settingsButton')}</button>
+          <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
+          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>설정</button>
         </div>
-      </div>
-      
-      <div className="tj-meta">
-        <span>{data.config.weekRange === 'mon-fri' ? t('monFri') : t('monSun')}</span>
-        <span>·</span>
-        <span>{pad(data.config.startHour)}:00 – {pad(data.config.endHour)}:00</span>
-        <span>·</span>
-        <span>색띠: {
-          data.config.accent === 'none' ? t('accentNone') :
-          data.config.accent === 'pastel' ? t('accentPastel') : t('accentMono')
-        }</span>
       </div>
       
       <div className="tj-layout">
@@ -266,8 +265,6 @@ export default function Main({ data, setData, onGoExport }) {
           subjects={data.subjects}
           onAddSubject={handleAddSubjectClick}
           onEditSubject={handleEditSubject}
-          onToggleSubject={handleToggleSubject}
-          onDeleteSubject={handleDeleteSubject}
           onDragStart={handlePaletteDragStart}
         />
       </div>
@@ -289,6 +286,7 @@ export default function Main({ data, setData, onGoExport }) {
             setShowSubjectModal(false);
             handleDeleteSubject(editingSubjectId);
           } : null}
+          onDuplicate={handleSubjectDuplicate}
         />
       )}
       
