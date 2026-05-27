@@ -100,9 +100,6 @@ export default function Palette({
   
   return (
     <div className="tj-palette">
-      <div className="tj-pal-logo">
-        <img src="/logo.png" alt="TimeJig" />
-      </div>
       <div className="tj-pal-head">
         <h3>{t('subjects')}</h3>
         <button className="tj-add-btn" onClick={onAddSubject}>+</button>

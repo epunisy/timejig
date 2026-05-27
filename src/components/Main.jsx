@@ -16,7 +16,7 @@ export default function Main({ data, setData, onGoExport }) {
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [showTutorial, setShowTutorial] = useState(!data.tutorialDone);
   const [addingTT, setAddingTT] = useState(false);
-  const [renamingTT, setRenamingTT] = useState(null); // 이름 수정 중인 시간표 id
+  const [renamingTT, setRenamingTT] = useState(null);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -216,7 +216,6 @@ export default function Main({ data, setData, onGoExport }) {
             let cls = 'tj-tab';
             if (isActive) cls += ' active ' + accentClass;
             
-            // 이름 수정 모드
             if (renamingTT === tt.id) {
               return (
                 <span key={tt.id} className="tj-inline-add">
@@ -289,6 +288,7 @@ export default function Main({ data, setData, onGoExport }) {
           )}
         </div>
         <div className="tj-action-row">
+          <img src="/logo.png" alt="TimeJig" className="tj-logo-top" />
           <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
           <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>⚙</button>
         </div>
