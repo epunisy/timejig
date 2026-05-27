@@ -211,7 +211,7 @@ export default function Main({ data, setData, onGoExport }) {
                   className="tab-btn" 
                   title="복제"
                   onClick={(e) => { e.stopPropagation(); handleDuplicate(tt.id); }}
-                >⎘</span>
+                >복제</span>
                 {data.timetables.length > 1 && (
                   <span 
                     className="tab-btn"
@@ -246,7 +246,7 @@ export default function Main({ data, setData, onGoExport }) {
         </div>
         <div className="tj-action-row">
           <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
-          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>설정</button>
+          <button className="tj-icon-btn" onClick={() => setShowSettings(true)}>⚙</button>
         </div>
       </div>
       

@@ -70,10 +70,13 @@ html, body {
 .tj-name-input {
   padding: 11px;
   border: 0.5px solid #d8d8d8;
+  border-radius: 0;
   font-size: 14px;
   font-family: inherit;
   background: #fff;
   color: #222;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .tj-name-input:focus {
@@ -151,10 +154,9 @@ html, body {
 
 .tj-tab .tab-btn {
   opacity: 0.7;
-  font-size: 12px;
+  font-size: 10px;
   padding: 2px 4px;
   cursor: pointer;
-  min-width: 20px;
   text-align: center;
 }
 
@@ -175,6 +177,7 @@ html, body {
 
 .tj-tab-add:hover { color: #222; }
 
+/* 시간표 추가 입력칸 — 얇은 테두리, 라운드 X */
 .tj-inline-add {
   display: flex;
   gap: 4px;
@@ -182,23 +185,32 @@ html, body {
 }
 
 .tj-inline-add input {
-  padding: 6px 8px;
+  padding: 5px 8px;
   border: 0.5px solid #d8d8d8;
+  border-radius: 0;
+  outline: none;
   font-size: 12px;
   font-family: inherit;
   background: #fff;
   color: #222;
   width: 100px;
   min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.tj-inline-add input:focus {
+  border-color: #aaa;
 }
 
 .tj-inline-add button {
-  padding: 6px 9px;
+  padding: 5px 9px;
   background: #222;
   color: #fff;
   border: none;
   font-size: 11px;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .tj-inline-add button.cancel {
@@ -528,10 +540,13 @@ html, body {
 .tj-modal input, .tj-modal select {
   padding: 7px 9px;
   border: 0.5px solid #d8d8d8;
+  border-radius: 0;
   font-size: 13px;
   font-family: inherit;
   background: #fff;
   color: #222;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 /* 드롭다운 가운데 정렬 */
