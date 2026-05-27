@@ -35,13 +35,12 @@ export default function Export({ data, onBack }) {
     if (phone === '9-20.5') return 20.5;
     if (phone === '9-16') return 16;
     if (phone === '9-21.6') return 21.6;
-    return 19.5; // auto = 19.5
+    return 19.5;
   }
   
   function handleDownload() {
     if (selection.length === 0) return;
     alert(`실제 앱에선 여기서 PNG가 다운로드돼요!\n선택된 시간표 ${selection.length}개\n비율: ${phone}`);
-    // TODO: 실제 PNG 생성 로직은 나중에 (html2canvas 라이브러리 등)
   }
   
   const W = 200;
@@ -55,7 +54,7 @@ export default function Export({ data, onBack }) {
     <div className="tj-app">
       <div className="tj-topbar">
         <button className="tj-icon-btn" onClick={onBack}>{t('backButton')}</button>
-        <div style={{ fontSize: '15px', fontWeight: 500 }}>{t('backgroundTitle')}</div>
+        <div style={{ fontSize: '14px', fontWeight: 500 }}>{t('backgroundTitle')}</div>
         <div></div>
       </div>
       
@@ -163,7 +162,7 @@ export default function Export({ data, onBack }) {
           >
             {t('downloadPNG')}
           </button>
-          <div style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginTop: '-10px' }}>
+          <div style={{ fontSize: '10px', color: '#888', textAlign: 'center', marginTop: '-8px' }}>
             {selection.length === 0 ? t('selectAtLeastOne') : t('selectedCount', selection.length)}
           </div>
         </div>
@@ -182,7 +181,7 @@ export default function Export({ data, onBack }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#888',
-                    fontSize: '11px',
+                    fontSize: '10px',
                     textAlign: 'center',
                     lineHeight: 1.5,
                   }}>
@@ -212,7 +211,9 @@ export default function Export({ data, onBack }) {
                                 const heightPct = ((b.end - b.start) / totalMin) * 100;
                                 const style = { 
                                   top: topPct + '%', 
-                                  height: heightPct + '%' 
+                                  height: heightPct + '%',
+                                  padding: '1px 0',
+                                  lineHeight: 1.05,
                                 };
                                 let className = 'tj-mini-block';
                                 if (accents) {
@@ -221,10 +222,24 @@ export default function Export({ data, onBack }) {
                                 }
                                 return (
                                   <div key={b.id} className={className} style={style}>
-                                    <div>{subj.name}</div>
+                                    <div style={{ 
+                                      fontSize: '6px', 
+                                      fontWeight: 500,
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      width: '100%',
+                                      textAlign: 'center',
+                                    }}>{subj.name}</div>
                                     {showTime && (
-                                      <div style={{ fontSize: '5px', opacity: 0.7 }}>
-                                        {fmtTime(b.start)}
+                                      <div style={{ 
+                                        fontSize: '5px', 
+                                        opacity: 0.6,
+                                        whiteSpace: 'nowrap',
+                                        marginTop: '1px',
+                                        textAlign: 'center',
+                                      }}>
+                                        {fmtTime(b.start)}–{fmtTime(b.end)}
                                       </div>
                                     )}
                                   </div>
