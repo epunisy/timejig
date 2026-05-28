@@ -286,7 +286,11 @@ export default function Timetable({
               if (!subj) return null;
               const top = Math.round(b.start * PX_PER_MIN);
               const bottom = Math.round(b.end * PX_PER_MIN);
-              const style = { top: top + 'px', height: (bottom - top) + 'px' };
+              const style = { 
+                top: top + 'px', 
+                height: (bottom - top + 1) + 'px',
+                zIndex: 2 + b.start,
+              };
               let className = 'tj-block';
               if (accents) {
                 style.borderLeftColor = accents[subj.colorIndex % accents.length];
