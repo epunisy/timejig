@@ -9,7 +9,6 @@ const COL_W_LABEL = 36;
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
-// 마우스 이벤트 또는 터치 이벤트에서 좌표 추출
 function getEventPoint(e) {
   if (e.touches && e.touches.length > 0) {
     return { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -42,7 +41,6 @@ export default function Timetable({
     return pad(h) + ':' + pad(m);
   }
   
-  // 외부 드래그 (팔레트→시간표) 처리
   useEffect(() => {
     if (!dragSubject) return;
     
@@ -120,7 +118,6 @@ export default function Timetable({
     };
   }, [dragSubject, blocks, days, totalMin]);
   
-  // 시간표 블록 자체 드래그
   function handleBlockStart(e, block) {
     e.preventDefault();
     setInternalDrag(block);
@@ -233,12 +230,12 @@ export default function Timetable({
     clearDropPreview();
     const dayCol = document.querySelector(`[data-day="${day}"]`);
     if (!dayCol) return;
-    const top = start * PX_PER_MIN;
-    const h = (end - start) * PX_PER_MIN;
+    const top = Math.round(start * PX_PER_MIN);
+    const bottom = Math.round(end * PX_PER_MIN);
     const div = document.createElement('div');
     div.className = 'tj-drop-preview' + (invalid ? ' invalid' : '');
     div.style.top = top + 'px';
-    div.style.height = h + 'px';
+    div.style.height = (bottom - top) + 'px';
     dayCol.appendChild(div);
   }
   
@@ -287,9 +284,15 @@ export default function Timetable({
             {blocks.filter(b => b.day === d).map(b => {
               const subj = subjects.find(s => s.id === b.subjectId);
               if (!subj) return null;
-              const top = b.start * PX_PER_MIN;
-              const h = (b.end - b.start) * PX_PER_MIN;
-              const style = { top: top + 'px', height: h + 'px' };
+              const top = Math.round(b.start * PX_PER_MIN);
+              const bottom = Math.round(b.end * PX_PER_MIN);
+              // 아래 블록일수록 z-index 높게 → 아래 블록 윗변이 위 블록 아랫변을 덮음
+              // 높이 +1px 로 살짝 겹치게 → 경계가 한 줄로만 보임
+              const style = { 
+                top: top + 'px', 
+                height: (bottom - top + 1) + 'px',
+                zIndex: 2 + b.start,
+              };
               let className = 'tj-block';
               if (accents) {
                 style.borderLeftColor = accents[subj.colorIndex % accents.length];

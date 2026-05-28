@@ -234,12 +234,14 @@ html, body {
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
 .tj-logo-top {
-  height: 20px;
+  height: 15px;
   width: auto;
   margin-right: 6px;
   display: inline-block;
   vertical-align: middle;
+  transform: scaleY(0.92);
 }
+
 
 .tj-cta, .tj-icon-btn {
   background: transparent;
