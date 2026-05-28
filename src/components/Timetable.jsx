@@ -272,50 +272,41 @@ export default function Timetable({
             </div>
           ))}
         </div>
-        {days.map((d, dayIdx) => {
-          const isLastDay = dayIdx === days.length - 1;
-          return (
-            <div key={d} className="tj-day-col" data-day={d}>
-              {hours.map((h, i) => i === 0 ? null : (
-                <div 
-                  key={h}
-                  className="tj-hour-line" 
-                  style={{ top: (i * HOUR_PX) + 'px' }}
-                />
-              ))}
-              {blocks.filter(b => b.day === d).map(b => {
-                const subj = subjects.find(s => s.id === b.subjectId);
-                if (!subj) return null;
-                const top = Math.round(b.start * PX_PER_MIN);
-                const bottom = Math.round(b.end * PX_PER_MIN);
-                const style = { 
-                  top: top + 'px', 
-                  height: (bottom - top) + 'px',
-                  left: '0px',
-                  width: isLastDay ? '100%' : 'calc(100% + 0.5px)',
-                  zIndex: 2 + b.start,
-                };
-                let className = 'tj-block';
-                if (accents) {
-                  style.borderLeftColor = accents[subj.colorIndex % accents.length];
-                  className += ' with-accent';
-                }
-                return (
-                  <div
-                    key={b.id}
-                    className={className}
-                    style={style}
-                    onMouseDown={(e) => handleBlockStart(e, b)}
-                    onTouchStart={(e) => handleBlockStart(e, b)}
-                  >
-                    <div className="nm">{subj.name}</div>
-                    <div className="tm">{fmtTime(b.start)}–{fmtTime(b.end)}</div>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
+        {days.map(d => (
+          <div key={d} className="tj-day-col" data-day={d}>
+            {hours.map((h, i) => i === 0 ? null : (
+              <div 
+                key={h}
+                className="tj-hour-line" 
+                style={{ top: (i * HOUR_PX) + 'px' }}
+              />
+            ))}
+            {blocks.filter(b => b.day === d).map(b => {
+              const subj = subjects.find(s => s.id === b.subjectId);
+              if (!subj) return null;
+              const top = Math.round(b.start * PX_PER_MIN);
+              const bottom = Math.round(b.end * PX_PER_MIN);
+              const style = { top: top + 'px', height: (bottom - top) + 'px' };
+              let className = 'tj-block';
+              if (accents) {
+                style.borderLeftColor = accents[subj.colorIndex % accents.length];
+                className += ' with-accent';
+              }
+              return (
+                <div
+                  key={b.id}
+                  className={className}
+                  style={style}
+                  onMouseDown={(e) => handleBlockStart(e, b)}
+                  onTouchStart={(e) => handleBlockStart(e, b)}
+                >
+                  <div className="nm">{subj.name}</div>
+                  <div className="tm">{fmtTime(b.start)}–{fmtTime(b.end)}</div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );
