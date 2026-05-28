@@ -211,9 +211,7 @@ export default function Export({ data, onBack }) {
                                 const heightPct = ((b.end - b.start) / totalMin) * 100;
                                 const style = { 
                                   top: topPct + '%', 
-                                  height: heightPct + '%',
-                                  padding: '1px 0',
-                                  lineHeight: 1.05,
+                                  height: heightPct + '%' 
                                 };
                                 let className = 'tj-mini-block';
                                 if (accents) {
@@ -222,25 +220,11 @@ export default function Export({ data, onBack }) {
                                 }
                                 return (
                                   <div key={b.id} className={className} style={style}>
-                                    <div style={{ 
-                                      fontSize: '6px', 
-                                      fontWeight: 500,
-                                      whiteSpace: 'nowrap',
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      width: '100%',
-                                      textAlign: 'center',
-                                    }}>{subj.name}</div>
+                                    <span className="tj-mini-nm">{subj.name}</span>
                                     {showTime && (
-                                      <div style={{ 
-                                        fontSize: '5px', 
-                                        opacity: 0.6,
-                                        whiteSpace: 'nowrap',
-                                        marginTop: '1px',
-                                        textAlign: 'center',
-                                      }}>
-                                        {fmtTime(b.start)}–{fmtTime(b.end)}
-                                      </div>
+                                      <span className="tj-mini-tm">
+                                        {fmtTime(b.start)}~{fmtTime(b.end)}
+                                      </span>
                                     )}
                                   </div>
                                 );

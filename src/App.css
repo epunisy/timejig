@@ -748,4 +748,38 @@ html, body {
 .tj-mini-col { border-right: 0.5px solid #ebebeb; position: relative; }
 .tj-mini-col:last-child { border-right: none; }
 .tj-mini-block { position: absolute; left: 0; right: 0; font-size: 6px; padding: 1px; text-align: center; background: #fff; border: 0.5px solid #aaa; color: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; line-height: 1.1; }
+.tj-mini-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 1px;
+  text-align: center;
+  background: #fff;
+  border: 0.5px solid #aaa;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  line-height: 1;
+}
+
 .tj-mini-block.with-accent { border-left-width: 2px; }
+
+.tj-mini-nm {
+  font-size: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.tj-mini-tm {
+  font-size: 4.5px;
+  color: #777;
+  white-space: nowrap;
+  margin-top: 0.5px;
+  transform: scale(0.92);
+}
