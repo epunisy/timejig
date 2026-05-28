@@ -50,6 +50,9 @@ export default function Export({ data, onBack }) {
     data.timetables.find(t => t.id === id)
   ).filter(Boolean);
   
+  // 시간표 1개일 때만 시간 표시
+  const showTimeNow = showTime && selectedTTs.length === 1;
+  
   return (
     <div className="tj-app">
       <div className="tj-topbar">
@@ -152,6 +155,11 @@ export default function Export({ data, onBack }) {
                 <span>{t('subjectWithTime')}</span>
               </div>
             </div>
+            {showTime && selectedTTs.length > 1 && (
+              <div style={{ fontSize: '10px', color: '#888', marginTop: '5px', lineHeight: 1.4 }}>
+                시간표를 2개 이상 선택하면 공간이 좁아<br />과목명만 표시돼요.
+              </div>
+            )}
           </div>
           
           <button
@@ -221,7 +229,7 @@ export default function Export({ data, onBack }) {
                                 return (
                                   <div key={b.id} className={className} style={style}>
                                     <span className="tj-mini-nm">{subj.name}</span>
-                                    {showTime && (
+                                    {showTimeNow && (
                                       <span className="tj-mini-tm">
                                         {fmtTime(b.start)}~{fmtTime(b.end)}
                                       </span>

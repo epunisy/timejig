@@ -129,6 +129,7 @@ html, body {
   min-width: 0;
 }
 
+/* 시간표 탭 — 색띠 모드별, 비활성도 색 (활성은 진하게) */
 .tj-tab {
   padding: 5px 7px 5px 9px;
   font-size: 12px;
@@ -139,10 +140,17 @@ html, body {
   gap: 3px;
 }
 
-.tj-tab.active.accent-pastel { background: #B5D4F4; color: #1a2a3a; }
-.tj-tab.active.accent-mono { background: #222; color: #fff; }
+/* 파스텔 모드 */
+.tj-tab.accent-pastel { background: #E6F1FB; color: #185FA5; border: 0.5px solid #B5D4F4; }
+.tj-tab.active.accent-pastel { background: #B5D4F4; color: #0C447C; border: 0.5px solid #85B7EB; }
+
+/* 흑백 모드 */
+.tj-tab.accent-mono { background: #f0f0f0; color: #555; border: 0.5px solid #ddd; }
+.tj-tab.active.accent-mono { background: #222; color: #fff; border: 0.5px solid #222; }
+
+/* 없음 모드 */
+.tj-tab.accent-none { background: transparent; color: #999; border: 0.5px solid #e5e5e5; }
 .tj-tab.active.accent-none { background: transparent; color: #222; border: 0.5px solid #888; }
-.tj-tab:not(.active) { background: transparent; color: #888; border: 0.5px solid #d8d8d8; }
 
 .tj-tab .tab-name {
   padding-right: 3px;
@@ -163,6 +171,7 @@ html, body {
 
 .tj-tab .tab-btn:hover { opacity: 1; }
 
+/* + 버튼 — 평평 */
 .tj-tab-add {
   background: transparent;
   color: #999;
@@ -177,6 +186,7 @@ html, body {
 
 .tj-tab-add:hover { color: #222; }
 
+/* 시간표 추가 입력 영역 */
 .tj-inline-add {
   display: flex;
   gap: 4px;
@@ -220,9 +230,9 @@ html, body {
   color: #999;
 }
 
+/* 우측 액션 버튼 */
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
-/* 상단 우측 로고 */
 .tj-logo-top {
   height: 20px;
   width: auto;
@@ -480,6 +490,7 @@ html, body {
   background: rgba(232,165,165,0.15);
 }
 
+/* 휴지통 — 옅은 레드 */
 .tj-trash-zone {
   position: fixed;
   bottom: 10px;
@@ -747,39 +758,7 @@ html, body {
 .tj-mini-day-head:last-child { border-right: none; }
 .tj-mini-col { border-right: 0.5px solid #ebebeb; position: relative; }
 .tj-mini-col:last-child { border-right: none; }
-.tj-mini-block { position: absolute; left: 0; right: 0; font-size: 6px; padding: 1px; text-align: center; background: #fff; border: 0.5px solid #aaa; color: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; line-height: 1.1; }
-.tj-mini-block {
-  position: absolute;
-  left: 0;
-  right: 0;
-  padding: 0 1px;
-  text-align: center;
-  background: #fff;
-  border: 0.5px solid #aaa;
-  color: #111;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  line-height: 1;
-}
-
+.tj-mini-block { position: absolute; left: 0; right: 0; padding: 0 1px; text-align: center; background: #fff; border: 0.5px solid #aaa; color: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; line-height: 1; }
 .tj-mini-block.with-accent { border-left-width: 2px; }
-
-.tj-mini-nm {
-  font-size: 6px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
-.tj-mini-tm {
-  font-size: 4.5px;
-  color: #777;
-  white-space: nowrap;
-  margin-top: 0.5px;
-  transform: scale(0.92);
-}
+.tj-mini-nm { font-size: 6px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; }
+.tj-mini-tm { font-size: 5px; color: #777; white-space: nowrap; margin-top: 0.5px; text-align: center; }
