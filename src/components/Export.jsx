@@ -50,15 +50,19 @@ export default function Export({ data, onBack }) {
     data.timetables.find(t => t.id === id)
   ).filter(Boolean);
   
-  // 시간표 1개일 때만 시간 표시
   const showTimeNow = showTime && selectedTTs.length === 1;
   
   return (
     <div className="tj-app">
-      <div className="tj-topbar">
+      <div className="tj-topbar" style={{ position: 'relative', justifyContent: 'flex-start' }}>
         <button className="tj-icon-btn" onClick={onBack}>{t('backButton')}</button>
-        <div style={{ fontSize: '14px', fontWeight: 500 }}>{t('backgroundTitle')}</div>
-        <div></div>
+        <div style={{ 
+          position: 'absolute', 
+          left: '50%', 
+          transform: 'translateX(-50%)', 
+          fontSize: '14px', 
+          fontWeight: 500 
+        }}>{t('backgroundTitle')}</div>
       </div>
       
       <div className="tj-export">
@@ -66,16 +70,16 @@ export default function Export({ data, onBack }) {
           
           <div className="tj-export-section">
             <h4>{t('section1')}</h4>
-            <div className="tj-checklist">
+            <div className="tj-radio-row">
               {data.timetables.map(tt => {
                 const sel = selection.includes(tt.id);
                 return (
                   <div
                     key={tt.id}
-                    className={'tj-check-item' + (sel ? ' sel' : '')}
+                    className={'tj-radio-item tj-pick' + (sel ? ' sel' : '')}
                     onClick={() => togglePick(tt.id)}
                   >
-                    <div className="tj-check-box">{sel ? '✓' : ''}</div>
+                    <div className="tj-radio-circle"></div>
                     <span>{tt.name}</span>
                   </div>
                 );

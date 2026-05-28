@@ -129,7 +129,7 @@ html, body {
   min-width: 0;
 }
 
-/* 시간표 탭 — 색띠 모드별, 비활성도 색 (활성은 진하게) */
+/* 시간표 탭 — 색띠 모드별 */
 .tj-tab {
   padding: 5px 7px 5px 9px;
   font-size: 12px;
@@ -140,15 +140,12 @@ html, body {
   gap: 3px;
 }
 
-/* 파스텔 모드 */
 .tj-tab.accent-pastel { background: #E6F1FB; color: #185FA5; border: 0.5px solid #B5D4F4; }
 .tj-tab.active.accent-pastel { background: #B5D4F4; color: #0C447C; border: 0.5px solid #85B7EB; }
 
-/* 흑백 모드 */
 .tj-tab.accent-mono { background: #f0f0f0; color: #555; border: 0.5px solid #ddd; }
 .tj-tab.active.accent-mono { background: #222; color: #fff; border: 0.5px solid #222; }
 
-/* 없음 모드 */
 .tj-tab.accent-none { background: transparent; color: #999; border: 0.5px solid #e5e5e5; }
 .tj-tab.active.accent-none { background: transparent; color: #222; border: 0.5px solid #888; }
 
@@ -171,7 +168,6 @@ html, body {
 
 .tj-tab .tab-btn:hover { opacity: 1; }
 
-/* + 버튼 — 평평 */
 .tj-tab-add {
   background: transparent;
   color: #999;
@@ -186,7 +182,6 @@ html, body {
 
 .tj-tab-add:hover { color: #222; }
 
-/* 시간표 추가 입력 영역 */
 .tj-inline-add {
   display: flex;
   gap: 4px;
@@ -230,18 +225,16 @@ html, body {
   color: #999;
 }
 
-/* 우측 액션 버튼 */
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
 .tj-logo-top {
-  height: 15px;
+  height: 18px;
   width: auto;
   margin-right: 6px;
   display: inline-block;
   vertical-align: middle;
   transform: scaleY(0.92);
 }
-
 
 .tj-cta, .tj-icon-btn {
   background: transparent;
@@ -276,7 +269,7 @@ html, body {
 /* ===== 시간표 ===== */
 .tj-grid {
   background: #fff;
-  border: 0.5px solid #d8d8d8;
+  border: 0.5px solid #999;
   overflow: hidden;
   position: relative;
   user-select: none;
@@ -303,8 +296,8 @@ html, body {
   font-size: 11px;
   font-weight: 500;
   color: #222;
-  border-right: 0.5px solid #d8d8d8;
-  border-bottom: 0.5px solid #d8d8d8;
+  border-right: 0.5px solid #999;
+  border-bottom: 0.5px solid #999;
   box-sizing: border-box;
 }
 
@@ -312,8 +305,8 @@ html, body {
 
 .tj-corner {
   background: #F4F4F2;
-  border-right: 0.5px solid #d8d8d8;
-  border-bottom: 0.5px solid #d8d8d8;
+  border-right: 0.5px solid #999;
+  border-bottom: 0.5px solid #999;
 }
 
 .tj-time-col {
@@ -321,13 +314,14 @@ html, body {
   color: #888;
   text-align: right;
   padding-right: 3px;
-  border-right: 0.5px solid #d8d8d8;
+  border-right: 0.5px solid #999;
   box-sizing: border-box;
   position: relative;
 }
 
+/* 칸 세로선 — 연하게 (빈칸용, 블록이 덮음) */
 .tj-day-col {
-  border-right: 0.5px solid #ebebeb;
+  border-right: 0.5px solid #e5e5e5;
   box-sizing: border-box;
   position: relative;
 }
@@ -342,6 +336,7 @@ html, body {
   pointer-events: none;
 }
 
+/* 블록 — 위+오른쪽 테두리, 흰 배경으로 격자 덮음 */
 .tj-block {
   position: absolute;
   left: 0;
@@ -357,7 +352,9 @@ html, body {
   overflow: hidden;
   box-sizing: border-box;
   background: #fff;
-  border: 1px solid #aaa;
+  border: none;
+  border-top: 0.5px solid #999;
+  border-right: 0.5px solid #999;
   color: #111;
   z-index: 2;
   touch-action: none;
@@ -367,8 +364,9 @@ html, body {
 
 .tj-block:active { cursor: grabbing; }
 
+/* 색띠 — 왼쪽 색 띠 */
 .tj-block.with-accent {
-  border-left-width: 4px;
+  border-left: 4px solid;
   padding-left: 2px;
 }
 
@@ -483,7 +481,7 @@ html, body {
   left: 0;
   right: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: 50;
   box-sizing: border-box;
 }
 
@@ -492,7 +490,7 @@ html, body {
   background: rgba(232,165,165,0.15);
 }
 
-/* 휴지통 — 옅은 레드 */
+/* 휴지통 */
 .tj-trash-zone {
   position: fixed;
   bottom: 10px;
@@ -741,6 +739,7 @@ html, body {
 .tj-radio-row { display: flex; flex-direction: column; gap: 5px; }
 .tj-radio-item { display: flex; align-items: center; gap: 8px; padding: 9px; border: 0.5px solid #e5e5e5; cursor: pointer; background: #fff; font-size: 12px; min-height: 36px; }
 .tj-radio-item.sel { border-color: #222; background: #f5f5f5; }
+.tj-radio-item.tj-pick.sel { background: #fff; }
 .tj-radio-circle { width: 14px; height: 14px; border: 1.5px solid #999; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .tj-radio-item.sel .tj-radio-circle::after { content: ''; width: 6px; height: 6px; background: #222; border-radius: 50%; }
 .tj-radio-sub { font-size: 10px; color: #888; margin-left: auto; }
