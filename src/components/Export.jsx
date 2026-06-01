@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents } from '../App';
+import { getAccents, getFontFamily } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 
@@ -130,8 +130,10 @@ export default function Export({ data, onBack }) {
     const schedH = Math.max(0, wrapH - labelH);
     const bodyH = Math.max(0, schedH - headH);
 
+    const fontFamily = getFontFamily(data.config.font);
+
     return (
-      <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px' }}>
+      <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
             {/* 시간표 이름 — 찐그레이, 과목명과 동일 크기 */}

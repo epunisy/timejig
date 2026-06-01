@@ -30,6 +30,10 @@ export default function Settings({
   function setAccent(accent) {
     onConfigChange({ ...config, accent });
   }
+
+  function setFont(font) {
+    onConfigChange({ ...config, font });
+  }
   
   function setStartHour(h) {
     let endHour = config.endHour;
@@ -139,7 +143,27 @@ export default function Settings({
             >{t('accentMono')}</button>
           </div>
         </label>
-        
+
+        <label>
+          <span>{t('fontLabel')}</span>
+          <div className="tj-mode-strip">
+            <button
+              className={(config.font || 'system') === 'system' ? 'active' : ''}
+              onClick={() => setFont('system')}
+            >{t('fontSystem')}</button>
+            <button
+              className={config.font === 'jua' ? 'active' : ''}
+              style={{ fontFamily: "'Jua', sans-serif" }}
+              onClick={() => setFont('jua')}
+            >{t('fontRound')}</button>
+            <button
+              className={config.font === 'hand' ? 'active' : ''}
+              style={{ fontFamily: "'Gaegu', cursive", fontSize: '13px' }}
+              onClick={() => setFont('hand')}
+            >{t('fontHand')}</button>
+          </div>
+        </label>
+
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '14px', marginTop: '4px' }}>
           <button
             onClick={handleReset}

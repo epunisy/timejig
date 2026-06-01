@@ -47,6 +47,10 @@ const translations = {
     accentNone: '없음',
     accentPastel: '파스텔',
     accentMono: '흑백',
+    fontLabel: '글씨체',
+    fontSystem: '기본',
+    fontRound: '동글동글',
+    fontHand: '손글씨',
     showTutorial: '튜토리얼 다시 보기',
     done: '완료',
     

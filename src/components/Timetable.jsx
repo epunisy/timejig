@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { getAccents } from '../App';
+import { getAccents, getFontFamily } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const SLOT_MIN = 10;
@@ -248,8 +248,10 @@ export default function Timetable({
   const colTpl = `${COL_W_LABEL}px repeat(${days.length}, 1fr)`;
   const accents = getAccents(config.accent);
   
+  const fontFamily = getFontFamily(config.font);
+
   return (
-    <div className="tj-grid">
+    <div className="tj-grid" style={fontFamily ? { fontFamily } : undefined}>
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map(d => <div key={d} className="tj-day-head">{d}</div>)}

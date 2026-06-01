@@ -21,6 +21,13 @@ export function getAccents(accent) {
   return null;
 }
 
+// 글씨체 (시간표/배경화면에만 적용)
+export function getFontFamily(font) {
+  if (font === 'jua') return "'Jua', sans-serif";
+  if (font === 'hand') return "'Gaegu', cursive";
+  return null; // 기본(시스템 고딕)
+}
+
 // 기본값
 const DEFAULT_STATE = {
   config: {
@@ -28,6 +35,7 @@ const DEFAULT_STATE = {
     weekRange: 'mon-fri',
     startHour: 8,
     endHour: 16,
+    font: 'system',
   },
   timetables: [
     { id: 1, name: '시간표', blocks: [] }
