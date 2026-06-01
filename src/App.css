@@ -67,9 +67,9 @@ html, body {
 }
 
 .tj-setup img.tj-setup-logo {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
+  width: 150px;
+  height: auto;
+  margin: 4px auto 0;
 }
 
 .tj-setup-greeting {

@@ -62,11 +62,14 @@ function App() {
   }, [data, mode]);
   
   // 시작 화면에서 "시작하기" 눌렀을 때 (이름·시간 범위 반영)
-  function handleSetupDone(name, startHour, endHour) {
+  function handleSetupDone(name, startHour, endHour, accent) {
     const config = { ...DEFAULT_STATE.config };
     if (Number.isInteger(startHour) && Number.isInteger(endHour) && endHour > startHour) {
       config.startHour = startHour;
       config.endHour = endHour;
+    }
+    if (['pastel', 'mono', 'none'].includes(accent)) {
+      config.accent = accent;
     }
     setData({
       ...DEFAULT_STATE,
