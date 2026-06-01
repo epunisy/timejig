@@ -21,11 +21,26 @@ export function getAccents(accent) {
   return null;
 }
 
-// 글씨체 (시간표/배경화면에만 적용)
+// 글씨체 (시간표/배경화면에만 적용) — 나중에 골라서 줄일 예정
+export const FONTS = [
+  { key: 'system', label: '기본', family: null },
+  { key: 'jua', label: '주아', family: "'Jua', sans-serif" },
+  { key: 'hand', label: '개구', family: "'Gaegu', cursive" },
+  { key: 'gowun', label: '고운돋움', family: "'Gowun Dodum', sans-serif" },
+  { key: 'myeongjo', label: '나눔명조', family: "'Nanum Myeongjo', serif" },
+  { key: 'dohyeon', label: '도현', family: "'Do Hyeon', sans-serif" },
+  { key: 'blackhan', label: '검은고딕', family: "'Black Han Sans', sans-serif" },
+  { key: 'gamja', label: '감자꽃', family: "'Gamja Flower', cursive" },
+  { key: 'himelody', label: '하이멜로디', family: "'Hi Melody', cursive" },
+  { key: 'dongle', label: '동글', family: "'Dongle', sans-serif" },
+  { key: 'poorstory', label: '포어스토리', family: "'Poor Story', cursive" },
+  { key: 'yeonsung', label: '연성', family: "'Yeon Sung', cursive" },
+  { key: 'gugi', label: '구기', family: "'Gugi', cursive" },
+];
+
 export function getFontFamily(font) {
-  if (font === 'jua') return "'Jua', sans-serif";
-  if (font === 'hand') return "'Gaegu', cursive";
-  return null; // 기본(시스템 고딕)
+  const f = FONTS.find(x => x.key === font);
+  return f ? f.family : null; // 기본(시스템 고딕)이면 null
 }
 
 // 기본값

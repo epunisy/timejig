@@ -668,6 +668,30 @@ html, body {
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 
+/* 글씨체 선택 — 줄바꿈 그리드 */
+.tj-font-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.tj-font-grid button {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 0.5px solid #d8d8d8;
+  background: #fff;
+  color: #444;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.tj-font-grid button.active {
+  border-color: #222;
+  background: #f5f5f5;
+  color: #222;
+}
+
 /* ===== 튜토리얼 ===== */
 .tj-tutorial-bg {
   position: fixed;

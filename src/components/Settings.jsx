@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { t } from '../i18n';
 import { clearData } from '../storage';
+import { FONTS } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -146,21 +147,15 @@ export default function Settings({
 
         <label>
           <span>{t('fontLabel')}</span>
-          <div className="tj-mode-strip">
-            <button
-              className={(config.font || 'system') === 'system' ? 'active' : ''}
-              onClick={() => setFont('system')}
-            >{t('fontSystem')}</button>
-            <button
-              className={config.font === 'jua' ? 'active' : ''}
-              style={{ fontFamily: "'Jua', sans-serif" }}
-              onClick={() => setFont('jua')}
-            >{t('fontRound')}</button>
-            <button
-              className={config.font === 'hand' ? 'active' : ''}
-              style={{ fontFamily: "'Gaegu', cursive", fontSize: '13px' }}
-              onClick={() => setFont('hand')}
-            >{t('fontHand')}</button>
+          <div className="tj-font-grid">
+            {FONTS.map(f => (
+              <button
+                key={f.key}
+                className={(config.font || 'system') === f.key ? 'active' : ''}
+                style={f.family ? { fontFamily: f.family } : undefined}
+                onClick={() => setFont(f.key)}
+              >{f.label}</button>
+            ))}
           </div>
         </label>
 
