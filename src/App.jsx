@@ -68,10 +68,16 @@ function App() {
     }
   }, [data, mode]);
   
-  // 시작 화면에서 "시작하기" 눌렀을 때
-  function handleSetupDone(name) {
+  // 시작 화면에서 "시작하기" 눌렀을 때 (이름·시간 범위 반영)
+  function handleSetupDone(name, startHour, endHour) {
+    const config = { ...DEFAULT_STATE.config };
+    if (Number.isInteger(startHour) && Number.isInteger(endHour) && endHour > startHour) {
+      config.startHour = startHour;
+      config.endHour = endHour;
+    }
     setData({
       ...DEFAULT_STATE,
+      config,
       timetables: [{ id: 1, name: name || '시간표', blocks: [] }],
       subjects: [
         { id: 101, name: '국어', duration: 60, colorIndex: 0, active: true },
