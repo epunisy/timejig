@@ -126,13 +126,13 @@ export default function Settings({
           <span>{t('colorBand')}</span>
           <div className="tj-mode-strip">
             <button
-              className={config.accent === 'none' ? 'active' : ''}
-              onClick={() => setAccent('none')}
-            >{t('accentNone')}</button>
-            <button
               className={config.accent === 'pastel' ? 'active' : ''}
               onClick={() => setAccent('pastel')}
             >{t('accentPastel')}</button>
+            <button
+              className={config.accent === 'none' ? 'active' : ''}
+              onClick={() => setAccent('none')}
+            >{t('accentNone')}</button>
             <button
               className={config.accent === 'mono' ? 'active' : ''}
               onClick={() => setAccent('mono')}
@@ -145,7 +145,9 @@ export default function Settings({
             onClick={handleReset}
             style={{
               width: '100%',
-              padding: '10px',
+              minHeight: '40px',
+              boxSizing: 'border-box',
+              padding: '0 10px',
               background: 'transparent',
               border: '0.5px solid #E24B4A',
               color: '#A32D2D',

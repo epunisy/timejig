@@ -73,7 +73,7 @@ export default function Setup({ onDone }) {
           <select
             value={startHour}
             onChange={(e) => handleStartHourChange(parseInt(e.target.value, 10))}
-            style={{ padding: '10px 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
+            style={{ minHeight: '40px', boxSizing: 'border-box', padding: '0 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
           >
             {hourOptions(0, 23).map(o => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -83,7 +83,7 @@ export default function Setup({ onDone }) {
           <select
             value={endHour}
             onChange={(e) => setEndHour(parseInt(e.target.value, 10))}
-            style={{ padding: '10px 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
+            style={{ minHeight: '40px', boxSizing: 'border-box', padding: '0 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
           >
             {hourOptions(startHour + 1, 24).map(o => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -98,13 +98,13 @@ export default function Setup({ onDone }) {
         </div>
         <div className="tj-mode-strip">
           <button
-            className={accent === 'none' ? 'active' : ''}
-            onClick={() => setAccent('none')}
-          >{t('accentNone')}</button>
-          <button
             className={accent === 'pastel' ? 'active' : ''}
             onClick={() => setAccent('pastel')}
           >{t('accentPastel')}</button>
+          <button
+            className={accent === 'none' ? 'active' : ''}
+            onClick={() => setAccent('none')}
+          >{t('accentNone')}</button>
           <button
             className={accent === 'mono' ? 'active' : ''}
             onClick={() => setAccent('mono')}
