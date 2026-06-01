@@ -9,7 +9,7 @@ const translations = {
     
     // 시작 화면
     welcome: '배경화면에 담는 나만의 시간표,\n타임지그에 오신 걸 환영해요!',
-    setupGuide: '시간표 이름을 알려주세요',
+    setupGuide: '시간표 이름부터 정해볼까요?',
     namePlaceholder: '예: 민준',
     start: '시작하기',
     setupHint: '월–금, 8:00–16:00, 파스텔로 시작해요.\n나중에 ⚙ 설정에서 다 바꿀 수 있어요.',
