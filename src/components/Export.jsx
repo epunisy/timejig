@@ -63,7 +63,11 @@ export default function Export({ data, onBack }) {
       });
       const link = document.createElement('a');
       const name = selectedTTs.map(tt => tt.name).join('_');
-      link.download = `타임지그_${name}.png`;
+      const d = new Date();
+      const yymmdd = String(d.getFullYear()).slice(2)
+        + String(d.getMonth() + 1).padStart(2, '0')
+        + String(d.getDate()).padStart(2, '0');
+      link.download = `${name}_${yymmdd}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
