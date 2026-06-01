@@ -35,6 +35,18 @@ html, body {
 
 .tj-splash img { width: 140px; height: 140px; }
 .tj-splash-tagline { font-size: 12px; color: #888; letter-spacing: 0.5px; }
+.tj-splash-tap {
+  position: absolute;
+  bottom: 48px;
+  font-size: 11px;
+  color: #bbb;
+  letter-spacing: 0.5px;
+  animation: tjTapPulse 1.4s ease-in-out infinite;
+}
+@keyframes tjTapPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
 
 @keyframes fadeIn {
   from { opacity: 0; }

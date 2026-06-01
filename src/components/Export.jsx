@@ -99,9 +99,22 @@ export default function Export({ data, onBack }) {
   //  전부 명시적 px + 1px 테두리로 계산 → 미리보기와 PNG가 동일하게 나옴)
   function renderSchedules(boxW, boxH) {
     const n = selectedTTs.length || 1;
-    const colW = boxW / days.length;
+    const startHour = data.config.startHour;
+    const hourCount = data.config.endHour - startHour;
+    const hours = [];
+    for (let h = startHour; h <= data.config.endHour; h++) hours.push(h);
+
+    // 왼쪽 시간축 + 요일 컬럼
+    const timeColW = Math.max(10, Math.round(boxW * 0.08));
+    const colW = (boxW - timeColW) / days.length;
     const gap = Math.round(boxH * 0.03);
-    const wrapH = (boxH - gap * (n - 1)) / n;
+
+    // 시간표가 1개일 때 세로로 너무 길어지지 않게 높이 제한 + 세로 가운데 정렬
+    const rawWrapH = (boxH - gap * (n - 1)) / n;
+    const maxWrapH = Math.round(boxW * 1.05);
+    const wrapH = Math.min(rawWrapH, maxWrapH);
+    const usedH = wrapH * n + gap * (n - 1);
+    const offsetTop = Math.max(0, Math.round((boxH - usedH) / 2));
 
     // 요일·과목명·시간표 이름 모두 동일한 폰트 크기 (요일 글자 기준)
     const font = Math.max(6, Math.round(colW * 0.16));
@@ -110,14 +123,16 @@ export default function Export({ data, onBack }) {
     const headFont = font;
     const headH = Math.round(headFont * 1.8);
     const blockFont = font;
+    const timeFont = Math.max(5, Math.round(font * 0.85));
+    const timeLabelH = Math.round(timeFont * 1.2);
     const accentW = Math.max(3, Math.round(colW * 0.06));
     const schedH = Math.max(0, wrapH - labelH);
     const bodyH = Math.max(0, schedH - headH);
 
     return (
-      <div style={{ width: boxW + 'px', height: boxH + 'px' }}>
+      <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px' }}>
         {selectedTTs.map((tt, wi) => (
-          <div key={tt.id} style={{ marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
+          <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
             {/* 시간표 이름 — 찐그레이, 과목명과 동일 크기 */}
             <div style={{
               height: labelH + 'px', lineHeight: labelH + 'px',
@@ -129,8 +144,12 @@ export default function Export({ data, onBack }) {
               height: schedH + 'px', boxSizing: 'border-box',
               border: '1px solid #ddd', background: '#fff', overflow: 'hidden',
             }}>
-              {/* 요일 헤더 — 찐그레이 글자 + 연그레이 바탕 */}
+              {/* 헤더 — 시간축 코너 + 요일 (찐그레이 글자 + 연그레이 바탕) */}
               <div style={{ display: 'flex', height: headH + 'px' }}>
+                <div style={{
+                  width: timeColW + 'px', boxSizing: 'border-box',
+                  background: '#ececec', borderRight: '1px solid #fff',
+                }}></div>
                 {days.map((d, i) => (
                   <div key={d} style={{
                     width: colW + 'px', boxSizing: 'border-box',
@@ -141,13 +160,38 @@ export default function Export({ data, onBack }) {
                   }}>{d}</div>
                 ))}
               </div>
-              {/* 본문 — 요일별 컬럼 + 블록 */}
+              {/* 본문 — 시간축 + 요일별 컬럼 + 블록 */}
               <div style={{ display: 'flex', height: bodyH + 'px' }}>
+                {/* 왼쪽 시간축 (요일과 동일한 연그레이 바탕) */}
+                <div style={{
+                  width: timeColW + 'px', boxSizing: 'border-box', position: 'relative',
+                  background: '#ececec', borderRight: '1px solid #fff',
+                }}>
+                  {hours.map((h, i) => {
+                    let topPx = (i / hourCount) * bodyH;
+                    if (i === hourCount) topPx = bodyH - timeLabelH;
+                    return (
+                      <div key={h} style={{
+                        position: 'absolute', left: 0, right: 0, top: topPx + 'px',
+                        height: timeLabelH + 'px', lineHeight: timeLabelH + 'px',
+                        textAlign: 'center', fontSize: timeFont + 'px', color: '#444',
+                      }}>{pad(h)}</div>
+                    );
+                  })}
+                </div>
                 {days.map((d, i) => (
                   <div key={d} style={{
                     width: colW + 'px', boxSizing: 'border-box', position: 'relative',
                     borderRight: i < days.length - 1 ? '1px solid #ececec' : 'none',
                   }}>
+                    {/* 시간 눈금선 */}
+                    {hours.slice(1, hourCount).map((h, j) => (
+                      <div key={'l' + h} style={{
+                        position: 'absolute', left: 0, right: 0,
+                        top: (((j + 1) / hourCount) * bodyH) + 'px',
+                        height: '1px', background: '#eee',
+                      }}></div>
+                    ))}
                     {tt.blocks.filter(b => b.day === d).map(b => {
                       const subj = data.subjects.find(s => s.id === b.subjectId);
                       if (!subj) return null;

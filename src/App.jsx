@@ -47,19 +47,25 @@ function App() {
 
   // 방금 "시작하기"로 들어온 진짜 첫 진입인지 (이때만 튜토리얼 자동 표시)
   const [justSetup, setJustSetup] = useState(false);
-  
-  // 처음 진입 시 저장된 데이터 불러오기
+
+  // 스플래시에서 터치하면 넘어갈 다음 화면 (자동 전환 없음)
+  const [nextMode, setNextMode] = useState(null);
+
+  // 처음 진입 시 저장된 데이터 불러오기 (자동 전환 없이 터치 대기)
   useEffect(() => {
     const saved = loadData();
     if (saved && saved.timetables && saved.timetables.length > 0 && saved.subjects && saved.subjects.length > 0) {
-      // 저장된 데이터 있으면 메인으로 (스플래시를 충분히 보여준 뒤)
       setData(saved);
-      setTimeout(() => setMode('main'), 1800);
+      setNextMode('main');
     } else {
-      // 처음이면 시작 화면으로
-      setTimeout(() => setMode('setup'), 1800);
+      setNextMode('setup');
     }
   }, []);
+
+  // 스플래시 터치 → 다음 화면으로
+  function handleSplashTap() {
+    if (nextMode) setMode(nextMode);
+  }
   
   // 데이터 바뀔 때마다 자동 저장
   useEffect(() => {
@@ -91,7 +97,7 @@ function App() {
 
   return (
     <>
-      {mode === 'splash' && <Splash />}
+      {mode === 'splash' && <Splash onTap={handleSplashTap} ready={nextMode !== null} />}
       {mode === 'setup' && <Setup onDone={handleSetupDone} />}
       {mode === 'main' && (
         <Main
