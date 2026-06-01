@@ -464,15 +464,20 @@ html, body {
 .tj-ghost {
   position: fixed;
   pointer-events: none;
-  background: #222;
-  color: #fff;
-  padding: 7px 10px;
+  background: #fff;
+  color: #333;
+  padding: 6px 10px 6px 8px;
   font-size: 11px;
+  font-weight: 500;
   z-index: 1000;
-  transform: translate(-50%, -50%);
+  /* 커서/손가락 바로 위에 살짝 띄우고 집어든 느낌으로 기울임 */
+  transform: translate(-50%, -135%) rotate(-3deg);
   white-space: nowrap;
-  opacity: 0.9;
-  border-radius: 4px;
+  opacity: 0.96;
+  border: 1px solid #ccc;
+  border-left: 4px solid #888;
+  border-radius: 3px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
 }
 
 .tj-drop-preview {

@@ -46,9 +46,12 @@ export default function Timetable({
   useEffect(() => {
     if (!dragSubject) return;
     
+    const palAcc = getAccents(config.accent);
+    const palColor = palAcc ? palAcc[dragSubject.colorIndex % palAcc.length] : '#888';
+
     function handleMove(e) {
       const p = getEventPoint(e);
-      showGhost(dragSubject.name, p.x, p.y);
+      showGhost(dragSubject.name, p.x, p.y, palColor);
       const body = gridBodyRef.current;
       if (!body) return;
       const rect = body.getBoundingClientRect();
@@ -134,11 +137,13 @@ export default function Timetable({
 
     const dragSubj = subjects.find(s => s.id === internalDrag.subjectId);
     const dragLabel = dragSubj ? dragSubj.name : '';
+    const intAcc = getAccents(config.accent);
+    const intColor = (intAcc && dragSubj) ? intAcc[dragSubj.colorIndex % intAcc.length] : '#888';
 
     function handleMove(e) {
       e.preventDefault();
       const p = getEventPoint(e);
-      showGhost(dragLabel, p.x, p.y);
+      showGhost(dragLabel, p.x, p.y, intColor);
       const body = gridBodyRef.current;
       if (!body) return;
       const rect = body.getBoundingClientRect();
@@ -255,7 +260,7 @@ export default function Timetable({
   }
 
   // 드래그 중 커서를 따라다니는 고스트 (무엇을 옮기는지 보이게)
-  function showGhost(text, x, y) {
+  function showGhost(text, x, y, color) {
     let g = document.getElementById('drag-ghost');
     if (!g) {
       g = document.createElement('div');
@@ -266,6 +271,7 @@ export default function Timetable({
     g.textContent = text;
     g.style.left = x + 'px';
     g.style.top = y + 'px';
+    g.style.borderLeftColor = color || '#888';
   }
 
   function clearGhost() {
