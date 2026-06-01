@@ -52,12 +52,12 @@ function App() {
   useEffect(() => {
     const saved = loadData();
     if (saved && saved.timetables && saved.timetables.length > 0 && saved.subjects && saved.subjects.length > 0) {
-      // 저장된 데이터 있으면 바로 메인으로
+      // 저장된 데이터 있으면 메인으로 (스플래시를 충분히 보여준 뒤)
       setData(saved);
-      setTimeout(() => setMode('main'), 1000);
+      setTimeout(() => setMode('main'), 1800);
     } else {
       // 처음이면 시작 화면으로
-      setTimeout(() => setMode('setup'), 1500);
+      setTimeout(() => setMode('setup'), 1800);
     }
   }, []);
   
