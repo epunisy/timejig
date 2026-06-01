@@ -286,10 +286,12 @@ export default function Timetable({
               if (!subj) return null;
               const top = Math.round(b.start * PX_PER_MIN);
               const bottom = Math.round(b.end * PX_PER_MIN);
-              const style = { 
-                top: top + 'px', 
+              const style = {
+                top: top + 'px',
                 height: (bottom - top + 1) + 'px',
-                zIndex: 2 + b.start,
+                // 늦게 시작하는 블록일수록 살짝 위로 쌓아 1px 테두리 겹침을 자연스럽게.
+                // 단, 모달/튜토리얼 오버레이(z-index 100~300)는 넘지 않도록 시(hour) 단위로 제한.
+                zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
               if (accents) {

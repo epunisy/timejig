@@ -53,14 +53,14 @@ export default function Export({ data, onBack }) {
     try {
       const node = captureRef.current;
       const canvas = await html2canvas(node, {
-        scale: 3,
+        scale: 2,
         backgroundColor: '#ffffff',
         logging: false,
         useCORS: true,
       });
       const link = document.createElement('a');
       const name = selectedTTs.map(tt => tt.name).join('_');
-      link.download = `시간퍼즐_${name}.png`;
+      link.download = `타임지그_${name}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
@@ -73,58 +73,113 @@ export default function Export({ data, onBack }) {
   // 미리보기 폰 크기
   const W = 200;
   const H = W * getRatio() / 9;
+  // 미리보기 콘텐츠 영역 (.tj-phone-content: 상120 하30 좌우12)
+  const PREV_W = W - 24;
+  const PREV_H = H - 150;
   // 캡쳐용 실제 크기 (가로 1080 기준)
   const CAP_W = 1080;
   const CAP_H = Math.round(CAP_W * getRatio() / 9);
-  
-  // 미리보기/캡쳐 공통 — 시간표 콜라주 렌더
-  function renderSchedules(scale) {
-    return selectedTTs.map(tt => (
-      <div key={tt.id} className="tj-mini-wrap">
-        <div className="tj-mini-label" style={{ fontSize: (10 * scale) + 'px', paddingLeft: (2 * scale) + 'px' }}>
-          {tt.name}
-        </div>
-        <div className="tj-mini-schedule">
-          <div 
-            className="tj-mini-grid"
-            style={{ 
-              gridTemplateRows: 'auto 1fr', 
-              gridTemplateColumns: `repeat(${days.length}, 1fr)` 
-            }}
-          >
-            {days.map(d => (
-              <div key={d} className="tj-mini-day-head" style={{ fontSize: (7 * scale) + 'px', padding: (2 * scale) + 'px 0' }}>{d}</div>
-            ))}
-            {days.map(d => (
-              <div key={d} className="tj-mini-col">
-                {tt.blocks.filter(b => b.day === d).map(b => {
-                  const subj = data.subjects.find(s => s.id === b.subjectId);
-                  if (!subj) return null;
-                  const topPct = (b.start / totalMin) * 100;
-                  const heightPct = ((b.end - b.start) / totalMin) * 100;
-                  const style = { top: topPct + '%', height: heightPct + '%' };
-                  let className = 'tj-mini-block';
-                  if (accents) {
-                    style.borderLeftColor = accents[subj.colorIndex % accents.length];
-                    className += ' with-accent';
-                  }
-                  return (
-                    <div key={b.id} className={className} style={style}>
-                      <span className="tj-mini-nm" style={{ fontSize: (6 * scale) + 'px' }}>{subj.name}</span>
-                      {showTimeNow && (
-                        <span className="tj-mini-tm" style={{ fontSize: (5 * scale) + 'px' }}>
-                          {fmtTime(b.start)}~{fmtTime(b.end)}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
+  // 캡쳐 콘텐츠 영역 (상30% 하8% 좌우6%)
+  const CAP_PAD_X = Math.round(CAP_W * 0.06);
+  const CAP_TOP = Math.round(CAP_H * 0.30);
+  const CAP_CONTENT_W = CAP_W - CAP_PAD_X * 2;
+  const CAP_CONTENT_H = Math.round(CAP_H * 0.62);
+
+  // 미리보기/캡쳐 공통 — 시간표 콜라주를 "픽셀 기반"으로 렌더.
+  // (html2canvas가 grid 1fr·% 높이·0.5px 테두리를 제대로 못 그려서
+  //  전부 명시적 px + 1px 테두리로 계산 → 미리보기와 PNG가 동일하게 나옴)
+  function renderSchedules(boxW, boxH) {
+    const n = selectedTTs.length || 1;
+    const colW = boxW / days.length;
+    const gap = Math.round(boxH * 0.03);
+    const wrapH = (boxH - gap * (n - 1)) / n;
+
+    const labelFont = Math.max(8, Math.round(boxW * 0.022));
+    const labelH = Math.round(labelFont * 1.5);
+    const headFont = Math.max(6, Math.round(colW * 0.16));
+    const headH = Math.round(headFont * 1.8);
+    const blockFont = Math.max(5, Math.round(colW * 0.14));
+    const accentW = Math.max(2, Math.round(colW * 0.03));
+    const schedH = Math.max(0, wrapH - labelH);
+    const bodyH = Math.max(0, schedH - headH);
+
+    return (
+      <div style={{ width: boxW + 'px', height: boxH + 'px' }}>
+        {selectedTTs.map((tt, wi) => (
+          <div key={tt.id} style={{ marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
+            {/* 시간표 이름 — 작게, 회색 */}
+            <div style={{
+              height: labelH + 'px', lineHeight: labelH + 'px',
+              fontSize: labelFont + 'px', fontWeight: 400, color: '#9a9a9a',
+              paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
+            }}>{tt.name}</div>
+
+            <div style={{
+              height: schedH + 'px', boxSizing: 'border-box',
+              border: '1px solid #ddd', background: '#fff', overflow: 'hidden',
+            }}>
+              {/* 요일 헤더 — 진하게, 굵게 */}
+              <div style={{ display: 'flex', height: headH + 'px' }}>
+                {days.map((d, i) => (
+                  <div key={d} style={{
+                    width: colW + 'px', boxSizing: 'border-box',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: headFont + 'px', fontWeight: 700, color: '#222',
+                    background: '#f4f4f2',
+                    borderRight: i < days.length - 1 ? '1px solid #ddd' : 'none',
+                    borderBottom: '1px solid #ddd',
+                  }}>{d}</div>
+                ))}
               </div>
-            ))}
+              {/* 본문 — 요일별 컬럼 + 블록 */}
+              <div style={{ display: 'flex', height: bodyH + 'px' }}>
+                {days.map((d, i) => (
+                  <div key={d} style={{
+                    width: colW + 'px', boxSizing: 'border-box', position: 'relative',
+                    borderRight: i < days.length - 1 ? '1px solid #ececec' : 'none',
+                  }}>
+                    {tt.blocks.filter(b => b.day === d).map(b => {
+                      const subj = data.subjects.find(s => s.id === b.subjectId);
+                      if (!subj) return null;
+                      const top = (b.start / totalMin) * bodyH;
+                      const h = ((b.end - b.start) / totalMin) * bodyH;
+                      const blkStyle = {
+                        position: 'absolute', left: 0, right: 0,
+                        top: top + 'px', height: h + 'px',
+                        boxSizing: 'border-box',
+                        background: '#fff', border: '1px solid #bbb',
+                        display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center',
+                        overflow: 'hidden', padding: '0 1px',
+                      };
+                      if (accents) {
+                        blkStyle.borderLeft = accentW + 'px solid ' + accents[subj.colorIndex % accents.length];
+                      }
+                      return (
+                        <div key={b.id} style={blkStyle}>
+                          {/* 과목명 — 옅게 */}
+                          <span style={{
+                            fontSize: blockFont + 'px', fontWeight: 300, color: '#aaa',
+                            lineHeight: 1.1, textAlign: 'center',
+                            maxWidth: '100%', overflow: 'hidden',
+                          }}>{subj.name}</span>
+                          {showTimeNow && (
+                            <span style={{
+                              fontSize: Math.max(4, Math.round(blockFont * 0.85)) + 'px',
+                              color: '#bbb', lineHeight: 1.1, whiteSpace: 'nowrap', marginTop: '1px',
+                            }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
-    ));
+    );
   }
   
   return (
@@ -275,7 +330,7 @@ export default function Export({ data, onBack }) {
                     왼쪽에서<br />시간표를 선택하면<br />여기 미리보기가 떠요
                   </div>
                 ) : (
-                  renderSchedules(1)
+                  renderSchedules(PREV_W, PREV_H)
                 )}
               </div>
             </div>
@@ -297,15 +352,12 @@ export default function Export({ data, onBack }) {
         >
           <div style={{
             position: 'absolute',
-            top: (CAP_H * 0.30) + 'px',
-            left: (CAP_W * 0.06) + 'px',
-            right: (CAP_W * 0.06) + 'px',
-            bottom: (CAP_H * 0.08) + 'px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: (CAP_W * 0.05) + 'px',
+            top: CAP_TOP + 'px',
+            left: CAP_PAD_X + 'px',
+            width: CAP_CONTENT_W + 'px',
+            height: CAP_CONTENT_H + 'px',
           }}>
-            {renderSchedules(8)}
+            {renderSchedules(CAP_CONTENT_W, CAP_CONTENT_H)}
           </div>
         </div>
       </div>
