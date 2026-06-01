@@ -46,7 +46,7 @@ export default function Export({ data, onBack }) {
     data.timetables.find(t => t.id === id)
   ).filter(Boolean);
   
-  const showTimeNow = showTime && selectedTTs.length === 1;
+  const showTimeNow = showTime;
   
   async function handleDownload() {
     if (selection.length === 0 || downloading) return;
@@ -117,7 +117,7 @@ export default function Export({ data, onBack }) {
     const offsetTop = Math.max(0, Math.round((boxH - usedH) / 2));
 
     // 요일·과목명·시간표 이름 모두 동일한 폰트 크기 (요일 글자 기준)
-    const font = Math.max(6, Math.round(colW * 0.16));
+    const font = Math.max(7, Math.round(colW * 0.18));
     const labelFont = font;
     const labelH = Math.round(labelFont * 1.6);
     const headFont = font;
@@ -221,8 +221,7 @@ export default function Export({ data, onBack }) {
                           {showTimeNow && (
                             <span style={{
                               fontSize: Math.max(4, Math.round(blockFont * 0.8)) + 'px',
-                              color: '#444', background: '#ececec', borderRadius: '2px',
-                              padding: '0 2px', lineHeight: 1.3, whiteSpace: 'nowrap', marginTop: '1px',
+                              color: '#444', lineHeight: 1.2, whiteSpace: 'nowrap', marginTop: '1px',
                             }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
                           )}
                         </div>
@@ -345,11 +344,6 @@ export default function Export({ data, onBack }) {
                 <span>{t('subjectWithTime')}</span>
               </div>
             </div>
-            {showTime && selectedTTs.length > 1 && (
-              <div style={{ fontSize: '10px', color: '#888', marginTop: '5px', lineHeight: 1.4 }}>
-                시간표를 2개 이상 선택하면 공간이 좁아<br />과목명만 표시돼요.
-              </div>
-            )}
           </div>
 
           <div className="tj-export-section">

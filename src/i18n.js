@@ -8,7 +8,7 @@ const translations = {
     appSubtitle: '하루가 보이는 나만의 배경화면 만들기!',
     
     // 시작 화면
-    welcome: '환영해요! 👋',
+    welcome: '배경화면에 담는 나만의 시간표,\n타임지그에 오신 걸 환영해요!',
     setupGuide: '시간표 이름을 알려주세요',
     namePlaceholder: '예: 민준',
     start: '시작하기',
