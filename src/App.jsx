@@ -44,6 +44,9 @@ function App() {
   
   // 전체 데이터
   const [data, setData] = useState(DEFAULT_STATE);
+
+  // 방금 "시작하기"로 들어온 진짜 첫 진입인지 (이때만 튜토리얼 자동 표시)
+  const [justSetup, setJustSetup] = useState(false);
   
   // 처음 진입 시 저장된 데이터 불러오기
   useEffect(() => {
@@ -76,9 +79,10 @@ function App() {
         { id: 103, name: '수학', duration: 60, colorIndex: 2, active: true },
       ],
     });
+    setJustSetup(true);
     setMode('main');
   }
-  
+
   return (
     <>
       {mode === 'splash' && <Splash />}
@@ -87,6 +91,7 @@ function App() {
         <Main
           data={data}
           setData={setData}
+          autoTutorial={justSetup}
           onGoExport={() => setMode('export')}
         />
       )}

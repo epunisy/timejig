@@ -7,7 +7,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 
-export default function Main({ data, setData, onGoExport }) {
+export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -22,12 +22,13 @@ export default function Main({ data, setData, onGoExport }) {
   const newTTComposingRef = useRef(false);
   const renameComposingRef = useRef(false);
 
-  // 첫 진입 시 메인 화면을 잠깐 본 뒤 튜토리얼을 띄운다 (처음 한 번만)
+  // 설정 완료 직후(진짜 첫 진입)에만, 메인 화면을 잠깐 본 뒤 튜토리얼을 띄운다.
+  // 일반 로드(저장된 데이터로 바로 메인) 때는 자동으로 띄우지 않음.
   useEffect(() => {
-    if (data.tutorialDone) return;
+    if (!autoTutorial || data.tutorialDone) return;
     const id = setTimeout(() => setShowTutorial(true), 700);
     return () => clearTimeout(id);
-  }, [data.tutorialDone]);
+  }, [autoTutorial, data.tutorialDone]);
   
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
