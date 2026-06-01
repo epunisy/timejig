@@ -33,6 +33,8 @@ export const FONTS = [
   { key: 'himelody', label: '하이멜로디', family: "'Hi Melody', cursive" },
   { key: 'poorstory', label: '포어스토리', family: "'Poor Story', cursive" },
   { key: 'yeonsung', label: '연성', family: "'Yeon Sung', cursive" },
+  { key: 'caveat', label: 'Caveat', family: "'Caveat', 'Apple SD Gothic Neo', 'Noto Sans KR', cursive" },
+  { key: 'patrick', label: 'Patrick', family: "'Patrick Hand', 'Apple SD Gothic Neo', 'Noto Sans KR', cursive" },
 ];
 
 export function getFontFamily(font) {
