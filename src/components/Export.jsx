@@ -94,11 +94,13 @@ export default function Export({ data, onBack }) {
     const gap = Math.round(boxH * 0.03);
     const wrapH = (boxH - gap * (n - 1)) / n;
 
-    const labelFont = Math.max(8, Math.round(boxW * 0.022));
-    const labelH = Math.round(labelFont * 1.5);
-    const headFont = Math.max(6, Math.round(colW * 0.16));
+    // 요일·과목명·시간표 이름 모두 동일한 폰트 크기 (요일 글자 기준)
+    const font = Math.max(6, Math.round(colW * 0.16));
+    const labelFont = font;
+    const labelH = Math.round(labelFont * 1.6);
+    const headFont = font;
     const headH = Math.round(headFont * 1.8);
-    const blockFont = Math.max(5, Math.round(colW * 0.14));
+    const blockFont = font;
     const accentW = Math.max(2, Math.round(colW * 0.03));
     const schedH = Math.max(0, wrapH - labelH);
     const bodyH = Math.max(0, schedH - headH);
@@ -107,10 +109,10 @@ export default function Export({ data, onBack }) {
       <div style={{ width: boxW + 'px', height: boxH + 'px' }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 작게, 회색 */}
+            {/* 시간표 이름 — 진그레이, 과목명과 동일 크기 */}
             <div style={{
               height: labelH + 'px', lineHeight: labelH + 'px',
-              fontSize: labelFont + 'px', fontWeight: 400, color: '#9a9a9a',
+              fontSize: labelFont + 'px', fontWeight: 500, color: '#555',
               paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
             }}>{tt.name}</div>
 
@@ -118,16 +120,15 @@ export default function Export({ data, onBack }) {
               height: schedH + 'px', boxSizing: 'border-box',
               border: '1px solid #ddd', background: '#fff', overflow: 'hidden',
             }}>
-              {/* 요일 헤더 — 진하게, 굵게 */}
+              {/* 요일 헤더 — 흰 글자 + 그레이 바탕 */}
               <div style={{ display: 'flex', height: headH + 'px' }}>
                 {days.map((d, i) => (
                   <div key={d} style={{
                     width: colW + 'px', boxSizing: 'border-box',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: headFont + 'px', fontWeight: 700, color: '#222',
-                    background: '#f4f4f2',
-                    borderRight: i < days.length - 1 ? '1px solid #ddd' : 'none',
-                    borderBottom: '1px solid #ddd',
+                    fontSize: headFont + 'px', fontWeight: 600, color: '#fff',
+                    background: '#9a9a9a',
+                    borderRight: i < days.length - 1 ? '1px solid #ffffff' : 'none',
                   }}>{d}</div>
                 ))}
               </div>
@@ -157,16 +158,16 @@ export default function Export({ data, onBack }) {
                       }
                       return (
                         <div key={b.id} style={blkStyle}>
-                          {/* 과목명 — 옅게 */}
+                          {/* 과목명 — 진그레이 */}
                           <span style={{
-                            fontSize: blockFont + 'px', fontWeight: 300, color: '#aaa',
+                            fontSize: blockFont + 'px', fontWeight: 400, color: '#555',
                             lineHeight: 1.1, textAlign: 'center',
                             maxWidth: '100%', overflow: 'hidden',
                           }}>{subj.name}</span>
                           {showTimeNow && (
                             <span style={{
-                              fontSize: Math.max(4, Math.round(blockFont * 0.85)) + 'px',
-                              color: '#bbb', lineHeight: 1.1, whiteSpace: 'nowrap', marginTop: '1px',
+                              fontSize: Math.max(4, Math.round(blockFont * 0.8)) + 'px',
+                              color: '#888', lineHeight: 1.1, whiteSpace: 'nowrap', marginTop: '1px',
                             }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
                           )}
                         </div>
