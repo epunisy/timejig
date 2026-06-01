@@ -613,12 +613,13 @@ html, body {
 }
 
 .tj-modal-actions button.danger {
-  color: #C77575;
-  border-color: #E8A5A5;
+  background: #A32D2D;
+  color: #fff;
+  border-color: #A32D2D;
 }
 
 .tj-modal-actions button.danger:hover {
-  background: #FCEEEE;
+  background: #8f2727;
 }
 
 .tj-confirm-msg {
