@@ -152,7 +152,7 @@ export default function Settings({
               border: '0.5px solid #E24B4A',
               color: '#A32D2D',
               cursor: 'pointer',
-              fontSize: '13px',
+              fontSize: '11px',
               fontFamily: 'inherit'
             }}
           >
