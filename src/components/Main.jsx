@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import Timetable from './Timetable';
 import Palette from './Palette';
@@ -14,13 +14,20 @@ export default function Main({ data, setData, onGoExport }) {
   const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
-  const [showTutorial, setShowTutorial] = useState(!data.tutorialDone);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
   const renameComposingRef = useRef(false);
+
+  // 첫 진입 시 메인 화면을 잠깐 본 뒤 튜토리얼을 띄운다 (처음 한 번만)
+  useEffect(() => {
+    if (data.tutorialDone) return;
+    const id = setTimeout(() => setShowTutorial(true), 700);
+    return () => clearTimeout(id);
+  }, [data.tutorialDone]);
   
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
@@ -198,11 +205,10 @@ export default function Main({ data, setData, onGoExport }) {
     updateTimetable(tt => ({ ...tt, name: name.trim() || tt.name }));
   }
   
-  function handleTutorialClose(dontShowAgain) {
+  function handleTutorialClose() {
+    // 어느 버튼으로 닫든 한 번 본 것으로 기록 → 다음 진입부터 자동으로 안 뜸
     setShowTutorial(false);
-    if (dontShowAgain) {
-      setData({ ...data, tutorialDone: true });
-    }
+    setData({ ...data, tutorialDone: true });
   }
   
   const isDragging = dragSubject !== null || internalDragging;

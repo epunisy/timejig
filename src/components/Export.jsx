@@ -101,7 +101,7 @@ export default function Export({ data, onBack }) {
     const headFont = font;
     const headH = Math.round(headFont * 1.8);
     const blockFont = font;
-    const accentW = Math.max(2, Math.round(colW * 0.03));
+    const accentW = Math.max(3, Math.round(colW * 0.06));
     const schedH = Math.max(0, wrapH - labelH);
     const bodyH = Math.max(0, schedH - headH);
 
