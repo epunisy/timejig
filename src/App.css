@@ -722,32 +722,56 @@ html, body {
   box-sizing: border-box;
 }
 
-.tj-coach-num { font-size: 10px; color: #aaa; margin-bottom: 4px; }
-.tj-coach-tip b { font-size: 13px; font-weight: 600; color: #222; }
-.tj-coach-tip p { font-size: 12px; color: #555; line-height: 1.55; margin: 6px 0 12px; }
+.tj-coach-spot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 7px;
+  animation: tjCoachPulse 1.7s ease-out infinite;
+}
+@keyframes tjCoachPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.55); }
+  70% { box-shadow: 0 0 0 11px rgba(255,255,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+
+.tj-coach-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.tj-coach-ic { font-size: 19px; line-height: 1; }
+.tj-coach-tip b { font-size: 14px; font-weight: 600; color: #222; }
+.tj-coach-tip p { font-size: 12px; color: #555; line-height: 1.55; margin: 7px 0 13px; }
 
 .tj-coach-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
+.tj-coach-dots { display: flex; align-items: center; gap: 5px; }
+.tj-coach-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #dcdcdc;
+  transition: all 0.2s;
+}
+.tj-coach-dot.on { width: 16px; border-radius: 3px; background: #222; }
+.tj-coach-btns { display: flex; align-items: center; gap: 2px; }
 .tj-coach-actions .skip {
   background: transparent;
   border: none;
-  color: #999;
+  color: #aaa;
   font-size: 12px;
   cursor: pointer;
   font-family: inherit;
-  padding: 6px 4px;
+  padding: 6px 8px;
 }
 .tj-coach-next {
   background: #222;
   color: #fff;
   border: none;
-  padding: 8px 18px;
-  border-radius: 5px;
+  padding: 8px 16px;
+  border-radius: 6px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   font-family: inherit;
 }
@@ -756,11 +780,51 @@ html, body {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.04));
 }
-.tj-coach-arrow.top { top: -7px; border-bottom: 7px solid #fff; }
-.tj-coach-arrow.bottom { bottom: -7px; border-top: 7px solid #fff; }
+.tj-coach-arrow.top { top: -8px; border-bottom: 8px solid #fff; }
+.tj-coach-arrow.bottom { bottom: -8px; border-top: 8px solid #fff; }
+
+/* 리스트형 튜토리얼 (다시 보기) */
+.tj-tutorial-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 14px;
+}
+.tj-tutorial {
+  background: #fff;
+  padding: 18px;
+  width: 400px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 8px;
+}
+.tj-tutorial h3 { margin: 0 0 2px; font-size: 15px; font-weight: 600; text-align: center; }
+.tj-tutorial-step {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 10px;
+  background: #f9f9f7;
+  border-radius: 6px;
+  border-left: 3px solid #222;
+}
+.tj-tutorial-num { font-size: 14px; font-weight: 700; color: #222; min-width: 18px; }
+.tj-tutorial-text { font-size: 12px; line-height: 1.5; color: #333; }
+.tj-tutorial-text b { color: #000; font-weight: 600; font-size: 12px; }
+.tj-tutorial-text .sub { color: #888; display: block; margin-top: 2px; font-size: 11px; }
+.tj-tutorial-actions { display: flex; align-items: center; margin-top: 3px; }
 
 /* ===== 배경화면 만들기 ===== */
 .tj-export { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }

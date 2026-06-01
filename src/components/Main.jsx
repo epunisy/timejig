@@ -6,6 +6,7 @@ import Settings from './Settings';
 import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
+import TutorialList from './TutorialList';
 
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
@@ -15,6 +16,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
   const newTTInputRef = useRef(null);
@@ -355,7 +357,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           timetableName={activeTT.name}
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
-          onShowTutorial={() => { setShowSettings(false); setShowTutorial(true); }}
+          onShowTutorial={() => { setShowSettings(false); setShowHelp(true); }}
           onClose={() => setShowSettings(false)}
         />
       )}
@@ -369,6 +371,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
+      )}
+
+      {showHelp && (
+        <TutorialList onClose={() => setShowHelp(false)} />
       )}
     </div>
   );
