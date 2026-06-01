@@ -264,9 +264,11 @@ export default function Timetable({
             <div key={h} style={{
               position: 'absolute',
               top: (i * HOUR_PX + 3) + 'px',
-              right: '4px',
+              left: 0,
+              right: 0,
+              textAlign: 'center',
               fontSize: '10px',
-              color: '#888',
+              color: '#444',
             }}>
               {pad(h)}
             </div>
@@ -307,7 +309,7 @@ export default function Timetable({
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
                   <div className="nm">{subj.name}</div>
-                  <div className="tm">{fmtTime(b.start)}–{fmtTime(b.end)}</div>
+                  <div className="tm">{fmtTime(b.start)}~{fmtTime(b.end)}</div>
                 </div>
               );
             })}
