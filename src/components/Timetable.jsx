@@ -48,6 +48,7 @@ export default function Timetable({
     
     function handleMove(e) {
       const p = getEventPoint(e);
+      showGhost(dragSubject.name, p.x, p.y);
       const body = gridBodyRef.current;
       if (!body) return;
       const rect = body.getBoundingClientRect();
@@ -55,7 +56,7 @@ export default function Timetable({
       const y = p.y - rect.top;
       const dayColW = (rect.width - COL_W_LABEL) / days.length;
       const inside = x >= COL_W_LABEL && x <= rect.width && y >= 0 && y <= rect.height;
-      
+
       if (inside) {
         const dayIdx = Math.floor((x - COL_W_LABEL) / dayColW);
         const dur = dragSubject.duration;
@@ -79,6 +80,7 @@ export default function Timetable({
     
     function handleEnd(e) {
       const p = getEventPoint(e);
+      clearGhost();
       const body = gridBodyRef.current;
       if (!body) { onDragEnd(null); return; }
       const rect = body.getBoundingClientRect();
@@ -117,6 +119,7 @@ export default function Timetable({
       document.removeEventListener('mouseup', handleEnd);
       document.removeEventListener('touchmove', handleMove);
       document.removeEventListener('touchend', handleEnd);
+      clearGhost();
     };
   }, [dragSubject, blocks, days, totalMin]);
   
@@ -128,10 +131,14 @@ export default function Timetable({
   
   useEffect(() => {
     if (!internalDrag) return;
-    
+
+    const dragSubj = subjects.find(s => s.id === internalDrag.subjectId);
+    const dragLabel = dragSubj ? dragSubj.name : '';
+
     function handleMove(e) {
       e.preventDefault();
       const p = getEventPoint(e);
+      showGhost(dragLabel, p.x, p.y);
       const body = gridBodyRef.current;
       if (!body) return;
       const rect = body.getBoundingClientRect();
@@ -211,6 +218,7 @@ export default function Timetable({
       }
       
       clearDropPreview();
+      clearGhost();
       if (trash) trash.className = 'tj-trash-zone';
       setInternalDrag(null);
       onInternalDraggingChange(false);
@@ -225,8 +233,9 @@ export default function Timetable({
       document.removeEventListener('mouseup', handleEnd);
       document.removeEventListener('touchmove', handleMove);
       document.removeEventListener('touchend', handleEnd);
+      clearGhost();
     };
-  }, [internalDrag, blocks, days, totalMin, onBlocksChange, onInternalDraggingChange]);
+  }, [internalDrag, blocks, days, totalMin, subjects, onBlocksChange, onInternalDraggingChange]);
   
   function showDropPreview(day, start, end, invalid) {
     clearDropPreview();
@@ -243,6 +252,25 @@ export default function Timetable({
   
   function clearDropPreview() {
     document.querySelectorAll('.tj-drop-preview').forEach(el => el.remove());
+  }
+
+  // 드래그 중 커서를 따라다니는 고스트 (무엇을 옮기는지 보이게)
+  function showGhost(text, x, y) {
+    let g = document.getElementById('drag-ghost');
+    if (!g) {
+      g = document.createElement('div');
+      g.id = 'drag-ghost';
+      g.className = 'tj-ghost';
+      document.body.appendChild(g);
+    }
+    g.textContent = text;
+    g.style.left = x + 'px';
+    g.style.top = y + 'px';
+  }
+
+  function clearGhost() {
+    const g = document.getElementById('drag-ghost');
+    if (g) g.remove();
   }
   
   const hours = [];
