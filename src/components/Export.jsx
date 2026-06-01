@@ -109,10 +109,10 @@ export default function Export({ data, onBack }) {
       <div style={{ width: boxW + 'px', height: boxH + 'px' }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 진그레이, 과목명과 동일 크기 */}
+            {/* 시간표 이름 — 찐그레이, 과목명과 동일 크기 */}
             <div style={{
               height: labelH + 'px', lineHeight: labelH + 'px',
-              fontSize: labelFont + 'px', fontWeight: 500, color: '#555',
+              fontSize: labelFont + 'px', fontWeight: 500, color: '#444',
               paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
             }}>{tt.name}</div>
 
@@ -120,15 +120,15 @@ export default function Export({ data, onBack }) {
               height: schedH + 'px', boxSizing: 'border-box',
               border: '1px solid #ddd', background: '#fff', overflow: 'hidden',
             }}>
-              {/* 요일 헤더 — 흰 글자 + 그레이 바탕 */}
+              {/* 요일 헤더 — 찐그레이 글자 + 연그레이 바탕 */}
               <div style={{ display: 'flex', height: headH + 'px' }}>
                 {days.map((d, i) => (
                   <div key={d} style={{
                     width: colW + 'px', boxSizing: 'border-box',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: headFont + 'px', fontWeight: 600, color: '#fff',
-                    background: '#9a9a9a',
-                    borderRight: i < days.length - 1 ? '1px solid #ffffff' : 'none',
+                    fontSize: headFont + 'px', fontWeight: 600, color: '#444',
+                    background: '#ececec',
+                    borderRight: i < days.length - 1 ? '1px solid #fff' : 'none',
                   }}>{d}</div>
                 ))}
               </div>
@@ -158,16 +158,17 @@ export default function Export({ data, onBack }) {
                       }
                       return (
                         <div key={b.id} style={blkStyle}>
-                          {/* 과목명 — 진그레이 */}
+                          {/* 과목명 — 찐그레이 */}
                           <span style={{
-                            fontSize: blockFont + 'px', fontWeight: 400, color: '#555',
+                            fontSize: blockFont + 'px', fontWeight: 400, color: '#444',
                             lineHeight: 1.1, textAlign: 'center',
                             maxWidth: '100%', overflow: 'hidden',
                           }}>{subj.name}</span>
                           {showTimeNow && (
                             <span style={{
                               fontSize: Math.max(4, Math.round(blockFont * 0.8)) + 'px',
-                              color: '#888', lineHeight: 1.1, whiteSpace: 'nowrap', marginTop: '1px',
+                              color: '#444', background: '#ececec', borderRadius: '2px',
+                              padding: '0 2px', lineHeight: 1.3, whiteSpace: 'nowrap', marginTop: '1px',
                             }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
                           )}
                         </div>
