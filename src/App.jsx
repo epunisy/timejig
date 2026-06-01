@@ -29,13 +29,10 @@ export const FONTS = [
   { key: 'gowun', label: '고운돋움', family: "'Gowun Dodum', sans-serif" },
   { key: 'myeongjo', label: '나눔명조', family: "'Nanum Myeongjo', serif" },
   { key: 'dohyeon', label: '도현', family: "'Do Hyeon', sans-serif" },
-  { key: 'blackhan', label: '검은고딕', family: "'Black Han Sans', sans-serif" },
   { key: 'gamja', label: '감자꽃', family: "'Gamja Flower', cursive" },
   { key: 'himelody', label: '하이멜로디', family: "'Hi Melody', cursive" },
-  { key: 'dongle', label: '동글', family: "'Dongle', sans-serif" },
   { key: 'poorstory', label: '포어스토리', family: "'Poor Story', cursive" },
   { key: 'yeonsung', label: '연성', family: "'Yeon Sung', cursive" },
-  { key: 'gugi', label: '구기', family: "'Gugi', cursive" },
 ];
 
 export function getFontFamily(font) {
@@ -51,6 +48,7 @@ const DEFAULT_STATE = {
     startHour: 8,
     endHour: 16,
     font: 'system',
+    dayLang: 'ko',
   },
   timetables: [
     { id: 1, name: '시간표', blocks: [] }

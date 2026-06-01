@@ -24,8 +24,8 @@ export default function Settings({
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   
-  function setWeekRange(range) {
-    onConfigChange({ ...config, weekRange: range });
+  function setWeek(range, lang) {
+    onConfigChange({ ...config, weekRange: range, dayLang: lang });
   }
   
   function setAccent(accent) {
@@ -94,13 +94,21 @@ export default function Settings({
           <span>{t('weekRange')}</span>
           <div className="tj-mode-strip">
             <button
-              className={config.weekRange === 'mon-fri' ? 'active' : ''}
-              onClick={() => setWeekRange('mon-fri')}
-            >{t('monFri')}</button>
+              className={config.weekRange === 'mon-fri' && (config.dayLang || 'ko') === 'ko' ? 'active' : ''}
+              onClick={() => setWeek('mon-fri', 'ko')}
+            >월–금</button>
             <button
-              className={config.weekRange === 'mon-sun' ? 'active' : ''}
-              onClick={() => setWeekRange('mon-sun')}
-            >{t('monSun')}</button>
+              className={config.weekRange === 'mon-sun' && (config.dayLang || 'ko') === 'ko' ? 'active' : ''}
+              onClick={() => setWeek('mon-sun', 'ko')}
+            >월–일</button>
+            <button
+              className={config.weekRange === 'mon-fri' && config.dayLang === 'en' ? 'active' : ''}
+              onClick={() => setWeek('mon-fri', 'en')}
+            >MON–FRI</button>
+            <button
+              className={config.weekRange === 'mon-sun' && config.dayLang === 'en' ? 'active' : ''}
+              onClick={() => setWeek('mon-sun', 'en')}
+            >MON–SUN</button>
           </div>
         </label>
         

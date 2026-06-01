@@ -4,6 +4,7 @@ import { t } from '../i18n';
 import { getAccents, getFontFamily } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
+const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -17,6 +18,7 @@ export default function Export({ data, onBack }) {
   const captureRef = useRef(null);
   
   const days = data.config.weekRange === 'mon-fri' ? ALL_DAYS.slice(0, 5) : ALL_DAYS;
+  const dayLabels = (data.config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (data.config.endHour - data.config.startHour) * 60;
   const accents = getAccents(data.config.accent);
   
@@ -160,7 +162,7 @@ export default function Export({ data, onBack }) {
                     fontSize: headFont + 'px', fontWeight: 600, color: '#444',
                     background: '#ececec',
                     borderRight: i < days.length - 1 ? '1px solid #fff' : 'none',
-                  }}>{d}</div>
+                  }}>{dayLabels[i]}</div>
                 ))}
               </div>
               {/* 본문 — 시간축 + 요일별 컬럼 + 블록 */}

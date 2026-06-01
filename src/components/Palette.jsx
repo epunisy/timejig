@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { t } from '../i18n';
-import { getAccents } from '../App';
+import { getAccents, getFontFamily } from '../App';
 
 const LONG_PRESS_MS = 500;
 const MOVE_THRESHOLD = 8;
@@ -13,6 +13,7 @@ export default function Palette({
   onDragStart,
 }) {
   const accents = getAccents(config.accent);
+  const fontFamily = getFontFamily(config.font);
   const itemRefs = useRef({});
   
   useEffect(() => {
@@ -104,7 +105,7 @@ export default function Palette({
         <h3>{t('subjects')}</h3>
         <button className="tj-add-btn" onClick={onAddSubject}>+</button>
       </div>
-      <div className="tj-pal-list">
+      <div className="tj-pal-list" style={fontFamily ? { fontFamily } : undefined}>
         {subjects.length === 0 ? (
           <div className="tj-empty">{t('emptySubjects')}</div>
         ) : (

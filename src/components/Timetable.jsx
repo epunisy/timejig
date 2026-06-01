@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { getAccents, getFontFamily } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
+const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
 const SLOT_MIN = 10;
 const HOUR_PX = 50;
 const PX_PER_MIN = HOUR_PX / 60;
@@ -32,6 +33,7 @@ export default function Timetable({
   const [internalDrag, setInternalDrag] = useState(null);
   
   const days = config.weekRange === 'mon-fri' ? ALL_DAYS.slice(0, 5) : ALL_DAYS;
+  const dayLabels = (config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (config.endHour - config.startHour) * 60;
   const bodyHeight = (config.endHour - config.startHour) * HOUR_PX;
   
@@ -254,7 +256,7 @@ export default function Timetable({
     <div className="tj-grid" style={fontFamily ? { fontFamily } : undefined}>
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
-        {days.map(d => <div key={d} className="tj-day-head">{d}</div>)}
+        {days.map((d, i) => <div key={d} className="tj-day-head">{dayLabels[i]}</div>)}
       </div>
       <div 
         className="tj-grid-body" 
