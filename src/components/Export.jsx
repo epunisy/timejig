@@ -12,6 +12,7 @@ export default function Export({ data, onBack }) {
   const [phone, setPhone] = useState('auto');
   const [showMore, setShowMore] = useState(false);
   const [showTime, setShowTime] = useState(false);
+  const [fillTop, setFillTop] = useState(false); // 상단 시계 공간을 시간표로 채울지
   const [downloading, setDownloading] = useState(false);
   const captureRef = useRef(null);
   
@@ -70,20 +71,28 @@ export default function Export({ data, onBack }) {
     }
   }
   
+  // 콘텐츠 영역 비율 (좌우 6%, 하단 8% 고정)
+  // 상단: 시계 공간 비우면 30%, 시간표로 채우면 6%
+  const TOP_RATIO = fillTop ? 0.06 : 0.30;
+  const SIDE_RATIO = 0.06;
+  const BOTTOM_RATIO = 0.08;
+
   // 미리보기 폰 크기
   const W = 200;
   const H = W * getRatio() / 9;
-  // 미리보기 콘텐츠 영역 (.tj-phone-content: 상120 하30 좌우12)
-  const PREV_W = W - 24;
-  const PREV_H = H - 150;
+  // 미리보기 콘텐츠 영역 (캡쳐와 동일 비율)
+  const PREV_TOP = Math.round(H * TOP_RATIO);
+  const PREV_SIDE = Math.round(W * SIDE_RATIO);
+  const PREV_BOTTOM = Math.round(H * BOTTOM_RATIO);
+  const PREV_W = W - PREV_SIDE * 2;
+  const PREV_H = H - PREV_TOP - PREV_BOTTOM;
   // 캡쳐용 실제 크기 (가로 1080 기준)
   const CAP_W = 1080;
   const CAP_H = Math.round(CAP_W * getRatio() / 9);
-  // 캡쳐 콘텐츠 영역 (상30% 하8% 좌우6%)
-  const CAP_PAD_X = Math.round(CAP_W * 0.06);
-  const CAP_TOP = Math.round(CAP_H * 0.30);
+  const CAP_PAD_X = Math.round(CAP_W * SIDE_RATIO);
+  const CAP_TOP = Math.round(CAP_H * TOP_RATIO);
   const CAP_CONTENT_W = CAP_W - CAP_PAD_X * 2;
-  const CAP_CONTENT_H = Math.round(CAP_H * 0.62);
+  const CAP_CONTENT_H = Math.round(CAP_H * (1 - TOP_RATIO - BOTTOM_RATIO));
 
   // 미리보기/캡쳐 공통 — 시간표 콜라주를 "픽셀 기반"으로 렌더.
   // (html2canvas가 grid 1fr·% 높이·0.5px 테두리를 제대로 못 그려서
@@ -297,7 +306,27 @@ export default function Export({ data, onBack }) {
               </div>
             )}
           </div>
-          
+
+          <div className="tj-export-section">
+            <h4>{t('section4')}</h4>
+            <div className="tj-radio-row">
+              <div
+                className={'tj-radio-item' + (!fillTop ? ' sel' : '')}
+                onClick={() => setFillTop(false)}
+              >
+                <div className="tj-radio-circle"></div>
+                <span>{t('clockKeep')}</span>
+              </div>
+              <div
+                className={'tj-radio-item' + (fillTop ? ' sel' : '')}
+                onClick={() => setFillTop(true)}
+              >
+                <div className="tj-radio-circle"></div>
+                <span>{t('clockFill')}</span>
+              </div>
+            </div>
+          </div>
+
           <button
             className="tj-setup-cta"
             onClick={handleDownload}
@@ -315,9 +344,12 @@ export default function Export({ data, onBack }) {
           <div className="tj-phone-frame">
             <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px' }}>
               <div className="tj-phone-notch"></div>
-              <div className="tj-phone-time">9:41</div>
-              <div className="tj-phone-date">10월 14일 화요일</div>
-              <div className="tj-phone-content">
+              {!fillTop && <div className="tj-phone-time">9:41</div>}
+              {!fillTop && <div className="tj-phone-date">10월 14일 화요일</div>}
+              <div
+                className="tj-phone-content"
+                style={{ top: PREV_TOP + 'px', left: PREV_SIDE + 'px', right: PREV_SIDE + 'px', bottom: PREV_BOTTOM + 'px' }}
+              >
                 {selectedTTs.length === 0 ? (
                   <div style={{
                     flex: 1,
