@@ -67,7 +67,7 @@ export default function Setup({ onDone }) {
       
       <div style={{ textAlign: 'left' }}>
         <div style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>
-          시간표 시간 범위
+          시간
         </div>
         <div className="tj-time-row">
           <select
