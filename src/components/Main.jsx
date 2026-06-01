@@ -19,6 +19,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [showHelp, setShowHelp] = useState(false);
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
+  const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -34,9 +35,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
-  
-  const accentClass = 'accent-' + data.config.accent;
-  
+
   function updateTimetable(updater) {
     setData({
       ...data,
@@ -219,81 +218,88 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   return (
     <div className="tj-app">
       <div className="tj-topbar">
-        <div className="tj-tabs">
-          {data.timetables.map(tt => {
-            const isActive = tt.id === data.activeTT;
-            let cls = 'tj-tab';
-            if (isActive) cls += ' active ' + accentClass;
-            
-            if (renamingTT === tt.id) {
-              return (
-                <span key={tt.id} className="tj-inline-add">
-                  <input
-                    ref={renameInputRef}
-                    type="text"
-                    defaultValue={tt.name}
-                    autoFocus
-                    autoComplete="off"
-                    onCompositionStart={() => { renameComposingRef.current = true; }}
-                    onCompositionEnd={() => { renameComposingRef.current = false; }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !renameComposingRef.current) handleRenameTimetable(tt.id);
-                      if (e.key === 'Escape') setRenamingTT(null);
-                    }}
-                  />
-                  <button onClick={() => handleRenameTimetable(tt.id)}>저장</button>
-                  <button className="cancel" onClick={() => setRenamingTT(null)}>취소</button>
-                </span>
-              );
-            }
-            
-            return (
+        <div className="tj-ttbar">
+          <button
+            className="tj-tt-current"
+            onClick={() => setTtMenuOpen(o => !o)}
+          >
+            <span className="tj-tt-cur-name">{activeTT.name}</span>
+            <span className="tj-tt-caret">▾</span>
+          </button>
+          {ttMenuOpen && (
+            <>
               <div
-                key={tt.id}
-                className={cls}
-                onClick={() => setData({ ...data, activeTT: tt.id })}
-              >
-                <span className="tab-name">{tt.name}</span>
-                <span 
-                  className="tab-btn" 
-                  title="이름 수정"
-                  onClick={(e) => { e.stopPropagation(); setRenamingTT(tt.id); }}
-                >✎</span>
-                <span 
-                  className="tab-btn" 
-                  title="복제"
-                  onClick={(e) => { e.stopPropagation(); handleDuplicate(tt.id); }}
-                >⧉</span>
-                {data.timetables.length > 1 && (
-                  <span 
-                    className="tab-btn"
-                    title="삭제"
-                    onClick={(e) => { e.stopPropagation(); handleDeleteTimetable(tt.id); }}
-                  >×</span>
+                className="tj-tt-backdrop"
+                onClick={() => { setTtMenuOpen(false); setRenamingTT(null); setAddingTT(false); }}
+              />
+              <div className="tj-tt-menu">
+                {data.timetables.map(tt => {
+                  const isActive = tt.id === data.activeTT;
+                  if (renamingTT === tt.id) {
+                    return (
+                      <div key={tt.id} className="tj-tt-row editing">
+                        <input
+                          ref={renameInputRef}
+                          type="text"
+                          defaultValue={tt.name}
+                          autoFocus
+                          autoComplete="off"
+                          onCompositionStart={() => { renameComposingRef.current = true; }}
+                          onCompositionEnd={() => { renameComposingRef.current = false; }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !renameComposingRef.current) handleRenameTimetable(tt.id);
+                            if (e.key === 'Escape') setRenamingTT(null);
+                          }}
+                        />
+                        <button onClick={() => handleRenameTimetable(tt.id)}>저장</button>
+                        <button className="cancel" onClick={() => setRenamingTT(null)}>취소</button>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={tt.id} className={'tj-tt-row' + (isActive ? ' active' : '')}>
+                      <span
+                        className="tj-tt-name"
+                        onClick={() => { setData({ ...data, activeTT: tt.id }); setTtMenuOpen(false); }}
+                      >
+                        <span className="tj-tt-check">{isActive ? '✓' : ''}</span>
+                        {tt.name}
+                      </span>
+                      <span className="tj-tt-act" title="이름 수정" onClick={() => setRenamingTT(tt.id)}>✎</span>
+                      <span className="tj-tt-act" title="복제" onClick={() => handleDuplicate(tt.id)}>⧉</span>
+                      {data.timetables.length > 1 && (
+                        <span
+                          className="tj-tt-act"
+                          title="삭제"
+                          onClick={() => { setTtMenuOpen(false); handleDeleteTimetable(tt.id); }}
+                        >×</span>
+                      )}
+                    </div>
+                  );
+                })}
+                {addingTT ? (
+                  <div className="tj-tt-row editing">
+                    <input
+                      ref={newTTInputRef}
+                      type="text"
+                      placeholder="시간표 이름"
+                      autoFocus
+                      autoComplete="off"
+                      onCompositionStart={() => { newTTComposingRef.current = true; }}
+                      onCompositionEnd={() => { newTTComposingRef.current = false; }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !newTTComposingRef.current) handleAddTimetable();
+                        if (e.key === 'Escape') setAddingTT(false);
+                      }}
+                    />
+                    <button onClick={handleAddTimetable}>추가</button>
+                    <button className="cancel" onClick={() => setAddingTT(false)}>취소</button>
+                  </div>
+                ) : (
+                  <button className="tj-tt-addrow" onClick={() => setAddingTT(true)}>+ 새 시간표</button>
                 )}
               </div>
-            );
-          })}
-          {addingTT ? (
-            <span className="tj-inline-add">
-              <input
-                ref={newTTInputRef}
-                type="text"
-                placeholder="시간표 이름"
-                autoFocus
-                autoComplete="off"
-                onCompositionStart={() => { newTTComposingRef.current = true; }}
-                onCompositionEnd={() => { newTTComposingRef.current = false; }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !newTTComposingRef.current) handleAddTimetable();
-                  if (e.key === 'Escape') setAddingTT(false);
-                }}
-              />
-              <button onClick={handleAddTimetable}>추가</button>
-              <button className="cancel" onClick={() => setAddingTT(false)}>취소</button>
-            </span>
-          ) : (
-            <button className="tj-tab-add" onClick={() => setAddingTT(true)}>+</button>
+            </>
           )}
         </div>
         <div className="tj-action-row">

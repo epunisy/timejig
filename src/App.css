@@ -135,108 +135,121 @@ html, body {
   flex-wrap: wrap;
 }
 
-.tj-tabs {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-}
+/* ===== 시간표 목록 (드롭다운) ===== */
+.tj-ttbar { position: relative; }
 
-/* 시간표 탭 — 선택 시 아래 모서리 밑줄 + 굵은 글자 */
-.tj-tab {
-  padding: 5px 7px 5px 9px;
-  font-size: 12px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: #999;
-  display: flex;
+.tj-tt-current {
+  display: inline-flex;
   align-items: center;
-  gap: 3px;
-}
-
-.tj-tab.active {
+  gap: 7px;
+  background: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: #222;
-  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  max-width: 220px;
+}
+.tj-tt-cur-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tj-tt-caret { color: #999; font-size: 10px; }
+
+.tj-tt-backdrop { position: fixed; inset: 0; z-index: 150; }
+
+.tj-tt-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 151;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  padding: 6px;
+  min-width: 240px;
+  max-height: 62vh;
+  overflow-y: auto;
 }
 
-.tj-tab .tab-name {
-  padding-right: 3px;
-  max-width: 80px;
+.tj-tt-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+.tj-tt-row.active { background: #f4f6fa; }
+.tj-tt-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  padding: 8px 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.tj-tab .tab-btn {
-  opacity: 0.7;
+.tj-tt-row.active .tj-tt-name { font-weight: 700; color: #111; }
+.tj-tt-check { width: 12px; color: #222; font-size: 11px; flex-shrink: 0; }
+.tj-tt-act {
+  padding: 7px;
   font-size: 13px;
-  padding: 2px 4px;
+  color: #aaa;
   cursor: pointer;
-  text-align: center;
   line-height: 1;
+  border-radius: 5px;
+  flex-shrink: 0;
 }
+.tj-tt-act:hover { background: #f0f0f0; color: #333; }
 
-.tj-tab .tab-btn:hover { opacity: 1; }
-
-.tj-tab-add {
+.tj-tt-addrow {
+  display: block;
+  width: 100%;
+  text-align: left;
   background: transparent;
-  color: #999;
   border: none;
-  padding: 5px 8px;
-  font-size: 15px;
-  font-weight: 400;
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+  padding: 11px 8px 7px;
+  font-size: 13px;
+  color: #555;
   cursor: pointer;
   font-family: inherit;
-  line-height: 1;
 }
+.tj-tt-addrow:hover { color: #111; }
 
-.tj-tab-add:hover { color: #222; }
-
-.tj-inline-add {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.tj-inline-add input {
-  padding: 5px 8px;
-  border: 0.5px solid #d8d8d8;
-  border-radius: 0;
+.tj-tt-row.editing { gap: 4px; padding: 4px; }
+.tj-tt-row.editing input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
   outline: none;
-  font-size: 12px;
+  font-size: 13px;
   font-family: inherit;
   background: #fff;
   color: #222;
-  width: 100px;
-  min-width: 0;
   -webkit-appearance: none;
   appearance: none;
 }
-
-.tj-inline-add input:focus {
-  border-color: #aaa;
-}
-
-.tj-inline-add button {
-  background: transparent;
-  border: none;
-  color: #666;
-  padding: 5px 6px;
+.tj-tt-row.editing input:focus { border-color: #aaa; }
+.tj-tt-row.editing button {
+  padding: 8px 9px;
   font-size: 11px;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  border-radius: 5px;
   cursor: pointer;
   font-family: inherit;
+  color: #444;
 }
-
-.tj-inline-add button:hover {
-  color: #000;
-}
-
-.tj-inline-add button.cancel {
-  color: #999;
-}
+.tj-tt-row.editing button.cancel { color: #999; }
 
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 

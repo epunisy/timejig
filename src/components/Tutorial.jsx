@@ -4,7 +4,7 @@ import { useState, useLayoutEffect } from 'react';
 const STEPS = [
   { sel: '.tj-add-btn', icon: '➕', title: '과목 추가', text: '여기 + 로 새 과목을 만들어요. 기본으로 국어·영어·수학이 있어요.' },
   { sel: '.tj-grid', icon: '🗓️', title: '드래그로 배치', text: '과목을 끌어다 시간표에 놓으면 10분 단위로 정렬돼요. 놓은 블록은 다시 끌어 옮기거나, 아래 휴지통으로 끌면 삭제. 카드를 길게 누르면 편집!' },
-  { sel: '.tj-tabs', icon: '🗂️', title: '시간표 관리', text: '이름 옆 ✎ 수정 · ⧉ 복제 · × 삭제. + 로 새 시간표를 추가해요.' },
+  { sel: '.tj-ttbar', icon: '🗂️', title: '시간표 관리', text: '이름(▾)을 누르면 시간표 목록이 열려요. 선택은 물론 ✎ 이름수정 · ⧉ 복제 · × 삭제, + 새 시간표까지 여기서!' },
   { sel: '.tj-icon-btn', icon: '⚙️', title: '설정', text: '요일 범위·시간·색띠, 그리고 글씨체까지 여기 ⚙ 에서 바꿔요.' },
   { sel: '.tj-cta', icon: '📱', title: '배경화면 만들기', text: '완성한 시간표를 폰 배경화면 이미지(PNG)로 저장해요!' },
 ];
