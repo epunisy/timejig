@@ -8,7 +8,7 @@ export default function Tutorial({ onClose }) {
           <div className="tj-tutorial-num">1</div>
           <div className="tj-tutorial-text">
             <b>과목 추가</b>
-            <span className="sub">우측 + 버튼으로 새 과목을 만들어요. 기본으로 국어, 영어, 수학이 있어요.</span>
+            <span className="sub">과목 옆 + 버튼으로 새 과목을 만들어요. 기본으로 국어, 영어, 수학이 있어요.</span>
           </div>
         </div>
         
@@ -51,7 +51,15 @@ export default function Tutorial({ onClose }) {
             <span className="sub">우측 ⚙ 톱니바퀴 → 요일 범위, 시간 범위, 색띠 변경.</span>
           </div>
         </div>
-        
+
+        <div className="tj-tutorial-step">
+          <div className="tj-tutorial-num">7</div>
+          <div className="tj-tutorial-text">
+            <b>배경화면 만들기</b>
+            <span className="sub">상단 ‘모바일 배경화면’ → 시간표를 폰 잠금화면 이미지(PNG)로 저장해요. 시간표 여러 개를 한 장에 담을 수도 있어요.</span>
+          </div>
+        </div>
+
         <div className="tj-tutorial-actions">
           <button className="skip" onClick={() => onClose(true)}>
             다시 보지 않기
