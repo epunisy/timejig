@@ -42,6 +42,40 @@ export function getFontFamily(font) {
   return f ? f.family : null; // 기본(시스템 고딕)이면 null
 }
 
+// 배경 테마 (시간표 표를 제외한 배경화면 전체에 적용)
+function svgBg(svg) {
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+const NS = "xmlns='http://www.w3.org/2000/svg'";
+export const BACKGROUNDS = [
+  { key: 'white', label: '기본', css: '#ffffff', text: '#444444' },
+  { key: 'black', label: '블랙', css: '#1f1f1f', text: '#ededed' },
+  { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f' },
+  { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566' },
+  { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86' },
+  { key: 'green', label: '초록', css: '#0b6b4f', text: '#ffffff' },
+  {
+    key: 'graph', label: '모눈', text: '#5a5a5a',
+    css: svgBg(`<svg ${NS} width='26' height='26'><rect width='26' height='26' fill='#ffffff'/><path d='M26 0H0V26' fill='none' stroke='#d7e3f0' stroke-width='1'/></svg>`),
+  },
+  {
+    key: 'check', label: '체크', text: '#8a5566',
+    css: svgBg(`<svg ${NS} width='40' height='40'><rect width='40' height='40' fill='#ffe9f0'/><rect width='20' height='20' fill='#ffffff'/><rect x='20' y='20' width='20' height='20' fill='#ffffff'/></svg>`),
+  },
+  {
+    key: 'gingham', label: '깅엄체크', text: '#5a4a4a',
+    css: svgBg(`<svg ${NS} width='40' height='40'><rect width='40' height='40' fill='#ffffff'/><rect width='20' height='40' fill='#f59ab4' opacity='0.4'/><rect width='40' height='20' fill='#f59ab4' opacity='0.4'/></svg>`),
+  },
+  {
+    key: 'cloud', label: '구름', text: '#3a5a86',
+    css: svgBg(`<svg ${NS} width='120' height='90'><rect width='120' height='90' fill='#d7ecff'/><g fill='#ffffff'><ellipse cx='28' cy='30' rx='22' ry='14'/><ellipse cx='50' cy='26' rx='18' ry='15'/><ellipse cx='44' cy='40' rx='25' ry='12'/><ellipse cx='95' cy='66' rx='20' ry='13'/><ellipse cx='110' cy='60' rx='15' ry='13'/></g></svg>`),
+  },
+];
+
+export function getBackground(bg) {
+  return BACKGROUNDS.find(b => b.key === bg) || BACKGROUNDS[0];
+}
+
 // 기본값
 const DEFAULT_STATE = {
   config: {
@@ -51,6 +85,7 @@ const DEFAULT_STATE = {
     endHour: 16,
     font: 'system',
     dayLang: 'ko',
+    bg: 'white',
   },
   timetables: [
     { id: 1, name: '시간표', blocks: [] }

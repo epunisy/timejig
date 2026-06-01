@@ -710,6 +710,32 @@ html, body {
   color: #222;
 }
 
+/* 배경 테마 선택 */
+.tj-bg-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.tj-bg-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.tj-bg-swatch {
+  width: 52px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+.tj-bg-item.active .tj-bg-swatch {
+  border: 2px solid #222;
+}
+.tj-bg-label { font-size: 10px; color: #666; }
+.tj-bg-item.active .tj-bg-label { color: #222; font-weight: 600; }
+
 /* ===== 튜토리얼 (스포트라이트 코치마크) ===== */
 .tj-coach-bg {
   position: fixed;

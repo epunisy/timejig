@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents, getFontFamily } from '../App';
+import { getAccents, getFontFamily, getBackground } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -21,6 +21,7 @@ export default function Export({ data, onBack }) {
   const dayLabels = (data.config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (data.config.endHour - data.config.startHour) * 60;
   const accents = getAccents(data.config.accent);
+  const bgTheme = getBackground(data.config.bg);
   
   function fmtTime(min) {
     const h = data.config.startHour + Math.floor(min / 60);
@@ -57,7 +58,7 @@ export default function Export({ data, onBack }) {
       const node = captureRef.current;
       const canvas = await html2canvas(node, {
         scale: 2,
-        backgroundColor: '#ffffff',
+        backgroundColor: null,
         logging: false,
         useCORS: true,
       });
@@ -142,10 +143,10 @@ export default function Export({ data, onBack }) {
       <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 찐그레이, 과목명과 동일 크기 */}
+            {/* 시간표 이름 — 배경 위에 올라가므로 배경 테마에 맞춘 색 */}
             <div style={{
               height: labelH + 'px', lineHeight: labelH + 'px',
-              fontSize: labelFont + 'px', fontWeight: 500, color: '#444',
+              fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
               paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
             }}>{tt.name}</div>
 
@@ -389,10 +390,10 @@ export default function Export({ data, onBack }) {
         
         <div className="tj-phone-preview">
           <div className="tj-phone-frame">
-            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px' }}>
+            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', background: bgTheme.css }}>
               <div className="tj-phone-notch"></div>
-              {!fillTop && <div className="tj-phone-time">9:41</div>}
-              {!fillTop && <div className="tj-phone-date">10월 14일 화요일</div>}
+              {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text }}>9:41</div>}
+              {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85 }}>10월 14일 화요일</div>}
               <div
                 className="tj-phone-content"
                 style={{ top: PREV_TOP + 'px', left: PREV_SIDE + 'px', right: PREV_SIDE + 'px', bottom: PREV_BOTTOM + 'px' }}
@@ -423,10 +424,10 @@ export default function Export({ data, onBack }) {
       <div style={{ position: 'fixed', left: '-99999px', top: 0, pointerEvents: 'none' }}>
         <div 
           ref={captureRef}
-          style={{ 
-            width: CAP_W + 'px', 
-            height: CAP_H + 'px', 
-            background: '#fff',
+          style={{
+            width: CAP_W + 'px',
+            height: CAP_H + 'px',
+            background: bgTheme.css,
             position: 'relative',
             overflow: 'hidden',
           }}

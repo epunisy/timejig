@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { t } from '../i18n';
 import { clearData } from '../storage';
-import { FONTS } from '../App';
+import { FONTS, BACKGROUNDS } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -34,6 +34,10 @@ export default function Settings({
 
   function setFont(font) {
     onConfigChange({ ...config, font });
+  }
+
+  function setBg(bg) {
+    onConfigChange({ ...config, bg });
   }
   
   function setStartHour(h) {
@@ -163,6 +167,23 @@ export default function Settings({
                 style={f.family ? { fontFamily: f.family } : undefined}
                 onClick={() => setFont(f.key)}
               >{f.label}</button>
+            ))}
+          </div>
+        </label>
+
+        <label>
+          <span>배경 (시간표 표 제외)</span>
+          <div className="tj-bg-grid">
+            {BACKGROUNDS.map(b => (
+              <button
+                key={b.key}
+                type="button"
+                className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
+                onClick={() => setBg(b.key)}
+              >
+                <span className="tj-bg-swatch" style={{ background: b.css }} />
+                <span className="tj-bg-label">{b.label}</span>
+              </button>
             ))}
           </div>
         </label>
