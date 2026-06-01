@@ -144,25 +144,25 @@ html, body {
   min-width: 0;
 }
 
-/* 시간표 탭 — 색띠 모드별 */
+/* 시간표 탭 — 선택 시 아래 모서리 밑줄 + 굵은 글자 */
 .tj-tab {
-  padding: 5px 7px 5px 9px;
+  padding: 5px 7px 4px 9px;
   font-size: 12px;
   cursor: pointer;
+  background: transparent;
   border: none;
+  border-bottom: 2px solid transparent;
+  color: #999;
   display: flex;
   align-items: center;
   gap: 3px;
 }
 
-.tj-tab.accent-pastel { background: #E6F1FB; color: #185FA5; border: 0.5px solid #B5D4F4; }
-.tj-tab.active.accent-pastel { background: #B5D4F4; color: #0C447C; border: 0.5px solid #85B7EB; }
-
-.tj-tab.accent-mono { background: #f0f0f0; color: #555; border: 0.5px solid #ddd; }
-.tj-tab.active.accent-mono { background: #222; color: #fff; border: 0.5px solid #222; }
-
-.tj-tab.accent-none { background: transparent; color: #999; border: 0.5px solid #e5e5e5; }
-.tj-tab.active.accent-none { background: transparent; color: #222; border: 0.5px solid #888; }
+.tj-tab.active {
+  color: #222;
+  font-weight: 700;
+  border-bottom-color: #222;
+}
 
 .tj-tab .tab-name {
   padding-right: 3px;
@@ -290,6 +290,7 @@ html, body {
   user-select: none;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   touch-action: none;
 }
 
@@ -387,6 +388,7 @@ html, body {
   background: #fff;
   border: 0.5px solid #d8d8d8;
   padding: 9px;
+  min-width: 0;
 }
 
 .tj-pal-head {
@@ -419,14 +421,6 @@ html, body {
   gap: 6px;
 }
 
-@media (max-width: 768px) {
-  .tj-pal-list {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-  }
-}
 
 .tj-pal-item {
   flex-shrink: 0;
@@ -447,7 +441,7 @@ html, body {
   box-sizing: border-box;
 }
 
-.tj-pal-item.with-accent { border-left-width: 4px; }
+.tj-pal-item.with-accent { border-left-width: 6px; }
 .tj-pal-item.inactive { opacity: 0.4; }
 .tj-pal-item.pressed {
   background: #f0f0ed;
@@ -523,9 +517,9 @@ html, body {
 }
 
 .tj-trash-zone.over {
-  background: #F2D4D4;
-  color: #A32D2D;
-  border-color: #A32D2D;
+  background: #A32D2D;
+  color: #fff;
+  border-color: #fff;
   transform: scale(1.02);
 }
 
