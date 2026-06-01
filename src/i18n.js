@@ -5,7 +5,7 @@ const translations = {
   ko: {
     // 공통
     appName: 'TimeJig',
-    appSubtitle: '깔끔하게 배경화면에 담는 우리의 하루',
+    appSubtitle: '하루가 보이는 나만의 배경화면 만들기!',
     
     // 시작 화면
     welcome: '환영해요! 👋',

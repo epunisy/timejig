@@ -121,7 +121,8 @@ export default function Export({ data, onBack }) {
     const labelFont = font;
     const labelH = Math.round(labelFont * 1.6);
     const headFont = font;
-    const headH = Math.round(headFont * 1.8);
+    // 요일 헤더 높이를 시간축 폭과 동일하게 (코너가 정사각형이 되어 균형있게)
+    const headH = Math.max(Math.round(headFont * 1.8), timeColW);
     const blockFont = font;
     const timeFont = Math.max(5, Math.round(font * 0.85));
     const timeLabelH = Math.round(timeFont * 1.2);
