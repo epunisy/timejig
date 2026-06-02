@@ -216,8 +216,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const isDragging = dragSubject !== null || internalDragging;
   
+  const bgTheme = getBackground(data.config.bg);
+
   return (
-    <div className="tj-app" style={{ background: getBackground(data.config.bg).css }}>
+    <div className={'tj-app' + (bgTheme.dark ? ' tj-app-dark' : '')} style={{ background: bgTheme.css }}>
       <div className="tj-topbar">
         <div className="tj-ttbar">
           <button

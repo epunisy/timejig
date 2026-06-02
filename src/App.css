@@ -251,6 +251,15 @@ html, body {
 }
 .tj-tt-row.editing button.cancel { color: #999; }
 
+/* 어두운 배경 테마에서 상단바 글씨를 밝은 그레이로 */
+.tj-app-dark .tj-tt-current,
+.tj-app-dark .tj-cta,
+.tj-app-dark .tj-icon-btn { color: #dcdcdc; }
+.tj-app-dark .tj-tt-current:hover,
+.tj-app-dark .tj-cta:hover,
+.tj-app-dark .tj-icon-btn:hover { color: #ffffff; }
+.tj-app-dark .tj-tt-caret { color: #bbbbbb; }
+
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
 .tj-logo-top {
