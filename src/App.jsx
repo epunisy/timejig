@@ -57,7 +57,7 @@ export const BACKGROUNDS = [
   { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566', tile: 0 },
   { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86', tile: 0 },
   { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
-  { key: 'field', label: '들판', image: '/bg-field.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
+  { key: 'field', label: '초록', image: '/bg-field.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
     css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
