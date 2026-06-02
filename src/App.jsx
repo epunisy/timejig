@@ -70,9 +70,11 @@ export const BACKGROUNDS = [
   { key: 'bluepetals', label: '블루꽃', image: '/bg-bluepetals.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'canvas', label: '캔버스', image: '/bg-canvas.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'ku', label: '고려대', image: '/bg-ku.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
+  { key: 'ku2', label: '고려대2', image: '/bg-ku2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'snu', label: '서울대', image: '/bg-snu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'snu2', label: '서울대2', image: '/bg-snu2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'yu', label: '연세대', image: '/bg-yu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
+  { key: 'yu2', label: '연세대2', image: '/bg-yu2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
     css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
