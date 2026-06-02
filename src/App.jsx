@@ -35,6 +35,8 @@ export const FONTS = [
   { key: 'yeonsung', label: '연성', family: "'Yeon Sung', cursive" },
   { key: 'caveat', label: 'Caveat', family: "'Caveat', 'Apple SD Gothic Neo', 'Noto Sans KR', cursive" },
   { key: 'patrick', label: 'Patrick', family: "'Patrick Hand', 'Apple SD Gothic Neo', 'Noto Sans KR', cursive" },
+  { key: 'playfair', label: 'Playfair', family: "'Playfair Display', 'Apple SD Gothic Neo', 'Noto Sans KR', serif" },
+  { key: 'courier', label: 'Courier', family: "'Courier Prime', 'Apple SD Gothic Neo', 'Noto Sans KR', monospace" },
 ];
 
 export function getFontFamily(font) {
@@ -47,33 +49,43 @@ function svgBg(svg) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 const NS = "xmlns='http://www.w3.org/2000/svg'";
+// tile = 무늬 한 칸 크기(1080px 배경 기준). 미리보기/스와치는 비율로 축소해서 그림.
 export const BACKGROUNDS = [
-  { key: 'white', label: '기본', css: '#ffffff', text: '#444444' },
-  { key: 'black', label: '블랙', css: '#1f1f1f', text: '#ededed' },
-  { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f' },
-  { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566' },
-  { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86' },
-  { key: 'green', label: '초록', css: '#0b6b4f', text: '#ffffff' },
+  { key: 'white', label: '기본', css: '#ffffff', text: '#444444', tile: 0 },
+  { key: 'black', label: '블랙', css: '#1f1f1f', text: '#ededed', tile: 0 },
+  { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f', tile: 0 },
+  { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566', tile: 0 },
+  { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86', tile: 0 },
+  { key: 'green', label: '초록', css: '#0b6b4f', text: '#ffffff', tile: 0 },
   {
-    key: 'graph', label: '모눈', text: '#5a5a5a',
-    css: svgBg(`<svg ${NS} width='26' height='26'><rect width='26' height='26' fill='#ffffff'/><path d='M26 0H0V26' fill='none' stroke='#d7e3f0' stroke-width='1'/></svg>`),
+    key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
+    css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
   },
   {
-    key: 'check', label: '체크', text: '#8a5566',
-    css: svgBg(`<svg ${NS} width='40' height='40'><rect width='40' height='40' fill='#ffe9f0'/><rect width='20' height='20' fill='#ffffff'/><rect x='20' y='20' width='20' height='20' fill='#ffffff'/></svg>`),
+    key: 'check', label: '체크', text: '#8a5566', tile: 48,
+    css: svgBg(`<svg ${NS} width='48' height='48'><rect width='48' height='48' fill='#ffe9f0'/><rect width='24' height='24' fill='#ffffff'/><rect x='24' y='24' width='24' height='24' fill='#ffffff'/></svg>`),
   },
   {
-    key: 'gingham', label: '깅엄체크', text: '#5a4a4a',
-    css: svgBg(`<svg ${NS} width='40' height='40'><rect width='40' height='40' fill='#ffffff'/><rect width='20' height='40' fill='#f59ab4' opacity='0.4'/><rect width='40' height='20' fill='#f59ab4' opacity='0.4'/></svg>`),
+    key: 'gingham', label: '깅엄', text: '#5a4a4a', tile: 44,
+    css: svgBg(`<svg ${NS} width='44' height='44'><rect width='44' height='44' fill='#ffffff'/><rect width='22' height='44' fill='#f59ab4' opacity='0.4'/><rect width='44' height='22' fill='#f59ab4' opacity='0.4'/></svg>`),
   },
   {
-    key: 'cloud', label: '구름', text: '#3a5a86',
-    css: svgBg(`<svg ${NS} width='120' height='90'><rect width='120' height='90' fill='#d7ecff'/><g fill='#ffffff'><ellipse cx='28' cy='30' rx='22' ry='14'/><ellipse cx='50' cy='26' rx='18' ry='15'/><ellipse cx='44' cy='40' rx='25' ry='12'/><ellipse cx='95' cy='66' rx='20' ry='13'/><ellipse cx='110' cy='60' rx='15' ry='13'/></g></svg>`),
+    key: 'ginghamBlack', label: '블랙깅엄', text: '#333333', tile: 44,
+    css: svgBg(`<svg ${NS} width='44' height='44'><rect width='44' height='44' fill='#ffffff'/><rect width='22' height='44' fill='#2b2b2b' opacity='0.34'/><rect width='44' height='22' fill='#2b2b2b' opacity='0.34'/></svg>`),
+  },
+  {
+    key: 'cloud', label: '구름', text: '#3a5a86', tile: 220,
+    css: svgBg(`<svg ${NS} width='220' height='165'><rect width='220' height='165' fill='#d7ecff'/><g fill='#ffffff'><ellipse cx='52' cy='56' rx='40' ry='25'/><ellipse cx='92' cy='48' rx='33' ry='27'/><ellipse cx='80' cy='74' rx='46' ry='22'/><ellipse cx='176' cy='122' rx='36' ry='24'/><ellipse cx='202' cy='112' rx='27' ry='24'/></g></svg>`),
   },
 ];
 
 export function getBackground(bg) {
   return BACKGROUNDS.find(b => b.key === bg) || BACKGROUNDS[0];
+}
+
+// 무늬 배경의 background-size 계산 (factor = 그리는 폭 / 1080)
+export function bgSize(theme, factor) {
+  return theme.tile ? Math.round(theme.tile * factor) + 'px' : undefined;
 }
 
 // 기본값

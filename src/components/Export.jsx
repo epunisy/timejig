@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents, getFontFamily, getBackground } from '../App';
+import { getAccents, getFontFamily, getBackground, bgSize } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -390,7 +390,7 @@ export default function Export({ data, onBack }) {
         
         <div className="tj-phone-preview">
           <div className="tj-phone-frame">
-            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', background: bgTheme.css }}>
+            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', background: bgTheme.css, backgroundSize: bgSize(bgTheme, W / CAP_W) }}>
               <div className="tj-phone-notch"></div>
               {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text }}>9:41</div>}
               {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85 }}>10월 14일 화요일</div>}

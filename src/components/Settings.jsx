@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { t } from '../i18n';
 import { clearData } from '../storage';
-import { FONTS, BACKGROUNDS } from '../App';
+import { FONTS, BACKGROUNDS, bgSize } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -172,7 +172,7 @@ export default function Settings({
         </label>
 
         <label>
-          <span>배경 (시간표 표 제외)</span>
+          <span>배경</span>
           <div className="tj-bg-grid">
             {BACKGROUNDS.map(b => (
               <button
@@ -181,7 +181,7 @@ export default function Settings({
                 className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
                 onClick={() => setBg(b.key)}
               >
-                <span className="tj-bg-swatch" style={{ background: b.css }} />
+                <span className="tj-bg-swatch" style={{ background: b.css, backgroundSize: bgSize(b, 0.25) }} />
                 <span className="tj-bg-label">{b.label}</span>
               </button>
             ))}
