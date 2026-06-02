@@ -71,6 +71,7 @@ export const BACKGROUNDS = [
   { key: 'canvas', label: '캔버스', image: '/bg-canvas.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'ku', label: '고려대', image: '/bg-ku.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'snu', label: '서울대', image: '/bg-snu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
+  { key: 'snu2', label: '서울대2', image: '/bg-snu2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'yu', label: '연세대', image: '/bg-yu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
