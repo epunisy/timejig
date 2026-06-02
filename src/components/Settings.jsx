@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { t } from '../i18n';
 import { clearData } from '../storage';
-import { FONTS, BACKGROUNDS, bgSize } from '../App';
+import { FONTS, BACKGROUNDS } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -23,7 +23,33 @@ export default function Settings({
 }) {
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
-  
+  const fileRef = useRef(null);
+
+  // 사진첩에서 고른 이미지를 줄여서(최대 1280px, JPEG) 배경으로 저장
+  function handleFile(e) {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1280;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        onConfigChange({ ...config, bg: 'custom', bgImage: dataUrl });
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
   function setWeek(range, lang) {
     onConfigChange({ ...config, weekRange: range, dayLang: lang });
   }
@@ -181,11 +207,28 @@ export default function Settings({
                 className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
                 onClick={() => setBg(b.key)}
               >
-                <span className="tj-bg-swatch" style={{ background: b.css, backgroundSize: bgSize(b, 0.25) }} />
+                <span className="tj-bg-swatch" style={{ background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }} />
                 <span className="tj-bg-label">{b.label}</span>
               </button>
             ))}
+            <button
+              type="button"
+              className={'tj-bg-item' + (config.bg === 'custom' ? ' active' : '')}
+              onClick={() => {
+                if (config.bgImage && config.bg !== 'custom') setBg('custom');
+                else fileRef.current && fileRef.current.click();
+              }}
+            >
+              <span
+                className="tj-bg-swatch"
+                style={config.bgImage
+                  ? { backgroundImage: `url(${config.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                  : { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#bbb' }}
+              >{config.bgImage ? '' : '＋'}</span>
+              <span className="tj-bg-label">{config.bgImage ? '내 사진' : '사진'}</span>
+            </button>
           </div>
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
         </label>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '14px', marginTop: '4px' }}>

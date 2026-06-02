@@ -83,9 +83,35 @@ export function getBackground(bg) {
   return BACKGROUNDS.find(b => b.key === bg) || BACKGROUNDS[0];
 }
 
-// 무늬 배경의 background-size 계산 (factor = 그리는 폭 / 1080)
-export function bgSize(theme, factor) {
-  return theme.tile ? Math.round(theme.tile * factor) + 'px' : undefined;
+// config 기준 배경 해석 (사진 배경 'custom' 처리 포함)
+export function resolveBackground(config) {
+  if (config && config.bg === 'custom' && config.bgImage) {
+    return { key: 'custom', image: config.bgImage, text: '#ffffff', shadow: true, tile: 0, dark: false };
+  }
+  return getBackground(config ? config.bg : 'white');
+}
+
+// 배경을 실제 스타일 객체로 (html2canvas 호환 위해 단축속성 대신 개별 속성 사용).
+// 무늬 크기는 폭 대비 % 라 어느 화면 폭(에디터/미리보기/PNG)에서도 동일하게 보인다.
+export function bgStyle(theme) {
+  if (!theme) return {};
+  if (theme.image) {
+    return {
+      backgroundColor: '#777777',
+      backgroundImage: `url("${theme.image}")`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    };
+  }
+  if (theme.tile) {
+    return {
+      backgroundImage: theme.css,
+      backgroundSize: (theme.tile / 1080 * 100).toFixed(3) + '%',
+      backgroundRepeat: 'repeat',
+    };
+  }
+  return { backgroundColor: theme.css };
 }
 
 // 기본값
@@ -98,6 +124,7 @@ const DEFAULT_STATE = {
     font: 'system',
     dayLang: 'ko',
     bg: 'white',
+    bgImage: null,
   },
   timetables: [
     { id: 1, name: '시간표', blocks: [] }

@@ -7,7 +7,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import TutorialList from './TutorialList';
-import { getBackground } from '../App';
+import { resolveBackground, bgStyle } from '../App';
 
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
@@ -216,10 +216,13 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const isDragging = dragSubject !== null || internalDragging;
   
-  const bgTheme = getBackground(data.config.bg);
+  const bgTheme = resolveBackground(data.config);
 
   return (
-    <div className={'tj-app' + (bgTheme.dark ? ' tj-app-dark' : '')} style={{ background: bgTheme.css }}>
+    <div
+      className={'tj-app' + (bgTheme.dark ? ' tj-app-dark' : '')}
+      style={bgStyle(bgTheme)}
+    >
       <div className="tj-topbar">
         <div className="tj-ttbar">
           <button

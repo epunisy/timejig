@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents, getFontFamily, getBackground, bgSize } from '../App';
+import { getAccents, getFontFamily, resolveBackground, bgStyle } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -21,7 +21,7 @@ export default function Export({ data, onBack }) {
   const dayLabels = (data.config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (data.config.endHour - data.config.startHour) * 60;
   const accents = getAccents(data.config.accent);
-  const bgTheme = getBackground(data.config.bg);
+  const bgTheme = resolveBackground(data.config);
   
   function fmtTime(min) {
     const h = data.config.startHour + Math.floor(min / 60);
@@ -147,6 +147,7 @@ export default function Export({ data, onBack }) {
             <div style={{
               height: labelH + 'px', lineHeight: labelH + 'px',
               fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
+              textShadow: bgTheme.shadow ? '0 1px 3px rgba(0,0,0,0.5)' : undefined,
               paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
             }}>{tt.name}</div>
 
@@ -390,10 +391,10 @@ export default function Export({ data, onBack }) {
         
         <div className="tj-phone-preview">
           <div className="tj-phone-frame">
-            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', background: bgTheme.css, backgroundSize: bgSize(bgTheme, W / CAP_W) }}>
+            <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', ...bgStyle(bgTheme) }}>
               <div className="tj-phone-notch"></div>
-              {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text }}>9:41</div>}
-              {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85 }}>10월 14일 화요일</div>}
+              {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text, textShadow: bgTheme.shadow ? '0 1px 4px rgba(0,0,0,0.5)' : undefined }}>9:41</div>}
+              {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85, textShadow: bgTheme.shadow ? '0 1px 3px rgba(0,0,0,0.5)' : undefined }}>10월 14일 화요일</div>}
               <div
                 className="tj-phone-content"
                 style={{ top: PREV_TOP + 'px', left: PREV_SIDE + 'px', right: PREV_SIDE + 'px', bottom: PREV_BOTTOM + 'px' }}
@@ -427,7 +428,7 @@ export default function Export({ data, onBack }) {
           style={{
             width: CAP_W + 'px',
             height: CAP_H + 'px',
-            background: bgTheme.css,
+            ...bgStyle(bgTheme),
             position: 'relative',
             overflow: 'hidden',
           }}
