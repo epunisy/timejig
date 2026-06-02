@@ -400,7 +400,15 @@ html, body {
   padding-left: 2px;
 }
 
-.tj-block .nm { font-weight: 400; font-size: 10px; line-height: 1.2; color: #444; }
+.tj-block .nm {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #444;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
 .tj-block .tm { font-size: 8px; color: #444; margin-top: 1px; line-height: 1.2; }
 
 /* ===== 과목 팔레트 ===== */
@@ -478,7 +486,8 @@ html, body {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  word-break: break-all;
+  word-break: keep-all;
+  overflow-wrap: break-word;
   max-width: 100%;
 }
 .tj-pal-dur { font-size: 9px; color: #666; }

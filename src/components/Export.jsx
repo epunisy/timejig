@@ -225,8 +225,9 @@ export default function Export({ data, onBack }) {
                           {/* 과목명 — 찐그레이 */}
                           <span style={{
                             fontSize: blockFont + 'px', fontWeight: 400, color: '#444',
-                            lineHeight: 1.1, textAlign: 'center',
+                            lineHeight: 1.15, textAlign: 'center',
                             maxWidth: '100%', overflow: 'hidden',
+                            wordBreak: 'keep-all', overflowWrap: 'break-word',
                           }}>{subj.name}</span>
                           {showTimeNow && (
                             <span style={{
