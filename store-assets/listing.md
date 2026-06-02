@@ -44,4 +44,7 @@
 - 카테고리 제안: 교육(Education) 또는 도구(Tools)
 - 태그/키워드 아이디어: 시간표, 배경화면, 잠금화면, 시간표만들기, 학생, 학부모, 플래너
 - 콘텐츠 등급: 전체 이용가 (수집 데이터 없음)
-- 개인정보처리방침 URL: (별도 준비 — 요청 시 페이지로 호스팅)
+- 개인정보처리방침 URL: https://timejig.vercel.app/privacy.html (문의 이메일만 채워 넣으면 됨)
+- 피처 그래픽: store-assets/feature.png (1024x500)
+- 폰 스크린샷: store-assets/shot1~shot4.png (1080x2340)
+- 앱 아이콘(512): public/icon-512.png
