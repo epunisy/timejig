@@ -311,7 +311,9 @@ html, body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  touch-action: none;
+  /* 빈 칸/시간축을 잡으면 세로 스크롤 허용(긴 시간표에서 팔레트까지 내려갈 수 있게).
+     블록은 .tj-block의 touch-action:none 으로 드래그 캡처 유지 */
+  touch-action: pan-y;
 }
 
 .tj-grid-header, .tj-grid-body { max-width: 100%; }
