@@ -41,9 +41,20 @@ export default function Settings({
         const canvas = document.createElement('canvas');
         canvas.width = w;
         canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        // 글씨가 놓이는 윗부분(상단 35%) 평균 밝기 → 글씨색 자동 결정용
+        let luma = 180;
+        try {
+          const region = ctx.getImageData(0, 0, w, Math.max(1, Math.round(h * 0.35))).data;
+          let sum = 0;
+          for (let p = 0; p < region.length; p += 4) {
+            sum += 0.299 * region[p] + 0.587 * region[p + 1] + 0.114 * region[p + 2];
+          }
+          luma = Math.round(sum / (region.length / 4));
+        } catch (err) { /* cross-origin 등 실패 시 기본값 */ }
         const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
-        onConfigChange({ ...config, bg: 'custom', bgImage: dataUrl });
+        onConfigChange({ ...config, bg: 'custom', bgImage: dataUrl, bgLuma: luma });
       };
       img.src = reader.result;
     };

@@ -143,25 +143,13 @@ export default function Export({ data, onBack }) {
       <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 사진 배경 위에선 반투명 칩으로 가독성 확보, 그 외엔 테마 색 */}
+            {/* 시간표 이름 — 배경 밝기에 따라 글씨색 자동, 사진 위에선 외곽 그림자로 가독성 */}
             <div style={{
-              height: labelH + 'px', display: 'flex', alignItems: 'center',
-              paddingLeft: '2px', overflow: 'hidden',
-            }}>
-              <span style={bgTheme.image
-                ? {
-                    fontSize: labelFont + 'px', fontWeight: 500, color: '#ffffff',
-                    background: 'rgba(0,0,0,0.42)',
-                    padding: `${Math.max(1, Math.round(labelFont * 0.16))}px ${Math.round(labelFont * 0.5)}px`,
-                    borderRadius: '4px',
-                    whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }
-                : {
-                    fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
-                    whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }
-              }>{tt.name}</span>
-            </div>
+              height: labelH + 'px', lineHeight: labelH + 'px',
+              fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
+              textShadow: bgTheme.image ? bgTheme.shadow : undefined,
+              paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
+            }}>{tt.name}</div>
 
             <div style={{
               height: schedH + 'px', boxSizing: 'border-box',
@@ -406,8 +394,8 @@ export default function Export({ data, onBack }) {
           <div className="tj-phone-frame">
             <div className="tj-phone-screen" style={{ width: W + 'px', height: H + 'px', ...bgStyle(bgTheme) }}>
               <div className="tj-phone-notch"></div>
-              {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text, textShadow: bgTheme.shadow ? '0 1px 4px rgba(0,0,0,0.5)' : undefined }}>9:41</div>}
-              {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85, textShadow: bgTheme.shadow ? '0 1px 3px rgba(0,0,0,0.5)' : undefined }}>10월 14일 화요일</div>}
+              {!fillTop && <div className="tj-phone-time" style={{ color: bgTheme.text, textShadow: bgTheme.image ? bgTheme.shadow : undefined }}>9:41</div>}
+              {!fillTop && <div className="tj-phone-date" style={{ color: bgTheme.text, opacity: 0.85, textShadow: bgTheme.image ? bgTheme.shadow : undefined }}>10월 14일 화요일</div>}
               <div
                 className="tj-phone-content"
                 style={{ top: PREV_TOP + 'px', left: PREV_SIDE + 'px', right: PREV_SIDE + 'px', bottom: PREV_BOTTOM + 'px' }}

@@ -49,6 +49,15 @@ function svgBg(svg) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 const NS = "xmlns='http://www.w3.org/2000/svg'";
+// 사진 위 글씨 가독용 외곽 그림자 (밝은 배경=검정글씨+흰글로우 / 어두운 배경=흰글씨+검정그림자)
+const WHITE_GLOW = '0 0 3px rgba(255,255,255,0.9), 0 1px 2px rgba(255,255,255,0.7)';
+const DARK_SHADOW = '0 1px 3px rgba(0,0,0,0.6)';
+// 영역 밝기(0~255)에 따라 글씨색/그림자 자동 선택
+export function textForLuma(luma) {
+  return luma > 150
+    ? { text: '#1f1f1f', shadow: WHITE_GLOW }
+    : { text: '#ffffff', shadow: DARK_SHADOW };
+}
 // tile = 무늬 한 칸 크기(1080px 배경 기준). 미리보기/스와치는 비율로 축소해서 그림.
 export const BACKGROUNDS = [
   { key: 'white', label: '기본', css: '#ffffff', text: '#444444', tile: 0 },
@@ -56,8 +65,8 @@ export const BACKGROUNDS = [
   { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f', tile: 0 },
   { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566', tile: 0 },
   { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86', tile: 0 },
-  { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
-  { key: 'field', label: '초록', image: '/bg-field.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
+  { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
+  { key: 'field', label: '초록', image: '/bg-field.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
     css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
@@ -83,7 +92,8 @@ export function getBackground(bg) {
 // config 기준 배경 해석 (사진 배경 'custom' 처리 포함)
 export function resolveBackground(config) {
   if (config && config.bg === 'custom' && config.bgImage) {
-    return { key: 'custom', image: config.bgImage, text: '#ffffff', shadow: true, tile: 0, dark: false };
+    const t = textForLuma(config.bgLuma == null ? 180 : config.bgLuma);
+    return { key: 'custom', image: config.bgImage, text: t.text, shadow: t.shadow, tile: 0, dark: false };
   }
   return getBackground(config ? config.bg : 'white');
 }
