@@ -207,7 +207,12 @@ export default function Settings({
                 className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
                 onClick={() => setBg(b.key)}
               >
-                <span className="tj-bg-swatch" style={{ background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }} />
+                <span
+                  className="tj-bg-swatch"
+                  style={b.image
+                    ? { backgroundImage: `url(${b.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                    : { background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }}
+                />
                 <span className="tj-bg-label">{b.label}</span>
               </button>
             ))}

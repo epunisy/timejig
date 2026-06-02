@@ -56,7 +56,8 @@ export const BACKGROUNDS = [
   { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f', tile: 0 },
   { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566', tile: 0 },
   { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86', tile: 0 },
-  { key: 'green', label: '초록', css: '#0b6b4f', text: '#ffffff', tile: 0, dark: true },
+  { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
+  { key: 'field', label: '들판', image: '/bg-field.jpg', text: '#ffffff', shadow: true, tile: 0, dark: true },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
     css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
@@ -72,10 +73,6 @@ export const BACKGROUNDS = [
   {
     key: 'ginghamBlack', label: '블랙깅엄', text: '#333333', tile: 44,
     css: svgBg(`<svg ${NS} width='44' height='44'><rect width='44' height='44' fill='#ffffff'/><rect width='22' height='44' fill='#2b2b2b' opacity='0.34'/><rect width='44' height='22' fill='#2b2b2b' opacity='0.34'/></svg>`),
-  },
-  {
-    key: 'cloud', label: '구름', text: '#3a5a86', tile: 220,
-    css: svgBg(`<svg ${NS} width='220' height='165'><rect width='220' height='165' fill='#d7ecff'/><g fill='#ffffff'><ellipse cx='52' cy='56' rx='40' ry='25'/><ellipse cx='92' cy='48' rx='33' ry='27'/><ellipse cx='80' cy='74' rx='46' ry='22'/><ellipse cx='176' cy='122' rx='36' ry='24'/><ellipse cx='202' cy='112' rx='27' ry='24'/></g></svg>`),
   },
 ];
 
