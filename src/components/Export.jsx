@@ -143,13 +143,25 @@ export default function Export({ data, onBack }) {
       <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
         {selectedTTs.map((tt, wi) => (
           <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 배경 위에 올라가므로 배경 테마에 맞춘 색 */}
+            {/* 시간표 이름 — 사진 배경 위에선 반투명 칩으로 가독성 확보, 그 외엔 테마 색 */}
             <div style={{
-              height: labelH + 'px', lineHeight: labelH + 'px',
-              fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
-              textShadow: bgTheme.shadow ? '0 1px 3px rgba(0,0,0,0.5)' : undefined,
-              paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
-            }}>{tt.name}</div>
+              height: labelH + 'px', display: 'flex', alignItems: 'center',
+              paddingLeft: '2px', overflow: 'hidden',
+            }}>
+              <span style={bgTheme.image
+                ? {
+                    fontSize: labelFont + 'px', fontWeight: 500, color: '#ffffff',
+                    background: 'rgba(0,0,0,0.42)',
+                    padding: `${Math.max(1, Math.round(labelFont * 0.16))}px ${Math.round(labelFont * 0.5)}px`,
+                    borderRadius: '4px',
+                    whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
+                  }
+                : {
+                    fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
+                    whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
+                  }
+              }>{tt.name}</span>
+            </div>
 
             <div style={{
               height: schedH + 'px', boxSizing: 'border-box',
