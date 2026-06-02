@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { getAccents, getFontFamily } from '../App';
+import { getAccents, getFontFamily, resolveBackground } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -285,9 +285,13 @@ export default function Timetable({
   const accents = getAccents(config.accent);
   
   const fontFamily = getFontFamily(config.font);
+  const bgBorder = resolveBackground(config).border;
+  const gridStyle = {};
+  if (fontFamily) gridStyle.fontFamily = fontFamily;
+  if (bgBorder) gridStyle.borderColor = bgBorder;
 
   return (
-    <div className="tj-grid" style={fontFamily ? { fontFamily } : undefined}>
+    <div className="tj-grid" style={gridStyle}>
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map((d, i) => <div key={d} className="tj-day-head">{dayLabels[i]}</div>)}

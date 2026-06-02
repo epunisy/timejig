@@ -153,7 +153,7 @@ export default function Export({ data, onBack }) {
 
             <div style={{
               height: schedH + 'px', boxSizing: 'border-box',
-              border: '1px solid #ddd', background: '#fff', overflow: 'hidden',
+              border: '1px solid ' + (bgTheme.border || '#ddd'), background: '#fff', overflow: 'hidden',
             }}>
               {/* 헤더 — 시간축 코너 + 요일 (찐그레이 글자 + 연그레이 바탕) */}
               <div style={{ display: 'flex', height: headH + 'px' }}>
