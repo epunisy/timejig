@@ -286,6 +286,24 @@ html, body {
 
 .tj-cta:hover, .tj-icon-btn:hover { color: #000; }
 
+/* 설정 버튼 — 눈에 잘 띄게 (라벨 + 알약 버튼) */
+.tj-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  color: #444;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.tj-settings-btn:hover { background: #e6e6e6; color: #000; }
+
 /* ===== 메인 레이아웃 ===== */
 .tj-layout {
   display: grid;
