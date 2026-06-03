@@ -2,7 +2,7 @@ import { useState, useLayoutEffect } from 'react';
 
 // 실제 화면 요소를 스포트라이트로 짚어주는 단계별 안내
 const STEPS = [
-  { sel: '.tj-add-btn', icon: '➕', title: '과목 추가', text: '여기 + 로 새 과목을 만들어요. 기본으로 국어·영어·수학이 있어요.' },
+  { sel: '.tj-add-btn', icon: '➕', title: '과목 추가', text: '여기 + 로 새 과목을 만들어요. 기본으로 국어가 들어 있어요.' },
   { sel: '.tj-grid', icon: '🗓️', title: '드래그로 배치', text: '과목을 끌어다 시간표에 놓으면 10분 단위로 정렬돼요. 놓은 블록은 다시 끌어 옮기거나, 아래 휴지통으로 끌면 삭제. 카드를 길게 누르면 편집!' },
   { sel: '.tj-ttbar', icon: '🗂️', title: '시간표 관리', text: '이름(▾)을 누르면 시간표 목록이 열려요. 선택은 물론 ✎ 이름수정 · ⧉ 복제 · × 삭제, + 새 시간표까지 여기서!' },
   { sel: '.tj-icon-btn', icon: '⚙️', title: '설정', text: '요일 범위·시간·색띠, 그리고 글씨체까지 여기 ⚙ 에서 바꿔요.' },

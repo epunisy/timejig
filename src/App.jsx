@@ -191,8 +191,6 @@ function App() {
       timetables: [{ id: 1, name: name || '시간표', blocks: [] }],
       subjects: [
         { id: 101, name: '국어', duration: 60, colorIndex: 0, active: true },
-        { id: 102, name: '영어', duration: 60, colorIndex: 1, active: true },
-        { id: 103, name: '수학', duration: 60, colorIndex: 2, active: true },
       ],
     });
     setJustSetup(true);
