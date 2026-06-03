@@ -245,6 +245,7 @@ export default function Settings({
             </button>
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
+          <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '14px', marginTop: '4px' }}>
