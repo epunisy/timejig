@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.timejig.twa",
+        "sha256_cert_fingerprints": ["0A:F9:4B:BE:46:81:96:1B:7D:0F:D4:31:42:90:A8:88:77:85:67:7B:06:49:B6:82:AA:83:AB:56:AB:31:8E:C2"]
+      }
+    }]
