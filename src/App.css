@@ -453,6 +453,7 @@ html, body {
 
 
 .tj-pal-item {
+  position: relative;
   flex-shrink: 0;
   width: 60px;
   height: 60px;
@@ -472,6 +473,26 @@ html, body {
 }
 
 .tj-pal-item.with-accent { border-left-width: 6px; }
+
+/* 과목 카드 수정 버튼 (우상단 ✎) */
+.tj-pal-edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  line-height: 1;
+  border: none;
+  background: rgba(255, 255, 255, 0.82);
+  color: #999;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom-left-radius: 5px;
+  z-index: 1;
+}
+.tj-pal-edit:hover { color: #222; background: #fff; }
 .tj-pal-item.inactive { opacity: 0.4; }
 .tj-pal-item.pressed {
   background: #f0f0ed;

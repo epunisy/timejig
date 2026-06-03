@@ -41,6 +41,8 @@ export default function Palette({
       }
       
       function handleStart(e) {
+        // ✎ 수정 버튼을 누른 경우엔 드래그/롱프레스 시작하지 않음 (버튼 클릭으로 편집)
+        if (e.target.closest && e.target.closest('.tj-pal-edit')) return;
         if (!subject.active) return;
         e.preventDefault();
         const p = getPoint(e);
@@ -124,6 +126,13 @@ export default function Palette({
                 style={style}
                 ref={(el) => { if (el) itemRefs.current[s.id] = el; }}
               >
+                <button
+                  className="tj-pal-edit"
+                  type="button"
+                  title="수정"
+                  aria-label="과목 수정"
+                  onClick={() => onEditSubject(s.id)}
+                >✎</button>
                 <div className="tj-pal-name">{s.name}</div>
                 <div className="tj-pal-dur">{s.duration}분</div>
               </div>
