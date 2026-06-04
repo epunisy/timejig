@@ -290,7 +290,8 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  /* 모바일: 화면 분할 — 위 시간표(자체 스크롤) + 아래 팔레트 고정 */
+  /* 모바일: 화면 분할 — 위 시간표(자체 스크롤) + 아래 팔레트 고정.
+     기본 규칙이 파일 뒤쪽에 있어 이기지 못하므로 .tj-app 으로 우선순위를 높임 */
   html, body, #root { height: 100%; }
   .tj-app {
     height: 100dvh;
@@ -298,23 +299,23 @@ html, body {
     overflow: hidden;
     gap: 8px;
   }
-  .tj-topbar { flex-shrink: 0; }
-  .tj-layout {
+  .tj-app .tj-topbar { flex-shrink: 0; }
+  .tj-app .tj-layout {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
     gap: 8px;
   }
-  .tj-grid {
+  .tj-app .tj-grid {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
   }
   /* 스크롤해도 요일 헤더는 위에 고정 */
-  .tj-grid-header { position: sticky; top: 0; z-index: 60; }
-  .tj-palette {
+  .tj-app .tj-grid-header { position: sticky; top: 0; z-index: 60; }
+  .tj-app .tj-palette {
     order: 1;
     position: static;
     flex-shrink: 0;
