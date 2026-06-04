@@ -10,12 +10,12 @@
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html, body {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: #fff;
 }
 
@@ -414,6 +414,12 @@ html, body {
   border: 0.5px solid #d8d8d8;
   padding: 9px;
   min-width: 0;
+  /* 시간표가 길어도 팔레트는 화면에 고정되어 보임 */
+  position: sticky;
+  top: 10px;
+  align-self: start;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
 }
 
 .tj-pal-head {
