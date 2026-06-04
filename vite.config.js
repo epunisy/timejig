@@ -13,7 +13,7 @@ export default defineConfig({
       manifest: {
         name: '타임지그',
         short_name: '타임지그',
-        description: '하루가 보이는 나만의 배경화면 시간표',
+        description: '하루가 보이는 나만의 잠금화면 시간표',
         lang: 'ko',
         start_url: '/',
         scope: '/',

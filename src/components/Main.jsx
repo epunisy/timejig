@@ -310,7 +310,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         </div>
         <div className="tj-action-row">
           <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
-          <button className="tj-cta" onClick={onGoExport}>모바일 배경화면</button>
+          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
           <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="설정">⚙ 설정</button>
         </div>
       </div>

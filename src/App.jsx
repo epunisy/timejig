@@ -21,7 +21,7 @@ export function getAccents(accent) {
   return null;
 }
 
-// 글씨체 (시간표/배경화면에만 적용) — 나중에 골라서 줄일 예정
+// 글씨체 (시간표/잠금화면에만 적용) — 나중에 골라서 줄일 예정
 export const FONTS = [
   { key: 'system', label: '기본', family: null },
   { key: 'jua', label: '주아', family: "'Jua', sans-serif" },
@@ -46,7 +46,7 @@ export function getFontFamily(font) {
   return f ? f.family : null; // 기본(시스템 고딕)이면 null
 }
 
-// 배경 테마 (시간표 표를 제외한 배경화면 전체에 적용)
+// 배경 테마 (시간표 표를 제외한 잠금화면 전체에 적용)
 function svgBg(svg) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }

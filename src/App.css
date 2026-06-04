@@ -949,7 +949,7 @@ html, body {
 .tj-tutorial-text .sub { color: #888; display: block; margin-top: 2px; font-size: 11px; }
 .tj-tutorial-actions { display: flex; align-items: center; margin-top: 3px; }
 
-/* ===== 배경화면 만들기 ===== */
+/* ===== 잠금화면 만들기 ===== */
 .tj-export { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
 @media (max-width: 768px) { .tj-export { grid-template-columns: 1fr; } }
 .tj-export-controls { display: flex; flex-direction: column; gap: 14px; }

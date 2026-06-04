@@ -5,10 +5,10 @@ const translations = {
   ko: {
     // 공통
     appName: 'TimeJig',
-    appSubtitle: '하루가 보이는 나만의 배경화면 만들기!',
+    appSubtitle: '하루가 보이는 나만의 잠금화면 만들기!',
     
     // 시작 화면
-    welcome: '배경화면에 담는 나만의 시간표,\n타임지그에 오신 걸 환영해요!',
+    welcome: '잠금화면에 담는 나만의 시간표,\n타임지그에 오신 걸 환영해요!',
     setupGuide: '시간표 이름부터 정해볼까요?',
     namePlaceholder: '예: 민준',
     start: '시작하기',
@@ -19,7 +19,7 @@ const translations = {
     timetableName: '시간표 이름',
     duplicate: '복제',
     deleteTimetable: '시간표 삭제',
-    backgroundButton: '🖼 배경화면',
+    backgroundButton: '🖼 잠금화면',
     settingsButton: '⚙ 설정',
     
     // 과목 팔레트
@@ -67,9 +67,9 @@ const translations = {
     dontShowAgain: '다시 보지 않기',
     gotIt: '알겠어요',
     
-    // 배경화면 만들기
+    // 잠금화면 만들기
     backButton: '← 돌아가기',
-    backgroundTitle: '배경화면 만들기',
+    backgroundTitle: '잠금화면 만들기',
     section1: '1. 시간표 선택 (콜라주)',
     section2: '2. 폰 비율',
     section3: '3. 표시 옵션',
