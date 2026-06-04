@@ -294,6 +294,13 @@ html, body {
     grid-template-columns: 1fr;
     gap: 8px;
   }
+  /* 모바일: 팔레트를 시간표 위로 올려 상단에 고정 (스크롤해도 항상 보임) */
+  .tj-palette {
+    order: -1;
+    top: 8px;
+    max-height: 34vh;
+    z-index: 40;
+  }
 }
 
 /* ===== 시간표 ===== */
