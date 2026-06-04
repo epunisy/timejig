@@ -23,6 +23,9 @@ export default function Tutorial({ onClose }) {
       const r = el.getBoundingClientRect();
       setRect({ top: r.top, left: r.left, width: r.width, height: r.height, bottom: r.bottom });
     }
+    // 단계가 바뀌면 대상을 화면 안으로 스크롤 (모바일에서 대상이 화면 밖일 수 있음)
+    const target = document.querySelector(step.sel);
+    if (target) target.scrollIntoView({ block: 'center', inline: 'nearest' });
     measure();
     window.addEventListener('resize', measure);
     window.addEventListener('scroll', measure, true);
@@ -47,15 +50,22 @@ export default function Tutorial({ onClose }) {
   let arrowDir = null;
   let arrowLeft = TT_W / 2;
   if (rect) {
+    const TT_H = 180; // 말풍선 대략 높이
     const centerX = rect.left + rect.width / 2;
     const left = Math.max(10, Math.min(centerX - TT_W / 2, vw - TT_W - 10));
     arrowLeft = Math.max(18, Math.min(centerX - left, TT_W - 18));
-    if (rect.bottom + 185 < vh) {
+    if (rect.bottom + 16 + TT_H <= vh) {
+      // 대상 아래에 공간 있음 → 아래에
       tipStyle = { top: rect.bottom + 16, left };
       arrowDir = 'top';
-    } else {
+    } else if (rect.top - 16 - TT_H >= 0) {
+      // 아래 공간 없고 위에 공간 있음 → 위에
       tipStyle = { bottom: vh - rect.top + 16, left };
       arrowDir = 'bottom';
+    } else {
+      // 대상이 화면보다 커서 위아래 다 안 됨 → 화면 하단에 고정 (글 안 잘리게)
+      tipStyle = { bottom: 24, left };
+      arrowDir = null;
     }
   }
 
