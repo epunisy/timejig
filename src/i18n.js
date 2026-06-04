@@ -23,7 +23,7 @@ const translations = {
     settingsButton: '⚙ 설정',
     
     // 과목 팔레트
-    subjects: '과목',
+    subjects: '과목팔레트',
     addSubject: '+ 추가',
     emptySubjects: '아직 과목이 없어요.\n+ 추가로 시작!',
     edit: '편집',

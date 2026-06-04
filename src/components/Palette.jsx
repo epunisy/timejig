@@ -107,7 +107,7 @@ export default function Palette({
         <h3>{t('subjects')}</h3>
         <button className="tj-add-btn" onClick={onAddSubject}>+</button>
       </div>
-      <div className="tj-pal-hint">과목 팔레트에 과목을 추가한 뒤, 시간표로 드래그해보세요.</div>
+      <div className="tj-pal-hint">이곳에 과목들을 추가한 뒤, 시간표로 드래그해 보세요.</div>
       <div className="tj-pal-list" style={fontFamily ? { fontFamily } : undefined}>
         {subjects.length === 0 ? (
           <div className="tj-empty">{t('emptySubjects')}</div>
