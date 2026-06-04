@@ -427,14 +427,14 @@ html, body {
 
 .tj-block .nm {
   font-weight: 400;
-  font-size: 10px;
+  font-size: var(--tj-nm, 10px);
   line-height: 1.2;
   color: #444;
   word-break: keep-all;
   overflow-wrap: break-word;
   max-width: 100%;
 }
-.tj-block .tm { font-size: 8px; color: #444; margin-top: 1px; line-height: 1.2; }
+.tj-block .tm { font-size: var(--tj-tm, 8px); color: #444; margin-top: 1px; line-height: 1.2; }
 
 /* ===== 과목 팔레트 ===== */
 .tj-palette {

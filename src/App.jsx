@@ -46,6 +46,12 @@ export function getFontFamily(font) {
   return f ? f.family : null; // 기본(시스템 고딕)이면 null
 }
 
+// 글씨 크기 배율 (편집 화면 + 내보내기 둘 다 적용)
+export const FONT_SCALES = { sm: 0.85, md: 1, lg: 1.2, xl: 1.45 };
+export function getFontScale(key) {
+  return FONT_SCALES[key] || 1;
+}
+
 // 배경 테마 (시간표 표를 제외한 잠금화면 전체에 적용)
 function svgBg(svg) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
@@ -139,6 +145,7 @@ const DEFAULT_STATE = {
     startHour: 8,
     endHour: 16,
     font: 'system',
+    fontScale: 'md',
     dayLang: 'ko',
     bg: 'white',
     bgImage: null,

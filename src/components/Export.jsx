@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents, getFontFamily, resolveBackground, bgStyle } from '../App';
+import { getAccents, getFontFamily, getFontScale, resolveBackground, bgStyle } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -130,7 +130,8 @@ export default function Export({ data, onBack }) {
     const headFont = font;
     // 요일 헤더 높이를 시간축 폭과 동일하게 (코너가 정사각형이 되어 균형있게)
     const headH = Math.max(Math.round(headFont * 1.8), timeColW);
-    const blockFont = font;
+    // 과목 블록 글씨만 사용자 배율 적용 (요일/이름/시간축은 비율 유지)
+    const blockFont = Math.max(6, Math.round(font * getFontScale(data.config.fontScale)));
     const timeFont = Math.max(5, Math.round(font * 0.85));
     const timeLabelH = Math.round(timeFont * 1.2);
     const accentW = Math.max(3, Math.round(colW * 0.06));

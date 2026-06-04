@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { t } from '../i18n';
 import { clearData } from '../storage';
-import { FONTS, BACKGROUNDS } from '../App';
+import { FONTS, BACKGROUNDS, FONT_SCALES } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -71,6 +71,10 @@ export default function Settings({
 
   function setFont(font) {
     onConfigChange({ ...config, font });
+  }
+
+  function setFontScale(fontScale) {
+    onConfigChange({ ...config, fontScale });
   }
 
   function setBg(bg) {
@@ -191,6 +195,20 @@ export default function Settings({
               className={config.accent === 'mono' ? 'active' : ''}
               onClick={() => setAccent('mono')}
             >{t('accentMono')}</button>
+          </div>
+        </label>
+
+        <label>
+          <span>글씨 크기</span>
+          <div className="tj-mode-strip">
+            {[['sm','작게'],['md','보통'],['lg','크게'],['xl','아주 크게']].map(([key, label]) => (
+              <button
+                key={key}
+                className={(config.fontScale || 'md') === key ? 'active' : ''}
+                style={{ fontSize: Math.round(11 * FONT_SCALES[key]) + 'px' }}
+                onClick={() => setFontScale(key)}
+              >{label}</button>
+            ))}
           </div>
         </label>
 

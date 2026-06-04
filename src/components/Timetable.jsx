@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { getAccents, getFontFamily, resolveBackground } from '../App';
+import { getAccents, getFontFamily, getFontScale, resolveBackground } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -286,7 +286,12 @@ export default function Timetable({
   
   const fontFamily = getFontFamily(config.font);
   const bgBorder = resolveBackground(config).border;
-  const gridStyle = {};
+  const fontScale = getFontScale(config.fontScale);
+  const gridStyle = {
+    // 블록 글씨 크기 배율 (CSS 변수로 .nm/.tm 에 적용)
+    '--tj-nm': (10 * fontScale).toFixed(1) + 'px',
+    '--tj-tm': (8 * fontScale).toFixed(1) + 'px',
+  };
   if (fontFamily) gridStyle.fontFamily = fontFamily;
   if (bgBorder) gridStyle.borderColor = bgBorder;
 
