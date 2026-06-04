@@ -302,7 +302,7 @@ export default function Timetable({
         style={{ gridTemplateColumns: colTpl, height: bodyHeight + 'px' }}
       >
         <div className="tj-time-col">
-          {hours.map((h, i) => (
+          {hours.map((h, i) => i === hours.length - 1 ? null : (
             <div key={h} style={{
               position: 'absolute',
               top: (i * HOUR_PX + 3) + 'px',
