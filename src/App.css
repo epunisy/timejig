@@ -290,16 +290,36 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  .tj-layout {
-    grid-template-columns: 1fr;
+  /* 모바일: 화면 분할 — 위 시간표(자체 스크롤) + 아래 팔레트 고정 */
+  html, body, #root { height: 100%; }
+  .tj-app {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
     gap: 8px;
   }
-  /* 모바일: 팔레트를 시간표 위로 올려 상단에 고정 (스크롤해도 항상 보임) */
+  .tj-topbar { flex-shrink: 0; }
+  .tj-layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    gap: 8px;
+  }
+  .tj-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  /* 스크롤해도 요일 헤더는 위에 고정 */
+  .tj-grid-header { position: sticky; top: 0; z-index: 60; }
   .tj-palette {
-    order: -1;
-    top: 8px;
-    max-height: 34vh;
-    z-index: 40;
+    order: 1;
+    position: static;
+    flex-shrink: 0;
+    max-height: 38vh;
+    overflow-y: auto;
   }
 }
 
