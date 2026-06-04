@@ -288,9 +288,8 @@ export default function Timetable({
   const bgBorder = resolveBackground(config).border;
   const fontScale = getFontScale(config.fontScale);
   const gridStyle = {
-    // 블록 글씨 크기 배율 (CSS 변수로 .nm/.tm 에 적용)
+    // 과목명 글씨 크기 배율 (CSS 변수로 .nm 에만 적용 — 시간은 고정)
     '--tj-nm': (10 * fontScale).toFixed(1) + 'px',
-    '--tj-tm': (8 * fontScale).toFixed(1) + 'px',
   };
   if (fontFamily) gridStyle.fontFamily = fontFamily;
   if (bgBorder) gridStyle.borderColor = bgBorder;

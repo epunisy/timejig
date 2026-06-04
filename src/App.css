@@ -434,7 +434,7 @@ html, body {
   overflow-wrap: break-word;
   max-width: 100%;
 }
-.tj-block .tm { font-size: var(--tj-tm, 8px); color: #444; margin-top: 1px; line-height: 1.2; }
+.tj-block .tm { font-size: 8px; color: #444; margin-top: 1px; line-height: 1.2; }
 
 /* ===== 과목 팔레트 ===== */
 .tj-palette {

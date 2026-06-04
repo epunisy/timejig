@@ -232,7 +232,7 @@ export default function Export({ data, onBack }) {
                           }}>{subj.name}</span>
                           {showTimeNow && (
                             <span style={{
-                              fontSize: Math.max(4, Math.round(blockFont * 0.8)) + 'px',
+                              fontSize: Math.max(4, Math.round(font * 0.8)) + 'px',
                               color: '#444', lineHeight: 1.2, whiteSpace: 'nowrap', marginTop: '1px',
                             }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
                           )}
