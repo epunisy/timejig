@@ -284,8 +284,11 @@ export default function Settings({
           >
             🔄 처음부터 다시 시작
           </button>
+          <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', marginTop: '10px', lineHeight: 1.5 }}>
+            글꼴 제공: Google Fonts (SIL Open Font License)
+          </div>
         </div>
-        
+
         <div className="tj-modal-actions">
           <button onClick={handleShowTutorial} style={{ marginRight: 'auto' }}>
             {t('showTutorial')}
