@@ -220,7 +220,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
 
   return (
     <div
-      className={'tj-app' + (bgTheme.dark ? ' tj-app-dark' : '')}
+      className={'tj-app tj-app-main' + (bgTheme.dark ? ' tj-app-dark' : '')}
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
