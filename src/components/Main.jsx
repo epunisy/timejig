@@ -232,43 +232,60 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   function handleConfigChange(newConfig) {
     const old = data.config;
+    const startChanged = newConfig.startHour !== old.startHour;
+    const endChanged = newConfig.endHour !== old.endHour;
+    const weekChanged = newConfig.weekRange !== old.weekRange;
 
-    // 새 설정에서 보이는 요일들 (월–금:5, 월–토:6, 월–일:7)
-    const dayCount = newConfig.weekRange === 'mon-fri' ? 5
-      : newConfig.weekRange === 'mon-sat' ? 6 : 7;
-    const allowedDays = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount);
+    // 시간 범위(시작/끝) 변경 — 새 범위 밖으로 잘려나갈 블록이 하나라도 있으면 변경을 막는다.
+    if (startChanged || endChanged) {
+      // 블록 start/end는 startHour 기준 분 단위라, 시작 시각이 바뀌면 그만큼 평행이동해야
+      // 원래의 '절대 시각'이 유지된다.
+      const delta = (old.startHour - newConfig.startHour) * 60;
+      const newTotalMin = (newConfig.endHour - newConfig.startHour) * 60;
+      const cutCount = data.timetables.reduce((sum, tt) =>
+        sum + tt.blocks.filter(b => (b.start + delta) < 0 || (b.end + delta) > newTotalMin).length, 0);
 
-    // 시작 시각이 바뀌면 블록을 '절대 시각' 기준으로 유지하도록 보정한다.
-    // (블록의 start/end는 startHour 기준 분 단위라, 보정하지 않으면 시간이 밀린다.)
-    const delta = (old.startHour - newConfig.startHour) * 60;
-    const newTotalMin = (newConfig.endHour - newConfig.startHour) * 60;
+      if (cutCount > 0) {
+        // 변경하지 않고 안내만 → config 그대로라 설정창의 선택값도 원위치된다.
+        setConfirmDialog({
+          title: '시간 범위를 바꿀 수 없어요',
+          message: `바꾸려는 시간 범위 밖에 과목 블록 <b>${cutCount}개</b>가 있어요.<br>` +
+            `<span style="color:#888; font-size:11px;">그 블록을 먼저 옮기거나 지운 뒤에 시간 범위를 바꿔주세요.</span>`,
+          infoOnly: true,
+        });
+        return;
+      }
 
-    const rangeChanged =
-      newConfig.startHour !== old.startHour ||
-      newConfig.endHour !== old.endHour ||
-      newConfig.weekRange !== old.weekRange;
-
-    let newTimetables = data.timetables;
-    if (rangeChanged) {
-      newTimetables = data.timetables.map(t => ({
-        ...t,
-        blocks: t.blocks
-          // 사라진 요일의 블록 제거
-          .filter(b => allowedDays.includes(b.day))
-          // 시작 시각 변화만큼 평행이동 → 원래 시간대 유지
-          .map(b => ({ ...b, start: b.start + delta, end: b.end + delta }))
-          // 새 범위를 벗어난 부분은 잘라낸다(시간이 줄면 잘려도 어쩔 수 없음)
-          .map(b => ({
-            ...b,
-            start: Math.max(0, b.start),
-            end: Math.min(newTotalMin, b.end),
-          }))
-          // 보일 영역이 전혀 안 남은 블록은 제거
-          .filter(b => b.end - b.start >= 10),
-      }));
+      // 통과 — 모든 블록을 평행이동해 원래 시각을 그대로 유지.
+      setData({
+        ...data,
+        config: newConfig,
+        timetables: data.timetables.map(tt => ({
+          ...tt,
+          blocks: tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })),
+        })),
+      });
+      return;
     }
 
-    setData({ ...data, config: newConfig, timetables: newTimetables });
+    // 요일 범위 축소 — 사라지는 요일(토/일)의 블록은 제거한다.
+    if (weekChanged) {
+      const dayCount = newConfig.weekRange === 'mon-fri' ? 5
+        : newConfig.weekRange === 'mon-sat' ? 6 : 7;
+      const allowedDays = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount);
+      setData({
+        ...data,
+        config: newConfig,
+        timetables: data.timetables.map(tt => ({
+          ...tt,
+          blocks: tt.blocks.filter(b => allowedDays.includes(b.day)),
+        })),
+      });
+      return;
+    }
+
+    // 그 외 설정(폰트·배경·색·글씨 크기 등)
+    setData({ ...data, config: newConfig });
   }
   
   function handleTimetableNameChange(name) {
