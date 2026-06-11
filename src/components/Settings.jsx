@@ -61,8 +61,12 @@ export default function Settings({
     reader.readAsDataURL(file);
   }
 
-  function setWeek(range, lang) {
-    onConfigChange({ ...config, weekRange: range, dayLang: lang });
+  function setRange(range) {
+    onConfigChange({ ...config, weekRange: range });
+  }
+
+  function setLang(lang) {
+    onConfigChange({ ...config, dayLang: lang });
   }
   
   function setAccent(accent) {
@@ -138,22 +142,27 @@ export default function Settings({
         <label>
           <span>{t('weekRange')}</span>
           <div className="tj-mode-strip">
+            {[
+              ['mon-fri', config.dayLang === 'en' ? 'MON–FRI' : '월–금'],
+              ['mon-sat', config.dayLang === 'en' ? 'MON–SAT' : '월–토'],
+              ['mon-sun', config.dayLang === 'en' ? 'MON–SUN' : '월–일'],
+            ].map(([range, label]) => (
+              <button
+                key={range}
+                className={config.weekRange === range ? 'active' : ''}
+                onClick={() => setRange(range)}
+              >{label}</button>
+            ))}
+          </div>
+          <div className="tj-mode-strip" style={{ marginTop: '4px' }}>
             <button
-              className={config.weekRange === 'mon-fri' && (config.dayLang || 'ko') === 'ko' ? 'active' : ''}
-              onClick={() => setWeek('mon-fri', 'ko')}
-            >월–금</button>
+              className={(config.dayLang || 'ko') === 'ko' ? 'active' : ''}
+              onClick={() => setLang('ko')}
+            >한글</button>
             <button
-              className={config.weekRange === 'mon-sun' && (config.dayLang || 'ko') === 'ko' ? 'active' : ''}
-              onClick={() => setWeek('mon-sun', 'ko')}
-            >월–일</button>
-            <button
-              className={config.weekRange === 'mon-fri' && config.dayLang === 'en' ? 'active' : ''}
-              onClick={() => setWeek('mon-fri', 'en')}
-            >MON–FRI</button>
-            <button
-              className={config.weekRange === 'mon-sun' && config.dayLang === 'en' ? 'active' : ''}
-              onClick={() => setWeek('mon-sun', 'en')}
-            >MON–SUN</button>
+              className={config.dayLang === 'en' ? 'active' : ''}
+              onClick={() => setLang('en')}
+            >English</button>
           </div>
         </label>
         

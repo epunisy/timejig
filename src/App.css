@@ -289,6 +289,15 @@ html, body {
   align-items: start;
 }
 
+/* 경계선 드래그 핸들 — 데스크톱(좌우 분할)에선 숨김, 모바일 분할에서만 노출 */
+.tj-divider { display: none; }
+
+/* 크기 조절 중에는 텍스트 선택 방지 */
+.tj-resizing, .tj-resizing * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 @media (max-width: 768px) {
   /* 모바일: 메인(편집) 화면만 화면 분할 — 위 시간표(자체 스크롤) + 아래 팔레트 고정.
      잠금화면 만들기 등 다른 화면은 일반 스크롤이라 .tj-app-main 으로만 한정.
@@ -318,10 +327,29 @@ html, body {
   .tj-app-main .tj-palette {
     order: 1;
     position: static;
-    flex-shrink: 0;
-    max-height: 38vh;
+    /* 경계선 드래그로 정한 높이(--tj-pal-h), 기본값은 38vh */
+    flex: 0 0 var(--tj-pal-h, 38vh);
+    min-height: 0;
     overflow-y: auto;
   }
+  /* 시간표와 팔레트 사이 드래그 핸들 */
+  .tj-app-main .tj-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    height: 16px;
+    margin: -4px 0;
+    cursor: row-resize;
+    touch-action: none;
+  }
+  .tj-app-main .tj-divider-grip {
+    width: 46px;
+    height: 4px;
+    border-radius: 2px;
+    background: #c4c4c4;
+  }
+  .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 }
 
 /* ===== 시간표 ===== */
@@ -434,7 +462,17 @@ html, body {
   overflow-wrap: break-word;
   max-width: 100%;
 }
-.tj-block .tm { font-size: 8px; color: #444; margin-top: 1px; line-height: 1.2; }
+.tj-block .tm {
+  font-size: 8px;
+  color: #444;
+  margin-top: 1px;
+  line-height: 1.2;
+  /* 블록이 좁으면 시간이 잘리지 않게 줄바꿈(시작/끝을 두 줄로) */
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
 
 /* ===== 과목 팔레트 ===== */
 .tj-palette {
@@ -974,7 +1012,7 @@ html, body {
 .tj-radio-item.sel .tj-radio-circle::after { content: ''; width: 6px; height: 6px; background: #222; border-radius: 50%; }
 .tj-radio-sub { font-size: 10px; color: #888; margin-left: auto; }
 .tj-expand { padding: 9px; border: 0.5px dashed #d8d8d8; cursor: pointer; background: transparent; font-size: 11px; color: #666; text-align: left; }
-.tj-phone-preview { background: #fff; padding: 14px; display: flex; align-items: center; justify-content: center; min-height: 400px; }
+.tj-phone-preview { background: #fff; padding: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
 .tj-phone-frame { background: #000; padding: 6px; border-radius: 28px; box-shadow: 0 10px 32px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.12); position: relative; }
 .tj-phone-screen { background: #fafafa; overflow: hidden; position: relative; border-radius: 22px; }
 .tj-phone-notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 80px; height: 18px; background: #000; border-radius: 20px; z-index: 5; }

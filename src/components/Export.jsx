@@ -17,7 +17,9 @@ export default function Export({ data, onBack }) {
   const [downloading, setDownloading] = useState(false);
   const captureRef = useRef(null);
   
-  const days = data.config.weekRange === 'mon-fri' ? ALL_DAYS.slice(0, 5) : ALL_DAYS;
+  const dayCount = data.config.weekRange === 'mon-fri' ? 5
+    : data.config.weekRange === 'mon-sat' ? 6 : 7;
+  const days = ALL_DAYS.slice(0, dayCount);
   const dayLabels = (data.config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (data.config.endHour - data.config.startHour) * 60;
   const accents = getAccents(data.config.accent);
@@ -233,8 +235,10 @@ export default function Export({ data, onBack }) {
                           {showTimeNow && (
                             <span style={{
                               fontSize: Math.max(4, Math.round(font * 0.8)) + 'px',
-                              color: '#444', lineHeight: 1.2, whiteSpace: 'nowrap', marginTop: '1px',
-                            }}>{fmtTime(b.start)}~{fmtTime(b.end)}</span>
+                              color: '#444', lineHeight: 1.2, marginTop: '1px',
+                              textAlign: 'center', whiteSpace: 'normal',
+                              overflowWrap: 'break-word', maxWidth: '100%',
+                            }}>{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</span>
                           )}
                         </div>
                       );
@@ -420,9 +424,12 @@ export default function Export({ data, onBack }) {
               </div>
             </div>
           </div>
+          <div style={{ fontSize: '10px', color: '#888', textAlign: 'center', marginTop: '8px', lineHeight: 1.4 }}>
+            미리보기는 실제 이미지와 다를 수 있습니다.
+          </div>
         </div>
       </div>
-      
+
       {/* 캡쳐용 고해상도 화면 — 화면 밖에 숨김 */}
       <div style={{ position: 'fixed', left: '-99999px', top: 0, pointerEvents: 'none' }}>
         <div 

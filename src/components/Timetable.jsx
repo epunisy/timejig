@@ -32,7 +32,9 @@ export default function Timetable({
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
   
-  const days = config.weekRange === 'mon-fri' ? ALL_DAYS.slice(0, 5) : ALL_DAYS;
+  const dayCount = config.weekRange === 'mon-fri' ? 5
+    : config.weekRange === 'mon-sat' ? 6 : 7;
+  const days = ALL_DAYS.slice(0, dayCount);
   const dayLabels = (config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
   const totalMin = (config.endHour - config.startHour) * 60;
   const bodyHeight = (config.endHour - config.startHour) * HOUR_PX;
@@ -355,7 +357,7 @@ export default function Timetable({
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
                   <div className="nm">{subj.name}</div>
-                  <div className="tm">{fmtTime(b.start)}~{fmtTime(b.end)}</div>
+                  <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
                 </div>
               );
             })}

@@ -26,6 +26,43 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const newTTComposingRef = useRef(false);
   const renameComposingRef = useRef(false);
 
+  // 모바일에서 시간표/팔레트 경계선을 드래그해 팔레트 높이를 조절 (기기마다 화면이 달라서)
+  const layoutRef = useRef(null);
+  const paletteHRef = useRef(data.config.paletteH || null);
+  const [paletteH, setPaletteH] = useState(data.config.paletteH || null);
+
+  function handleDividerDown(e) {
+    e.preventDefault();
+    const layout = layoutRef.current;
+    if (!layout) return;
+    function move(ev) {
+      if (ev.cancelable) ev.preventDefault();
+      const cy = ev.touches && ev.touches[0] ? ev.touches[0].clientY : ev.clientY;
+      const rect = layout.getBoundingClientRect();
+      // 팔레트는 아래쪽 → 높이 = 레이아웃 바닥 - 포인터 위치
+      let h = rect.bottom - cy;
+      h = Math.max(70, Math.min(h, rect.height - 160)); // 시간표 영역은 최소 160px 남김
+      paletteHRef.current = h;
+      setPaletteH(h);
+    }
+    function end() {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', end);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('touchend', end);
+      document.body.classList.remove('tj-resizing');
+      if (paletteHRef.current != null) {
+        const h = Math.round(paletteHRef.current);
+        setData(d => ({ ...d, config: { ...d.config, paletteH: h } }));
+      }
+    }
+    document.body.classList.add('tj-resizing');
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', end);
+  }
+
   // 설정 완료 직후(진짜 첫 진입)에만, 메인 화면을 잠깐 본 뒤 튜토리얼을 띄운다.
   // 일반 로드(저장된 데이터로 바로 메인) 때는 자동으로 띄우지 않음.
   useEffect(() => {
@@ -194,13 +231,43 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   }
   
   function handleConfigChange(newConfig) {
+    const old = data.config;
+
+    // 새 설정에서 보이는 요일들 (월–금:5, 월–토:6, 월–일:7)
+    const dayCount = newConfig.weekRange === 'mon-fri' ? 5
+      : newConfig.weekRange === 'mon-sat' ? 6 : 7;
+    const allowedDays = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount);
+
+    // 시작 시각이 바뀌면 블록을 '절대 시각' 기준으로 유지하도록 보정한다.
+    // (블록의 start/end는 startHour 기준 분 단위라, 보정하지 않으면 시간이 밀린다.)
+    const delta = (old.startHour - newConfig.startHour) * 60;
+    const newTotalMin = (newConfig.endHour - newConfig.startHour) * 60;
+
+    const rangeChanged =
+      newConfig.startHour !== old.startHour ||
+      newConfig.endHour !== old.endHour ||
+      newConfig.weekRange !== old.weekRange;
+
     let newTimetables = data.timetables;
-    if (newConfig.weekRange === 'mon-fri' && data.config.weekRange === 'mon-sun') {
+    if (rangeChanged) {
       newTimetables = data.timetables.map(t => ({
         ...t,
-        blocks: t.blocks.filter(b => !['토', '일'].includes(b.day)),
+        blocks: t.blocks
+          // 사라진 요일의 블록 제거
+          .filter(b => allowedDays.includes(b.day))
+          // 시작 시각 변화만큼 평행이동 → 원래 시간대 유지
+          .map(b => ({ ...b, start: b.start + delta, end: b.end + delta }))
+          // 새 범위를 벗어난 부분은 잘라낸다(시간이 줄면 잘려도 어쩔 수 없음)
+          .map(b => ({
+            ...b,
+            start: Math.max(0, b.start),
+            end: Math.min(newTotalMin, b.end),
+          }))
+          // 보일 영역이 전혀 안 남은 블록은 제거
+          .filter(b => b.end - b.start >= 10),
       }));
     }
+
     setData({ ...data, config: newConfig, timetables: newTimetables });
   }
   
@@ -315,7 +382,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         </div>
       </div>
       
-      <div className="tj-layout">
+      <div
+        className="tj-layout"
+        ref={layoutRef}
+        style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
+      >
         <Timetable
           config={data.config}
           blocks={activeTT.blocks}
@@ -325,6 +396,15 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
         />
+        <div
+          className="tj-divider"
+          onMouseDown={handleDividerDown}
+          onTouchStart={handleDividerDown}
+          role="separator"
+          aria-label="시간표와 과목 영역 크기 조절"
+        >
+          <span className="tj-divider-grip" />
+        </div>
         <Palette
           config={data.config}
           subjects={data.subjects}
