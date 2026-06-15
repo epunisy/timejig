@@ -7,6 +7,7 @@ const STEPS = [
   { sel: '.tj-ttbar', icon: '🗂️', title: '시간표 관리', text: '이름(▾)을 누르면 시간표 목록이 열려요. 선택은 물론 ✎ 이름수정 · ⧉ 복제 · × 삭제, + 새 시간표까지 여기서!' },
   { sel: '.tj-cta-settings', icon: '⚙️', title: '설정', text: '요일 범위·시간·색띠·글씨체·배경까지 여기 ⚙ 설정에서 바꿔요.' },
   { sel: '.tj-cta', icon: '📱', title: '잠금화면 만들기', text: '완성한 시간표를 폰 잠금화면 이미지(PNG)로 저장해요!' },
+  { sel: '.tj-logo-top', icon: '🔄', title: '처음부터 다시 시작', text: '왼쪽 위 로고를 누르면 모든 시간표를 지우고 처음부터! 실수로 눌러도 한 번 더 물어봐요.' },
 ];
 
 const TT_W = 270;

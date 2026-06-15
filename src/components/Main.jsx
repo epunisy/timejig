@@ -155,15 +155,20 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   function handleDuplicate(id) {
     const tt = data.timetables.find(t => t.id === id);
     const newId = Math.max(...data.timetables.map(t => t.id)) + 1;
-    const newBlocks = tt.blocks.map(b => ({ 
-      ...b, 
-      id: Date.now() + Math.random() 
+    const newBlocks = tt.blocks.map(b => ({
+      ...b,
+      id: Date.now() + Math.random()
     }));
+    // 복사본 이름: 원본 이름 뒤에 _2, _3 … (이미 있으면 다음 번호로)
+    const baseName = tt.name.replace(/_\d+$/, '');
+    const existing = data.timetables.map(t => t.name);
+    let copyN = 2;
+    while (existing.includes(`${baseName}_${copyN}`)) copyN++;
     setData({
       ...data,
       timetables: [...data.timetables, {
         id: newId,
-        name: tt.name + ' 복사본',
+        name: `${baseName}_${copyN}`,
         blocks: newBlocks,
         config: { ...(tt.config || config) },
       }],
@@ -355,6 +360,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onClick={handleLogoClick}
           style={{ cursor: 'pointer' }}
         />
+        <div className="tj-topbar-main">
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
@@ -439,8 +445,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             </>
           )}
         </div>
-        <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
-        <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
+        <div className="tj-topbar-actions">
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
+          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
+        </div>
+        </div>
       </div>
       
       <div

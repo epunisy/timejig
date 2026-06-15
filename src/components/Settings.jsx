@@ -1,6 +1,5 @@
-import { useState, useRef } from 'react';
+import { useRef, Fragment } from 'react';
 import { t } from '../i18n';
-import { clearData } from '../storage';
 import { FONTS, BACKGROUNDS, FONT_SCALES } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -107,14 +106,6 @@ export default function Settings({
       onTimetableNameChange(ttNameRef.current.value);
     }
     onShowTutorial();
-  }
-  
-  function handleReset() {
-    const ok = window.confirm('모든 시간표와 과목이 삭제되고 처음부터 다시 시작됩니다. 정말 진행할까요?');
-    if (ok) {
-      clearData();
-      window.location.reload();
-    }
   }
   
   return (
@@ -238,62 +229,49 @@ export default function Settings({
         <label>
           <span>배경</span>
           <div className="tj-bg-grid">
-            {BACKGROUNDS.map(b => (
-              <button
-                key={b.key}
-                type="button"
-                className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
-                onClick={() => setBg(b.key)}
-              >
-                <span
-                  className="tj-bg-swatch"
-                  style={b.image
-                    ? { backgroundImage: `url(${b.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                    : { background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }}
-                />
-                <span className="tj-bg-label">{b.label}</span>
-              </button>
+            {BACKGROUNDS.map((b, idx) => (
+              <Fragment key={b.key}>
+                <button
+                  type="button"
+                  className={'tj-bg-item' + ((config.bg || 'white') === b.key ? ' active' : '')}
+                  onClick={() => setBg(b.key)}
+                >
+                  <span
+                    className="tj-bg-swatch"
+                    style={b.image
+                      ? { backgroundImage: `url(${b.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                      : { background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }}
+                  />
+                  <span className="tj-bg-label">{b.label}</span>
+                </button>
+                {/* '사진(직접 업로드)' 을 기본(첫 배경) 바로 다음에 배치 */}
+                {idx === 0 && (
+                  <button
+                    type="button"
+                    className={'tj-bg-item' + (config.bg === 'custom' ? ' active' : '')}
+                    onClick={() => {
+                      if (config.bgImage && config.bg !== 'custom') setBg('custom');
+                      else fileRef.current && fileRef.current.click();
+                    }}
+                  >
+                    <span
+                      className="tj-bg-swatch"
+                      style={config.bgImage
+                        ? { backgroundImage: `url(${config.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                        : { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#bbb' }}
+                    >{config.bgImage ? '' : '＋'}</span>
+                    <span className="tj-bg-label">{config.bgImage ? '내 사진' : '사진'}</span>
+                  </button>
+                )}
+              </Fragment>
             ))}
-            <button
-              type="button"
-              className={'tj-bg-item' + (config.bg === 'custom' ? ' active' : '')}
-              onClick={() => {
-                if (config.bgImage && config.bg !== 'custom') setBg('custom');
-                else fileRef.current && fileRef.current.click();
-              }}
-            >
-              <span
-                className="tj-bg-swatch"
-                style={config.bgImage
-                  ? { backgroundImage: `url(${config.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                  : { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#bbb' }}
-              >{config.bgImage ? '' : '＋'}</span>
-              <span className="tj-bg-label">{config.bgImage ? '내 사진' : '사진'}</span>
-            </button>
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '14px', marginTop: '4px' }}>
-          <button
-            onClick={handleReset}
-            style={{
-              width: '100%',
-              minHeight: '40px',
-              boxSizing: 'border-box',
-              padding: '0 10px',
-              background: 'transparent',
-              border: '0.5px solid #E24B4A',
-              color: '#A32D2D',
-              cursor: 'pointer',
-              fontSize: '11px',
-              fontFamily: 'inherit'
-            }}
-          >
-            🔄 처음부터 다시 시작
-          </button>
-          <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', marginTop: '10px', lineHeight: 1.5 }}>
+          <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>
             글꼴 제공: Google Fonts (SIL Open Font License)
           </div>
         </div>

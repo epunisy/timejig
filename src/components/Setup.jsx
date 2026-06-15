@@ -19,8 +19,8 @@ function getRandomName() {
 }
 
 export default function Setup({ onDone }) {
-  const [startHour, setStartHour] = useState(8);
-  const [endHour, setEndHour] = useState(16);
+  const [startHour, setStartHour] = useState(12);
+  const [endHour, setEndHour] = useState(21);
   const [accent, setAccent] = useState('pastel');
   const [randomName] = useState(getRandomName);
   

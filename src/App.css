@@ -130,13 +130,31 @@ html, body {
 .tj-topbar {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   background: #fff;
   border: 0.5px solid #d8d8d8;
-  padding: 7px 12px;
+  padding: 7px 4px 7px 12px;
   box-sizing: border-box;
+}
+
+/* 로고 오른쪽 영역 — 이름이 길면 줄바꿈되어 위:시간표 이름 / 아래:메뉴 로 나뉘고,
+   짧으면 한 줄로 나란히 나온다. */
+.tj-topbar-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+/* 서식설정 · 모바일 잠금화면 묶음 — 항상 오른쪽 끝으로 (오른쪽 여백 없이) */
+.tj-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
@@ -260,6 +278,7 @@ html, body {
 .tj-logo-top {
   height: 27px;
   width: auto;
+  flex-shrink: 0;
   display: inline-block;
   vertical-align: middle;
   transform: scaleY(0.92);

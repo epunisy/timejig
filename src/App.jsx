@@ -141,8 +141,8 @@ export function bgStyle(theme) {
 const DEFAULT_CONFIG = {
   accent: 'pastel',
   weekRange: 'mon-fri',
-  startHour: 8,
-  endHour: 16,
+  startHour: 12,
+  endHour: 21,
   font: 'system',
   fontScale: 'md',
   dayLang: 'ko',
