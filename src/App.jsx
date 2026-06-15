@@ -151,7 +151,7 @@ const DEFAULT_STATE = {
     bgImage: null,
   },
   timetables: [
-    { id: 1, name: '시간표', blocks: [] }
+    { id: 1, name: 'Noname', blocks: [] }
   ],
   activeTT: 1,
   subjects: [],
@@ -195,7 +195,7 @@ function App() {
     setData({
       ...DEFAULT_STATE,
       config,
-      timetables: [{ id: 1, name: name || '시간표', blocks: [] }],
+      timetables: [{ id: 1, name: name || 'Noname', blocks: [] }],
       subjects: [
         { id: 101, name: '국어', duration: 60, colorIndex: 0, active: true },
       ],
