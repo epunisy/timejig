@@ -3,6 +3,17 @@
   box-sizing: border-box;
 }
 
+/* 기기/브라우저가 다크모드여도 타임지그는 항상 라이트(흰 배경)로 고정.
+   일부 안드로이드의 '강제 다크 모드'가 페이지를 검게 반전시키는 것을 막는다.
+   (글씨가 전부 검정이라 흰 배경이어야 로고·글자가 보임) */
+:root {
+  color-scheme: only light;
+}
+
+html, body {
+  background: #fff;
+}
+
 body {
   margin: 0;
   padding: 0;

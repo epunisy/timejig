@@ -281,16 +281,12 @@ html, body {
 
 .tj-cta:hover, .tj-icon-btn:hover { color: #000; }
 
-/* ===== 메인 레이아웃 ===== */
+/* ===== 메인 레이아웃 — 위 시간표 + 아래 과목 팔레트 세로 분할 (모든 화면 공통) ===== */
 .tj-layout {
-  display: grid;
-  grid-template-columns: 1fr 230px;
-  gap: 12px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-
-/* 경계선 드래그 핸들 — 데스크톱(좌우 분할)에선 숨김, 모바일 분할에서만 노출 */
-.tj-divider { display: none; }
 
 /* 크기 조절 중에는 텍스트 선택 방지 */
 .tj-resizing, .tj-resizing * {
@@ -298,59 +294,56 @@ html, body {
   -webkit-user-select: none !important;
 }
 
-@media (max-width: 768px) {
-  /* 모바일: 메인(편집) 화면만 화면 분할 — 위 시간표(자체 스크롤) + 아래 팔레트 고정.
-     잠금화면 만들기 등 다른 화면은 일반 스크롤이라 .tj-app-main 으로만 한정.
-     기본 규칙이 파일 뒤쪽에 있어 이기지 못하므로 우선순위도 높임 */
-  .tj-app-main {
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
-    gap: 8px;
-  }
-  .tj-app-main .tj-topbar { flex-shrink: 0; }
-  .tj-app-main .tj-layout {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    gap: 8px;
-  }
-  .tj-app-main .tj-grid {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  /* 스크롤해도 요일 헤더는 위에 고정 */
-  .tj-app-main .tj-grid-header { position: sticky; top: 0; z-index: 60; }
-  .tj-app-main .tj-palette {
-    order: 1;
-    position: static;
-    /* 경계선 드래그로 정한 높이(--tj-pal-h), 기본값은 38vh */
-    flex: 0 0 var(--tj-pal-h, 38vh);
-    min-height: 0;
-    overflow-y: auto;
-  }
-  /* 시간표와 팔레트 사이 드래그 핸들 */
-  .tj-app-main .tj-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-    height: 16px;
-    margin: -4px 0;
-    cursor: row-resize;
-    touch-action: none;
-  }
-  .tj-app-main .tj-divider-grip {
-    width: 46px;
-    height: 4px;
-    border-radius: 2px;
-    background: #c4c4c4;
-  }
-  .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
+/* 메인(편집) 화면: 화면 전체를 채워 위 시간표(자체 스크롤) + 아래 팔레트로 분할.
+   팔레트는 시간표와 같은 너비로 아래에 깔리고, 그 사이의 가운데 그립을 위아래로
+   드래그해 높이를 조절한다. 잠금화면 만들기 등 다른 화면은 일반 스크롤이라
+   .tj-app-main 으로만 한정. */
+.tj-app-main {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  gap: 8px;
 }
+.tj-app-main .tj-topbar { flex-shrink: 0; }
+.tj-app-main .tj-layout {
+  flex: 1;
+  min-height: 0;
+}
+.tj-app-main .tj-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* 스크롤해도 요일 헤더는 위에 고정 */
+.tj-app-main .tj-grid-header { position: sticky; top: 0; z-index: 60; }
+.tj-app-main .tj-palette {
+  order: 1;
+  position: static;
+  /* 경계선 드래그로 정한 높이(--tj-pal-h). 기본값은 한 줄만 보이게 낮춰
+     처음엔 시간표가 최대한 한눈에 들어오도록 한다. */
+  flex: 0 0 var(--tj-pal-h, 160px);
+  min-height: 0;
+  overflow-y: auto;
+}
+/* 시간표와 팔레트 사이 드래그 핸들 (가운데 그립) */
+.tj-app-main .tj-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 16px;
+  margin: -4px 0;
+  cursor: row-resize;
+  touch-action: none;
+}
+.tj-app-main .tj-divider-grip {
+  width: 46px;
+  height: 4px;
+  border-radius: 2px;
+  background: #c4c4c4;
+}
+.tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 
 /* ===== 시간표 ===== */
 .tj-grid {
