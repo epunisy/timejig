@@ -320,6 +320,9 @@ html, body {
 .tj-app-main .tj-palette {
   order: 1;
   position: static;
+  /* 세로 분할에서 시간표와 같은 너비로 펴지게 (기본 .tj-palette 의 align-self:start 무력화) */
+  align-self: stretch;
+  width: 100%;
   /* 경계선 드래그로 정한 높이(--tj-pal-h). 기본값은 한 줄만 보이게 낮춰
      처음엔 시간표가 최대한 한눈에 들어오도록 한다. */
   flex: 0 0 var(--tj-pal-h, 160px);
