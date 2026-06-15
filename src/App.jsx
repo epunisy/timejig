@@ -140,13 +140,13 @@ export function bgStyle(theme) {
 // 기본 표시 설정 — 시간표마다 각자 보유. 전역 config 는 새 시간표용 기본값 + paletteH 보관용.
 const DEFAULT_CONFIG = {
   accent: 'pastel',
-  weekRange: 'mon-fri',
+  weekRange: 'mon-sat',
   startHour: 12,
   endHour: 21,
-  font: 'system',
-  fontScale: 'md',
-  dayLang: 'ko',
-  bg: 'white',
+  font: 'gowun',
+  fontScale: 'lg',
+  dayLang: 'en',
+  bg: 'bluepetals',
   bgImage: null,
 };
 

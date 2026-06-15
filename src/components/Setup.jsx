@@ -115,7 +115,7 @@ export default function Setup({ onDone }) {
       <button className="tj-setup-cta" onClick={handleStart}>
         {t('start')}
       </button>
-      <div className="tj-setup-hint">월–금으로 시작해요.{'\n'}나중에 ⚙ 설정에서 다 바꿀 수 있어요.</div>
+      <div className="tj-setup-hint">월–토(MON–SAT)로 시작해요.{'\n'}나중에 ⚙ 서식설정에서 다 바꿀 수 있어요.</div>
     </div>
   );
 }
