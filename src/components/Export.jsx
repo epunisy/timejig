@@ -15,18 +15,23 @@ export default function Export({ data, onBack }) {
   const [showTime, setShowTime] = useState(false);
   const [fillTop, setFillTop] = useState(false); // 상단 시계 공간을 시간표로 채울지
   const [downloading, setDownloading] = useState(false);
+  const [formatBasis, setFormatBasis] = useState(data.activeTT);
   const captureRef = useRef(null);
-  
-  const dayCount = data.config.weekRange === 'mon-fri' ? 5
-    : data.config.weekRange === 'mon-sat' ? 6 : 7;
+
+  // 콜라주 서식 기준 — 선택한 시간표 중 어느 시간표의 설정(시간대·요일·배경·글꼴)으로 통일해 그릴지.
+  const formatTTId = selection.includes(formatBasis) ? formatBasis : (selection[0] ?? data.activeTT);
+  const fmtConfig = (data.timetables.find(t => t.id === formatTTId)?.config) || data.config;
+
+  const dayCount = fmtConfig.weekRange === 'mon-fri' ? 5
+    : fmtConfig.weekRange === 'mon-sat' ? 6 : 7;
   const days = ALL_DAYS.slice(0, dayCount);
-  const dayLabels = (data.config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
-  const totalMin = (data.config.endHour - data.config.startHour) * 60;
-  const accents = getAccents(data.config.accent);
-  const bgTheme = resolveBackground(data.config);
+  const dayLabels = (fmtConfig.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
+  const totalMin = (fmtConfig.endHour - fmtConfig.startHour) * 60;
+  const accents = getAccents(fmtConfig.accent);
+  const bgTheme = resolveBackground(fmtConfig);
   
   function fmtTime(min) {
-    const h = data.config.startHour + Math.floor(min / 60);
+    const h = fmtConfig.startHour + Math.floor(min / 60);
     const m = min % 60;
     return pad(h) + ':' + pad(m);
   }
@@ -108,10 +113,10 @@ export default function Export({ data, onBack }) {
   //  전부 명시적 px + 1px 테두리로 계산 → 미리보기와 PNG가 동일하게 나옴)
   function renderSchedules(boxW, boxH) {
     const n = selectedTTs.length || 1;
-    const startHour = data.config.startHour;
-    const hourCount = data.config.endHour - startHour;
+    const startHour = fmtConfig.startHour;
+    const hourCount = fmtConfig.endHour - startHour;
     const hours = [];
-    for (let h = startHour; h <= data.config.endHour; h++) hours.push(h);
+    for (let h = startHour; h <= fmtConfig.endHour; h++) hours.push(h);
 
     // 왼쪽 시간축 + 요일 컬럼
     const timeColW = Math.max(10, Math.round(boxW * 0.08));
@@ -133,14 +138,14 @@ export default function Export({ data, onBack }) {
     // 요일 헤더 높이를 시간축 폭과 동일하게 (코너가 정사각형이 되어 균형있게)
     const headH = Math.max(Math.round(headFont * 1.8), timeColW);
     // 과목 블록 글씨만 사용자 배율 적용 (요일/이름/시간축은 비율 유지)
-    const blockFont = Math.max(6, Math.round(font * getFontScale(data.config.fontScale)));
+    const blockFont = Math.max(6, Math.round(font * getFontScale(fmtConfig.fontScale)));
     const timeFont = Math.max(5, Math.round(font * 0.85));
     const timeLabelH = Math.round(timeFont * 1.2);
     const accentW = Math.max(3, Math.round(colW * 0.06));
     const schedH = Math.max(0, wrapH - labelH);
     const bodyH = Math.max(0, schedH - headH);
 
-    const fontFamily = getFontFamily(data.config.font);
+    const fontFamily = getFontFamily(fmtConfig.font);
 
     return (
       <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
@@ -288,6 +293,27 @@ export default function Export({ data, onBack }) {
             </div>
           </div>
           
+          {selection.length > 1 && (
+            <div className="tj-export-section">
+              <h4>서식 기준</h4>
+              <div className="tj-radio-row">
+                {selectedTTs.map(tt => (
+                  <div
+                    key={tt.id}
+                    className={'tj-radio-item' + (formatTTId === tt.id ? ' sel' : '')}
+                    onClick={() => setFormatBasis(tt.id)}
+                  >
+                    <div className="tj-radio-circle"></div>
+                    <span>{tt.name}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: '10px', color: '#888', marginTop: '4px', lineHeight: 1.4 }}>
+                선택한 시간표들을 이 시간표의 서식(시간대·요일·배경·글꼴)으로 통일해 그려요.
+              </div>
+            </div>
+          )}
+
           <div className="tj-export-section">
             <h4>{t('section2')}</h4>
             <div className="tj-radio-row">

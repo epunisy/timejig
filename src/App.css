@@ -130,8 +130,8 @@ html, body {
 .tj-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 10px;
   flex-wrap: wrap;
   background: #fff;
   border: 0.5px solid #d8d8d8;
@@ -257,16 +257,8 @@ html, body {
 
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
-/* 로고(맨 왼쪽) + 시간표 이름 묶음 */
-.tj-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
 .tj-logo-top {
-  height: 36px;
+  height: 27px;
   width: auto;
   display: inline-block;
   vertical-align: middle;

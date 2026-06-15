@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { t } from '../i18n';
 import Timetable from './Timetable';
 import Palette from './Palette';
 import Settings from './Settings';
@@ -8,6 +7,7 @@ import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import TutorialList from './TutorialList';
 import { resolveBackground, bgStyle } from '../App';
+import { clearData } from '../storage';
 
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
@@ -21,6 +21,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
+  const [resetNumbers, setResetNumbers] = useState(null);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -74,6 +75,50 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
 
+  // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
+  const config = activeTT.config || data.config;
+
+  // 로고를 누르면 전체 초기화 — 이중 확인(예 → 짝수 고르기)
+  function makeResetNumbers() {
+    const nums = [];
+    while (nums.length < 4) {
+      const n = 10 + Math.floor(Math.random() * 90);
+      if (!nums.includes(n)) nums.push(n);
+    }
+    if (!nums.some(n => n % 2 === 0)) {
+      const c = nums[0] < 99 ? nums[0] + 1 : nums[0] - 1;
+      if (!nums.includes(c)) nums[0] = c;
+    }
+    if (!nums.some(n => n % 2 === 1)) {
+      const c = nums[3] < 99 ? nums[3] + 1 : nums[3] - 1;
+      if (!nums.includes(c)) nums[3] = c;
+    }
+    return nums;
+  }
+
+  function handleLogoClick() {
+    setConfirmDialog({
+      title: '처음부터 다시 시작',
+      message: '모든 시간표를 삭제하고, 새로 시작하시겠습니까?<br><span style="color:#888; font-size:11px;">배치된 모든 블록·과목·설정이 사라집니다.</span>',
+      confirmText: '예',
+      onYes: () => setResetNumbers(makeResetNumbers()),
+    });
+  }
+
+  function handleResetPick(n) {
+    if (n % 2 === 0) {
+      clearData();
+      window.location.reload();
+    } else {
+      setResetNumbers(null);
+      setConfirmDialog({
+        title: '초기화 취소',
+        message: '짝수가 아니라서 초기화를 취소했어요.',
+        infoOnly: true,
+      });
+    }
+  }
+
   function updateTimetable(updater) {
     setData({
       ...data,
@@ -89,7 +134,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
     const newId = Math.max(...data.timetables.map(t => t.id)) + 1;
     setData({
       ...data,
-      timetables: [...data.timetables, { id: newId, name, blocks: [] }],
+      timetables: [...data.timetables, { id: newId, name, blocks: [], config: { ...config } }],
       activeTT: newId,
     });
     setAddingTT(false);
@@ -116,10 +161,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
     }));
     setData({
       ...data,
-      timetables: [...data.timetables, { 
-        id: newId, 
-        name: tt.name + ' 복사본', 
-        blocks: newBlocks 
+      timetables: [...data.timetables, {
+        id: newId,
+        name: tt.name + ' 복사본',
+        blocks: newBlocks,
+        config: { ...(tt.config || config) },
       }],
       activeTT: newId,
     });
@@ -231,7 +277,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   }
   
   function handleConfigChange(newConfig) {
-    const old = data.config;
+    // 설정은 시간표마다 따로 — 지금 보고 있는 시간표(activeTT)의 config 와 블록만 다룬다.
+    const old = config;
     const startChanged = newConfig.startHour !== old.startHour;
     const endChanged = newConfig.endHour !== old.endHour;
     const weekChanged = newConfig.weekRange !== old.weekRange;
@@ -242,8 +289,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       // 원래의 '절대 시각'이 유지된다.
       const delta = (old.startHour - newConfig.startHour) * 60;
       const newTotalMin = (newConfig.endHour - newConfig.startHour) * 60;
-      const cutCount = data.timetables.reduce((sum, tt) =>
-        sum + tt.blocks.filter(b => (b.start + delta) < 0 || (b.end + delta) > newTotalMin).length, 0);
+      const cutCount = activeTT.blocks.filter(b => (b.start + delta) < 0 || (b.end + delta) > newTotalMin).length;
 
       if (cutCount > 0) {
         // 변경하지 않고 안내만 → config 그대로라 설정창의 선택값도 원위치된다.
@@ -256,15 +302,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         return;
       }
 
-      // 통과 — 모든 블록을 평행이동해 원래 시각을 그대로 유지.
-      setData({
-        ...data,
+      // 통과 — 이 시간표의 블록만 평행이동해 원래 시각을 그대로 유지.
+      updateTimetable(tt => ({
+        ...tt,
         config: newConfig,
-        timetables: data.timetables.map(tt => ({
-          ...tt,
-          blocks: tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })),
-        })),
-      });
+        blocks: tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })),
+      }));
       return;
     }
 
@@ -273,19 +316,16 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       const dayCount = newConfig.weekRange === 'mon-fri' ? 5
         : newConfig.weekRange === 'mon-sat' ? 6 : 7;
       const allowedDays = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount);
-      setData({
-        ...data,
+      updateTimetable(tt => ({
+        ...tt,
         config: newConfig,
-        timetables: data.timetables.map(tt => ({
-          ...tt,
-          blocks: tt.blocks.filter(b => allowedDays.includes(b.day)),
-        })),
-      });
+        blocks: tt.blocks.filter(b => allowedDays.includes(b.day)),
+      }));
       return;
     }
 
     // 그 외 설정(폰트·배경·색·글씨 크기 등)
-    setData({ ...data, config: newConfig });
+    updateTimetable(tt => ({ ...tt, config: newConfig }));
   }
   
   function handleTimetableNameChange(name) {
@@ -300,7 +340,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const isDragging = dragSubject !== null || internalDragging;
   
-  const bgTheme = resolveBackground(data.config);
+  const bgTheme = resolveBackground(config);
 
   return (
     <div
@@ -308,9 +348,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
-        <div className="tj-topbar-left">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
-          <div className="tj-ttbar">
+        <img
+          src="/logo2.png"
+          alt="TimeJig"
+          className="tj-logo-top"
+          onClick={handleLogoClick}
+          style={{ cursor: 'pointer' }}
+        />
+        <div className="tj-ttbar">
           <button
             className="tj-tt-current"
             onClick={() => setTtMenuOpen(o => !o)}
@@ -394,11 +439,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             </>
           )}
         </div>
-        </div>
-        <div className="tj-action-row">
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="설정">⚙ 설정</button>
-          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
-        </div>
+        <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
+        <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
       </div>
       
       <div
@@ -407,7 +449,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
         <Timetable
-          config={data.config}
+          config={config}
           blocks={activeTT.blocks}
           subjects={data.subjects}
           onBlocksChange={handleBlocksChange}
@@ -425,7 +467,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           <span className="tj-divider-grip" />
         </div>
         <Palette
-          config={data.config}
+          config={config}
           subjects={data.subjects}
           onAddSubject={handleAddSubjectClick}
           onEditSubject={handleEditSubject}
@@ -450,7 +492,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       {showSubjectModal && (
         <SubjectModal
           subject={editingSubjectId ? data.subjects.find(s => s.id === editingSubjectId) : null}
-          config={data.config}
+          config={config}
           subjectCount={data.subjects.length}
           onSave={handleSubjectSave}
           onCancel={() => setShowSubjectModal(false)}
@@ -464,7 +506,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       
       {showSettings && (
         <Settings
-          config={data.config}
+          config={config}
           timetableName={activeTT.name}
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
@@ -479,7 +521,35 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onClose={() => setConfirmDialog(null)}
         />
       )}
-      
+
+      {resetNumbers && (
+        <div className="tj-modal-bg" onClick={() => setResetNumbers(null)}>
+          <div className="tj-modal" onClick={(e) => e.stopPropagation()} style={{ width: '320px' }}>
+            <h3>정말 다시 시작할까요?</h3>
+            <div className="tj-confirm-msg">
+              정말 원하신다면 아래 숫자 중 <b>짝수</b>를 선택하세요.
+            </div>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', margin: '16px 0' }}>
+              {resetNumbers.map(n => (
+                <button
+                  key={n}
+                  onClick={() => handleResetPick(n)}
+                  style={{
+                    minWidth: '56px', minHeight: '48px',
+                    fontSize: '18px', fontWeight: 600,
+                    border: '0.5px solid #ccc', background: '#fff',
+                    cursor: 'pointer', fontFamily: 'inherit',
+                  }}
+                >{n}</button>
+              ))}
+            </div>
+            <div className="tj-modal-actions">
+              <button onClick={() => setResetNumbers(null)}>취소</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
       )}

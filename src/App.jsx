@@ -137,33 +137,48 @@ export function bgStyle(theme) {
   return { backgroundColor: theme.css };
 }
 
+// 기본 표시 설정 — 시간표마다 각자 보유. 전역 config 는 새 시간표용 기본값 + paletteH 보관용.
+const DEFAULT_CONFIG = {
+  accent: 'pastel',
+  weekRange: 'mon-fri',
+  startHour: 8,
+  endHour: 16,
+  font: 'system',
+  fontScale: 'md',
+  dayLang: 'ko',
+  bg: 'white',
+  bgImage: null,
+};
+
 // 기본값
 const DEFAULT_STATE = {
-  config: {
-    accent: 'pastel',
-    weekRange: 'mon-fri',
-    startHour: 8,
-    endHour: 16,
-    font: 'system',
-    fontScale: 'md',
-    dayLang: 'ko',
-    bg: 'white',
-    bgImage: null,
-  },
+  config: { ...DEFAULT_CONFIG },
   timetables: [
-    { id: 1, name: 'Noname', blocks: [] }
+    { id: 1, name: 'Noname', blocks: [], config: { ...DEFAULT_CONFIG } }
   ],
   activeTT: 1,
   subjects: [],
   tutorialDone: false,
 };
 
+// 예전 데이터(시간표별 config 없음) 마이그레이션 — 각 시간표에 전역 config 를 복사해 넣는다.
+function normalizeData(data) {
+  if (!data || !Array.isArray(data.timetables)) return data;
+  const base = data.config || DEFAULT_CONFIG;
+  return {
+    ...data,
+    timetables: data.timetables.map(tt =>
+      tt.config ? tt : { ...tt, config: { ...base } }
+    ),
+  };
+}
+
 function App() {
   // 스플래시 없이 시작 — 저장된 데이터가 있으면 메인, 없으면 첫 설정 화면
   const [boot] = useState(() => {
     const saved = loadData();
     const valid = saved && saved.timetables && saved.timetables.length > 0 && saved.subjects && saved.subjects.length > 0;
-    return { data: valid ? saved : DEFAULT_STATE, mode: valid ? 'main' : 'setup' };
+    return { data: valid ? normalizeData(saved) : DEFAULT_STATE, mode: valid ? 'main' : 'setup' };
   });
 
   // 화면 모드: setup | main | export
@@ -195,7 +210,7 @@ function App() {
     setData({
       ...DEFAULT_STATE,
       config,
-      timetables: [{ id: 1, name: name || 'Noname', blocks: [] }],
+      timetables: [{ id: 1, name: name || 'Noname', blocks: [], config: { ...config } }],
       subjects: [
         { id: 101, name: '국어', duration: 60, colorIndex: 0, active: true },
       ],

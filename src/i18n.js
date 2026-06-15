@@ -39,7 +39,7 @@ const translations = {
     save: '저장',
     
     // 설정
-    settings: '설정',
+    settings: '서식 설정',
     weekRange: '요일 범위',
     monFri: '월 – 금',
     monSun: '월 – 일',
