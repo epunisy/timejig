@@ -308,7 +308,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
-        <div className="tj-ttbar">
+        <div className="tj-topbar-left">
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
+          <div className="tj-ttbar">
           <button
             className="tj-tt-current"
             onClick={() => setTtMenuOpen(o => !o)}
@@ -392,10 +394,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             </>
           )}
         </div>
+        </div>
         <div className="tj-action-row">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
-          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
           <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="설정">⚙ 설정</button>
+          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
         </div>
       </div>
       

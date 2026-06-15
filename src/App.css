@@ -257,10 +257,17 @@ html, body {
 
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
+/* 로고(맨 왼쪽) + 시간표 이름 묶음 */
+.tj-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .tj-logo-top {
-  height: 18px;
+  height: 36px;
   width: auto;
-  margin-right: 6px;
   display: inline-block;
   vertical-align: middle;
   transform: scaleY(0.92);
