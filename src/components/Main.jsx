@@ -80,20 +80,20 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
 
   // 로고를 누르면 전체 초기화 — 이중 확인(예 → 짝수 고르기)
   function makeResetNumbers() {
-    const nums = [];
-    while (nums.length < 4) {
-      const n = 10 + Math.floor(Math.random() * 90);
-      if (!nums.includes(n)) nums.push(n);
+    // 짝수는 딱 1개, 나머지 3개는 홀수 (정답이 한 개뿐이라 더 신중해짐)
+    const odds = [];
+    while (odds.length < 3) {
+      const n = 11 + 2 * Math.floor(Math.random() * 45); // 11~99 홀수
+      if (!odds.includes(n)) odds.push(n);
     }
-    if (!nums.some(n => n % 2 === 0)) {
-      const c = nums[0] < 99 ? nums[0] + 1 : nums[0] - 1;
-      if (!nums.includes(c)) nums[0] = c;
+    const even = 10 + 2 * Math.floor(Math.random() * 45); // 10~98 짝수 (홀수와 자동으로 겹치지 않음)
+    const arr = [...odds, even];
+    // 짝수가 항상 마지막에 오지 않도록 섞기
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    if (!nums.some(n => n % 2 === 1)) {
-      const c = nums[3] < 99 ? nums[3] + 1 : nums[3] - 1;
-      if (!nums.includes(c)) nums[3] = c;
-    }
-    return nums;
+    return arr;
   }
 
   function handleLogoClick() {
@@ -159,8 +159,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       ...b,
       id: Date.now() + Math.random()
     }));
-    // 복사본 이름: 원본 이름 뒤에 _2, _3 … (이미 있으면 다음 번호로)
-    const baseName = tt.name.replace(/_\d+$/, '');
+    // 복사본 이름: 원본 이름(전체) 뒤에 _2, _3 … (이미 있으면 다음 번호로)
+    const baseName = tt.name;
     const existing = data.timetables.map(t => t.name);
     let copyN = 2;
     while (existing.includes(`${baseName}_${copyN}`)) copyN++;
@@ -534,9 +534,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       {resetNumbers && (
         <div className="tj-modal-bg" onClick={() => setResetNumbers(null)}>
           <div className="tj-modal" onClick={(e) => e.stopPropagation()} style={{ width: '320px' }}>
-            <h3>정말 다시 시작할까요?</h3>
             <div className="tj-confirm-msg">
-              정말 원하신다면 아래 숫자 중 <b>짝수</b>를 선택하세요.
+              모든 시간표가 삭제됩니다.<br />
+              계속하시려면 아래 숫자 중 <b>짝수</b>를 선택하세요.
             </div>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', margin: '16px 0' }}>
               {resetNumbers.map(n => (
