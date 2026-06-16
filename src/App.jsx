@@ -146,7 +146,7 @@ const DEFAULT_CONFIG = {
   font: 'gowun',
   fontScale: 'lg',
   dayLang: 'en',
-  bg: 'bluepetals',
+  bg: 'graph',
   bgImage: null,
 };
 
