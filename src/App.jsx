@@ -158,7 +158,7 @@ const DEFAULT_CONFIG = {
 const DEFAULT_STATE = {
   config: { ...DEFAULT_CONFIG },
   timetables: [
-    { id: 1, name: 'Noname', blocks: [], config: { ...DEFAULT_CONFIG } }
+    { id: 1, name: '시간표1', blocks: [], config: { ...DEFAULT_CONFIG } }
   ],
   activeTT: 1,
   subjects: [],
@@ -214,7 +214,7 @@ function App() {
     setData({
       ...DEFAULT_STATE,
       config,
-      timetables: [{ id: 1, name: name || 'Noname', blocks: [], config: { ...config } }],
+      timetables: [{ id: 1, name: name || '시간표1', blocks: [], config: { ...config } }],
       subjects: [],
     });
     setJustSetup(true);
