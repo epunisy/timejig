@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
-import { getAccents } from '../App';
+import { getAccents, CATEGORIES } from '../App';
 
-export default function SubjectModal({ subject, config, subjectCount, onSave, onCancel, onDelete }) {
+export default function SubjectModal({ subject, config, onSave, onCancel, onDelete }) {
   const accents = getAccents(config.accent);
   const isEdit = subject !== null;
-  
-  const [colorIndex, setColorIndex] = useState(
-    subject ? subject.colorIndex : 
-    (accents ? subjectCount % accents.length : 0)
-  );
-  
+
+  // 분류 = 색띠. 기존 데이터 호환: category 없으면 colorIndex로 추정, 그것도 없으면 '기타'
+  const initCategory = subject?.category
+    || (subject && typeof subject.colorIndex === 'number' ? CATEGORIES[subject.colorIndex] : null)
+    || '기타';
+  const [category, setCategory] = useState(initCategory);
+
   const nameInputRef = useRef(null);
   const composingRef = useRef(false);
 
@@ -31,7 +32,8 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
     if (!name) return;
     const duration = durMode === 'custom' ? (parseInt(customDur, 10) || 60) : parseInt(durMode, 10);
     const price = parseInt(priceStr, 10) || 0;
-    onSave({ name, duration, colorIndex, price, priceType });
+    const colorIndex = Math.max(0, CATEGORIES.indexOf(category));
+    onSave({ name, duration, colorIndex, price, priceType, category });
   }
   
   function handleKeyDown(e) {
@@ -108,33 +110,34 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
           />
         </label>
         
-        {accents ? (
-          <label>
-            <span>{t('colorBand')}</span>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${accents.length}, 1fr)`, gap: '6px' }}>
-              {accents.map((c, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setColorIndex(i)}
-                  style={{
-                    height: '30px',
-                    minWidth: 0,
-                    background: '#fff',
-                    border: '1px solid #aaa',
-                    borderLeft: `6px solid ${c}`,
-                    cursor: 'pointer',
-                    ...(colorIndex === i ? { outline: '2px solid #222', outlineOffset: '2px' } : {})
-                  }}
-                />
-              ))}
-            </div>
-          </label>
-        ) : (
-          <div style={{ fontSize: '11px', color: '#888' }}>
-            색띠는 설정의 [색띠: 없음] 이라 별도 색이 없습니다.
+        <label>
+          <span>분류 (색띠)</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+            {CATEGORIES.map((cat, i) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setCategory(cat)}
+                style={{
+                  minWidth: 0,
+                  padding: '8px 4px',
+                  fontSize: '12px',
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  background: '#fff',
+                  border: '1px solid #ccc',
+                  borderLeft: accents ? `7px solid ${accents[i % accents.length]}` : '1px solid #ccc',
+                  ...(category === cat ? { outline: '2px solid #222', outlineOffset: '1px', fontWeight: 700 } : {})
+                }}
+              >{cat}</button>
+            ))}
           </div>
-        )}
+          {!accents && (
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
+              색띠는 [서식설정 → 색띠: 없음]이라 색은 표시되지 않지만 분류는 저장돼요.
+            </div>
+          )}
+        </label>
         
         <div className="tj-modal-actions">
           {isEdit && (

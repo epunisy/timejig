@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { getAccents, getFontFamily, getFontScale, resolveBackground } from '../App';
+import { getAccents, getFontFamily, getFontScale, resolveBackground, CATEGORIES } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -33,6 +33,8 @@ export default function Timetable({
   dayNotePos,
   onEditMemo,
   monthlyCost,
+  categoryCosts,
+  showCost,
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -379,8 +381,39 @@ export default function Timetable({
         ))}
       </div>
       {dayNotePos === 'bottom' && memoRow}
-      {monthlyCost > 0 && (
-        <div className="tj-cost">₩{monthlyCost.toLocaleString()}/month</div>
+      {showCost && monthlyCost > 0 && (
+        <div className="tj-cost">
+          {accents && (
+            <>
+              <div className="tj-cost-bar">
+                {CATEGORIES.map((cat, i) => {
+                  const amt = (categoryCosts && categoryCosts[cat]) || 0;
+                  if (!amt) return null;
+                  return (
+                    <div
+                      key={cat}
+                      style={{ width: (amt / monthlyCost * 100) + '%', background: accents[i % accents.length] }}
+                      title={`${cat} ₩${amt.toLocaleString()}`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="tj-cost-legend">
+                {CATEGORIES.map((cat, i) => {
+                  const amt = (categoryCosts && categoryCosts[cat]) || 0;
+                  if (!amt) return null;
+                  return (
+                    <span key={cat} className="tj-cost-leg">
+                      <span className="dot" style={{ background: accents[i % accents.length] }} />
+                      {cat} ₩{amt.toLocaleString()}
+                    </span>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}/month</div>
+        </div>
       )}
     </div>
   );

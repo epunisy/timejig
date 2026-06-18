@@ -8,7 +8,7 @@ import Tutorial from './Tutorial';
 import TutorialList from './TutorialList';
 import ImportPlan from './ImportPlan';
 import DayNotes from './DayNotes';
-import { resolveBackground, bgStyle } from '../App';
+import { resolveBackground, bgStyle, CATEGORIES } from '../App';
 import { clearData } from '../storage';
 
 function timeToMin(t) {
@@ -35,6 +35,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [showDayNotes, setShowDayNotes] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
+  const [showCost, setShowCost] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -465,17 +466,21 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   // 요일별 메모 — 시간표 안의 한 행으로 표시. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
   const dayNotePos = config.dayNotePos === 'bottom' ? 'bottom' : 'top';
 
-  // 한 달 학원비 — 회당: 금액 × 주간 배치횟수 × 4주, 한달치: 과목당 1회 합산
-  const monthlyCost = (() => {
+  // 한 달 학원비 — 회당: 금액 × 주간 배치횟수 × 4주, 한달치: 과목당 1회 합산. 분류별로도 합산.
+  const { monthlyCost, categoryCosts } = (() => {
     const counts = {};
     activeTT.blocks.forEach(b => { counts[b.subjectId] = (counts[b.subjectId] || 0) + 1; });
     let total = 0;
+    const cats = {};
     data.subjects.forEach(s => {
       const cnt = counts[s.id];
       if (!cnt || !s.price) return;
-      total += s.priceType === 'session' ? s.price * cnt * 4 : s.price;
+      const amt = s.priceType === 'session' ? s.price * cnt * 4 : s.price;
+      const cat = s.category || (typeof s.colorIndex === 'number' ? CATEGORIES[s.colorIndex] : '기타') || '기타';
+      cats[cat] = (cats[cat] || 0) + amt;
+      total += amt;
     });
-    return total;
+    return { monthlyCost: total, categoryCosts: cats };
   })();
 
   const bgTheme = resolveBackground(config);
@@ -596,6 +601,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
             <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
           </button>
+          <button className={'tj-cta' + (showCost ? ' on' : '')} onClick={() => setShowCost(s => !s)}>
+            {showCost ? '비용닫기' : '비용보기'}
+          </button>
         </div>
         </div>
       </div>
@@ -618,6 +626,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           dayNotePos={dayNotePos}
           onEditMemo={() => setShowDayNotes(true)}
           monthlyCost={monthlyCost}
+          categoryCosts={categoryCosts}
+          showCost={showCost}
         />
         <div
           className="tj-divider"
