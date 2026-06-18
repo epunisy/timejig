@@ -369,18 +369,19 @@ html, body {
 .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 
 /* 요일별 메모 — 시간표 안의 한 행 (요일 블록과 같은 그레이, 메모보기 토글로 표시) */
+/* 메모 행 — 메모지(노트) 느낌의 따뜻한 아이보리 + 위쪽 점선으로 '메모 영역'임을 표시 */
 .tj-memo-row {
   display: grid;
-  background: #fff;
-  border-top: 1px solid #ddd;
+  background: #fffcf4;
+  border-top: 1px dashed #d8c9a6;
   cursor: pointer;
 }
 .tj-memo-label, .tj-memo-cell {
   box-sizing: border-box;
-  border-right: 1px solid #eee;
+  border-right: 1px solid #ebe0c8;
   padding: 3px 4px;
   font-size: 10px;
-  color: #444;
+  color: #6e6149;
   min-width: 0;
   line-height: 1.3;
   white-space: nowrap;
@@ -388,7 +389,7 @@ html, body {
   text-align: center;
 }
 .tj-memo-cell:last-child { border-right: none; }
-.tj-memo-label { background: #ececec; font-weight: 600; }
+.tj-memo-label { background: #f3e9d2; color: #8c7a57; font-weight: 600; }
 
 /* ===== 시간표 ===== */
 .tj-grid {

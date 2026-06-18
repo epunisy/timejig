@@ -260,7 +260,7 @@ export default function Export({ data, onBack }) {
   
   return (
     <div className="tj-app">
-      <div className="tj-topbar" style={{ position: 'relative', justifyContent: 'flex-end' }}>
+      <div className="tj-topbar" style={{ position: 'relative', justifyContent: 'flex-end', border: 'none', background: 'transparent' }}>
         <div style={{
           position: 'absolute',
           left: '50%',
