@@ -102,13 +102,13 @@ export default function Setup({ onDone }) {
             onClick={() => setAccent('pastel')}
           >{t('accentPastel')}</button>
           <button
-            className={accent === 'none' ? 'active' : ''}
-            onClick={() => setAccent('none')}
-          >{t('accentNone')}</button>
-          <button
             className={accent === 'mono' ? 'active' : ''}
             onClick={() => setAccent('mono')}
           >{t('accentMono')}</button>
+          <button
+            className={accent === 'none' ? 'active' : ''}
+            onClick={() => setAccent('none')}
+          >{t('accentNone')}</button>
         </div>
       </div>
 

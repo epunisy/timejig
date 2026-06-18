@@ -192,13 +192,13 @@ export default function Settings({
               onClick={() => setAccent('pastel')}
             >{t('accentPastel')}</button>
             <button
-              className={config.accent === 'none' ? 'active' : ''}
-              onClick={() => setAccent('none')}
-            >{t('accentNone')}</button>
-            <button
               className={config.accent === 'mono' ? 'active' : ''}
               onClick={() => setAccent('mono')}
             >{t('accentMono')}</button>
+            <button
+              className={config.accent === 'none' ? 'active' : ''}
+              onClick={() => setAccent('none')}
+            >{t('accentNone')}</button>
           </div>
         </label>
 
