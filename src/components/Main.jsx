@@ -474,7 +474,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
-        <div className="tj-topbar-r1">
         <img
           src="/logo2.png"
           alt="TimeJig"
@@ -482,6 +481,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onClick={handleLogoClick}
           style={{ cursor: 'pointer' }}
         />
+        <div className="tj-topbar-main">
+        <div className="tj-topbar-r1">
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
@@ -580,6 +581,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
             <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
           </button>
+        </div>
         </div>
       </div>
 
