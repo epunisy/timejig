@@ -145,13 +145,13 @@ html, body {
   align-items: center;
   gap: 8px;
 }
-.tj-topbar-r1 .tj-ttbar { flex: 1; min-width: 0; }
+.tj-topbar-r1 .tj-ttbar { margin-left: auto; min-width: 0; }
 .tj-topbar-r1 .tj-cta-settings { flex-shrink: 0; }
 .tj-topbar-r2 {
   display: flex;
   gap: 6px;
+  justify-content: flex-end;
 }
-.tj-topbar-r2 .tj-cta { flex: 1; justify-content: center; }
 .tj-topbar-r1 .tj-cta, .tj-topbar-r2 .tj-cta {
   padding: 2px 6px;
   font-size: 10px;
@@ -384,13 +384,13 @@ html, body {
 .tj-memo-row {
   display: grid;
   background: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
   cursor: pointer;
 }
 .tj-memo-label, .tj-memo-cell {
   box-sizing: border-box;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #ececec;
   padding: 3px 4px;
   font-size: 10px;
   color: #444;
@@ -408,7 +408,8 @@ html, body {
   text-align: center;
 }
 .tj-memo-cell:last-child { border-right: none; }
-.tj-memo-label { background: #ececec; white-space: nowrap; color: #555; font-weight: 600; }
+/* 라벨(회색 칸)은 시간축처럼 오른쪽 선을 흰색으로 */
+.tj-memo-label { background: #ececec; border-right: 1px solid #fff; white-space: nowrap; color: #555; font-weight: 600; }
 
 /* ===== 시간표 ===== */
 .tj-grid {
