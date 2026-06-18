@@ -63,7 +63,6 @@ function Phone({ children }) {
 }
 
 const SLIDES = [
-  { title: '내 시간표를 한눈에', desc: '요일·시간대 그대로, 깔끔한 표로.', view: <MiniGrid /> },
   { title: '과목 만들고 드래그!', desc: '과목을 끌어다 시간표에 톡 놓으면 끝.', view: <MiniGrid drag /> },
   { title: '학습계획표 사진 자동입력', desc: '학교 주간학습계획표 사진만 올리면 AI가 채워줘요.', view: <MiniGrid plan /> },
   { title: '요일 메모 + 월 교육비', desc: '준비물 메모와 한 달 학원비까지 자동으로.', view: <MiniGrid memo cost /> },
