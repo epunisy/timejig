@@ -422,12 +422,13 @@ html, body {
 }
 .tj-memo-cell:last-child { border-right: none; }
 
-/* 한 달 학원비 — 시간표 상자 맨 아래. 비용보기 토글로 표시 */
-.tj-cost {
-  background: #fff;
-  padding: 6px 8px;
-  border-top: 1px solid #ececec;
+/* 교육비 — 과목팔레트 아래에 표시 */
+.tj-edu {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 0.5px solid #e2e2e2;
 }
+.tj-edu-head { font-size: 11px; font-weight: 600; color: #555; margin-bottom: 6px; }
 .tj-cost-bar {
   display: flex;
   height: 10px;

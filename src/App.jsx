@@ -22,7 +22,7 @@ export function getAccents(accent) {
 }
 
 // 과목 분류(색띠) — 분류 = 색. 색띠 그래프(포션)도 이 분류로 묶는다.
-export const CATEGORIES = ['국어', '영어', '수학', '예능', '체능', '기타'];
+export const CATEGORIES = ['국어', '영어', '수학', '사회', '과학', '예체능', '기타'];
 
 // 글씨체 (시간표/잠금화면에만 적용) — 나중에 골라서 줄일 예정
 export const FONTS = [

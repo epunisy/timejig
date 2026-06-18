@@ -35,7 +35,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [showDayNotes, setShowDayNotes] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
-  const [showCost, setShowCost] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -476,7 +475,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       const cnt = counts[s.id];
       if (!cnt || !s.price) return;
       const amt = s.priceType === 'session' ? s.price * cnt * 4 : s.price;
-      const cat = s.category || (typeof s.colorIndex === 'number' ? CATEGORIES[s.colorIndex] : '기타') || '기타';
+      let cat = s.category || (typeof s.colorIndex === 'number' ? CATEGORIES[s.colorIndex] : '기타') || '기타';
+      if (cat === '예능' || cat === '체능') cat = '예체능'; // 예전 분류 통합
+      if (!CATEGORIES.includes(cat)) cat = '기타';
       cats[cat] = (cats[cat] || 0) + amt;
       total += amt;
     });
@@ -601,9 +602,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
             <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
           </button>
-          <button className={'tj-cta' + (showCost ? ' on' : '')} onClick={() => setShowCost(s => !s)}>
-            {showCost ? '비용닫기' : '비용보기'}
-          </button>
         </div>
         </div>
       </div>
@@ -625,9 +623,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           showMemo={showMemo}
           dayNotePos={dayNotePos}
           onEditMemo={() => setShowDayNotes(true)}
-          monthlyCost={monthlyCost}
-          categoryCosts={categoryCosts}
-          showCost={showCost}
         />
         <div
           className="tj-divider"
@@ -644,6 +639,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onAddSubject={handleAddSubjectClick}
           onEditSubject={handleEditSubject}
           onDragStart={handlePaletteDragStart}
+          monthlyCost={monthlyCost}
+          categoryCosts={categoryCosts}
         />
       </div>
       

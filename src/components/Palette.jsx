@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { t } from '../i18n';
-import { getAccents, getFontFamily } from '../App';
+import { getAccents, getFontFamily, CATEGORIES } from '../App';
 
 const LONG_PRESS_MS = 500;
 const MOVE_THRESHOLD = 8;
@@ -11,6 +11,8 @@ export default function Palette({
   onAddSubject,
   onEditSubject,
   onDragStart,
+  monthlyCost,
+  categoryCosts,
 }) {
   const accents = getAccents(config.accent);
   const fontFamily = getFontFamily(config.font);
@@ -144,6 +146,41 @@ export default function Palette({
           })
         )}
       </div>
+      {monthlyCost > 0 && (
+        <div className="tj-edu">
+          <div className="tj-edu-head">교육비</div>
+          {accents && (
+            <>
+              <div className="tj-cost-bar">
+                {CATEGORIES.map((cat, i) => {
+                  const amt = (categoryCosts && categoryCosts[cat]) || 0;
+                  if (!amt) return null;
+                  return (
+                    <div
+                      key={cat}
+                      style={{ width: (amt / monthlyCost * 100) + '%', background: accents[i % accents.length] }}
+                      title={`${cat} ₩${amt.toLocaleString()}`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="tj-cost-legend">
+                {CATEGORIES.map((cat, i) => {
+                  const amt = (categoryCosts && categoryCosts[cat]) || 0;
+                  if (!amt) return null;
+                  return (
+                    <span key={cat} className="tj-cost-leg">
+                      <span className="dot" style={{ background: accents[i % accents.length] }} />
+                      {cat} ₩{amt.toLocaleString()}
+                    </span>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}/month</div>
+        </div>
+      )}
     </div>
   );
 }
