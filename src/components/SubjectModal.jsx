@@ -12,17 +12,21 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
   );
   
   const nameInputRef = useRef(null);
-  const durInputRef = useRef(null);
   const composingRef = useRef(false);
-  
+
+  const DUR_PRESETS = [60, 120, 180, 240];
+  const initDur = subject?.duration || 60;
+  const [durMode, setDurMode] = useState(DUR_PRESETS.includes(initDur) ? String(initDur) : 'custom');
+  const [customDur, setCustomDur] = useState(String(initDur));
+
   useEffect(() => {
     if (nameInputRef.current) nameInputRef.current.focus();
   }, []);
-  
+
   function handleSave() {
     const name = nameInputRef.current.value.trim();
     if (!name) return;
-    const duration = parseInt(durInputRef.current.value, 10) || 60;
+    const duration = durMode === 'custom' ? (parseInt(customDur, 10) || 60) : parseInt(durMode, 10);
     onSave({ name, duration, colorIndex });
   }
   
@@ -52,13 +56,34 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
         
         <label>
           <span>{t('subjectDuration')}</span>
-          <input
-            ref={durInputRef}
-            type="number"
-            defaultValue={subject?.duration || 60}
-            min="10"
-            step="10"
-          />
+          <div className="tj-mode-strip">
+            {DUR_PRESETS.map(p => (
+              <button
+                key={p}
+                type="button"
+                className={durMode === String(p) ? 'active' : ''}
+                onClick={() => setDurMode(String(p))}
+              >{p}분</button>
+            ))}
+            <button
+              type="button"
+              className={durMode === 'custom' ? 'active' : ''}
+              onClick={() => setDurMode('custom')}
+            >직접입력</button>
+          </div>
+          {durMode === 'custom' && (
+            <input
+              type="number"
+              min="10"
+              step="10"
+              value={customDur}
+              placeholder="분"
+              onChange={(e) => setCustomDur(e.target.value)}
+              onKeyDown={handleKeyDown}
+              style={{ marginTop: '6px' }}
+              autoFocus
+            />
+          )}
         </label>
         
         {accents ? (
