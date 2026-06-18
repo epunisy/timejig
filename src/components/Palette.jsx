@@ -148,7 +148,7 @@ export default function Palette({
       </div>
       {monthlyCost > 0 && (
         <div className="tj-edu">
-          <div className="tj-edu-head">교육비</div>
+          <div className="tj-edu-head">월 교육비</div>
           {accents && (
             <>
               <div className="tj-cost-bar">
@@ -178,7 +178,7 @@ export default function Palette({
               </div>
             </>
           )}
-          <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}/month</div>
+          <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}</div>
         </div>
       )}
     </div>
