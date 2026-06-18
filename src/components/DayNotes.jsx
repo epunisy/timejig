@@ -49,7 +49,6 @@ export default function DayNotes({ config, dayNotes, onSave, onClose }) {
             <div key={d} style={{ marginBottom: '10px' }}>
               <div style={{ fontWeight: 600, fontSize: '12px', marginBottom: '4px' }}>{d}요일</div>
               <textarea
-                placeholder="메모"
                 value={notes[d]}
                 onChange={(e) => update(d, e.target.value)}
                 style={inputStyle}
