@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { getAccents, getFontFamily, getFontScale, resolveBackground } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
@@ -9,29 +9,6 @@ const PX_PER_MIN = HOUR_PX / 60;
 const COL_W_LABEL = 36;
 
 function pad(n) { return String(n).padStart(2, '0'); }
-
-// 메모 칸 — 폭에 맞춰 글씨 크기를 줄여 한 줄에 들어가게(줄바꿈 방지). 기기마다 칸 폭이 달라서 자동 조절.
-function MemoCell({ text }) {
-  const ref = useRef(null);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const fit = () => {
-      let size = 10;
-      el.style.fontSize = size + 'px';
-      let guard = 40;
-      while (el.scrollWidth > el.clientWidth && size > 5 && guard-- > 0) {
-        size -= 0.5;
-        el.style.fontSize = size + 'px';
-      }
-    };
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [text]);
-  return <div className="tj-memo-cell" ref={ref} title={text}>{text}</div>;
-}
 
 function getEventPoint(e) {
   if (e.touches && e.touches.length > 0) {
@@ -327,7 +304,7 @@ export default function Timetable({
   const memoRow = showMemo ? (
     <div className="tj-memo-row" style={{ gridTemplateColumns: colTpl }} onClick={onEditMemo}>
       <div className="tj-memo-label">{config.dayLang === 'en' ? 'MEMO' : '메모'}</div>
-      {days.map(d => <MemoCell key={d} text={memoText(dayNotes?.[d])} />)}
+      {days.map(d => <div key={d} className="tj-memo-cell">{memoText(dayNotes?.[d])}</div>)}
     </div>
   ) : null;
 
