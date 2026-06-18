@@ -481,6 +481,22 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onClick={handleLogoClick}
           style={{ cursor: 'pointer' }}
         />
+        <div className="tj-topbar-actions">
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
+            <img src="/icon_settings.png" alt="" style={menuIco} />서식설정
+          </button>
+          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
+            <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
+          </button>
+          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
+            <img src="/icon_weekly.png" alt="" style={menuIco} />주간학습계획표
+          </button>
+          <button className="tj-cta" onClick={onGoExport}>
+            <img src="/icon_lockscreen.png" alt="" style={menuIco} />모바일 잠금화면
+          </button>
+        </div>
+      </div>
+      <div className="tj-ttbar-row">
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
@@ -564,20 +580,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
               </div>
             </>
           )}
-        </div>
-        <div className="tj-topbar-actions">
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
-            <img src="/icon_settings.png" alt="" style={menuIco} />서식설정
-          </button>
-          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
-            <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
-          </button>
-          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
-            <img src="/icon_weekly.png" alt="" style={menuIco} />주간학습계획표
-          </button>
-          <button className="tj-cta" onClick={onGoExport}>
-            <img src="/icon_lockscreen.png" alt="" style={menuIco} />모바일 잠금화면
-          </button>
         </div>
       </div>
       

@@ -157,6 +157,10 @@ html, body {
 /* 메모보기 토글이 켜진 상태 */
 .tj-topbar-actions .tj-cta.on { color: #111; font-weight: 600; }
 
+/* 시간표 이름 줄 — 로고 박스 바로 아래(시간표 위)에 별도 줄로. 이름이 길어도 메뉴와 안 겹침 */
+.tj-ttbar-row { flex-shrink: 0; padding: 0 2px; }
+.tj-ttbar-row .tj-tt-current { max-width: 100%; }
+
 /* ===== 시간표 목록 (드롭다운) ===== */
 .tj-ttbar { position: relative; flex: 0 1 auto; min-width: 0; }
 
