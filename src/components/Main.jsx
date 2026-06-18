@@ -20,7 +20,6 @@ function timeToMin(t) {
 }
 
 const ALL_DAYS = ['월', '화', '수', '목', '금', '토', '일'];
-const ALL_DAYS_EN = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
@@ -400,11 +399,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       return blocks;
     }
 
-    // 요일별 메모
+    // 요일별 메모 (준비물 + 참고를 한 줄 메모로 합침)
     const newDayNotes = {};
     days.forEach(d => {
-      const s = (d.supplies || '').trim(), t = (d.notes || '').trim();
-      if (s || t) newDayNotes[d.day] = { supplies: s, notes: t };
+      const memo = [(d.supplies || '').trim(), (d.notes || '').trim()].filter(Boolean).join(' / ');
+      if (memo) newDayNotes[d.day] = memo;
     });
 
     const hasTimes = Number.isFinite(minStart) && Number.isFinite(maxEnd);
@@ -437,11 +436,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       const schoolBlocks = buildBlocks(newStartHour);
       const mergedNotes = { ...(activeTT.dayNotes || {}) };
       Object.keys(newDayNotes).forEach(d => {
-        const prev = mergedNotes[d] || { supplies: '', notes: '' };
-        mergedNotes[d] = {
-          supplies: [prev.supplies, newDayNotes[d].supplies].filter(Boolean).join(' / '),
-          notes: [prev.notes, newDayNotes[d].notes].filter(Boolean).join(' / '),
-        };
+        const prev = mergedNotes[d];
+        const prevStr = !prev ? '' : (typeof prev === 'string' ? prev : [prev.supplies, prev.notes].filter(Boolean).join(' / '));
+        mergedNotes[d] = [prevStr, newDayNotes[d]].filter(Boolean).join(' / ');
       });
       setData({
         ...data,
@@ -471,17 +468,13 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
     const notes = activeTT.dayNotes || {};
     const dayCount = config.weekRange === 'mon-fri' ? 5 : config.weekRange === 'mon-sat' ? 6 : 7;
     const days = ALL_DAYS.slice(0, dayCount);
-    const labels = (config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, dayCount);
     const colTpl = `36px repeat(${dayCount}, 1fr)`;
+    const toText = (v) => !v ? '' : (typeof v === 'string' ? v : [v.supplies, v.notes].filter(Boolean).join(' / '));
     return (
       <div className="tj-daynote-table" onClick={() => setShowDayNotes(true)} title="눌러서 메모 편집">
         <div className="tj-dn-grid" style={{ gridTemplateColumns: colTpl }}>
-          <div className="tj-dn-corner" />
-          {labels.map((l, i) => <div key={'h' + i} className="tj-dn-head">{l}</div>)}
-          <div className="tj-dn-rowlabel">준비물</div>
-          {days.map(d => <div key={'s' + d} className="tj-dn-cell">{notes[d]?.supplies || ''}</div>)}
-          <div className="tj-dn-rowlabel">참고</div>
-          {days.map(d => <div key={'n' + d} className="tj-dn-cell">{notes[d]?.notes || ''}</div>)}
+          <div className="tj-dn-rowlabel">메모</div>
+          {days.map(d => <div key={d} className="tj-dn-cell">{toText(notes[d])}</div>)}
         </div>
       </div>
     );
