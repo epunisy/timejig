@@ -264,6 +264,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         name: subjectData.name + ' 복사본',
         duration: subjectData.duration,
         colorIndex: subjectData.colorIndex,
+        price: subjectData.price || 0,
+        priceType: subjectData.priceType || 'month',
         active: true,
       }],
     });
@@ -463,6 +465,19 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   // 요일별 메모 — 시간표 안의 한 행으로 표시. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
   const dayNotePos = config.dayNotePos === 'bottom' ? 'bottom' : 'top';
 
+  // 한 달 학원비 — 회당: 금액 × 주간 배치횟수 × 4주, 한달치: 과목당 1회 합산
+  const monthlyCost = (() => {
+    const counts = {};
+    activeTT.blocks.forEach(b => { counts[b.subjectId] = (counts[b.subjectId] || 0) + 1; });
+    let total = 0;
+    data.subjects.forEach(s => {
+      const cnt = counts[s.id];
+      if (!cnt || !s.price) return;
+      total += s.priceType === 'session' ? s.price * cnt * 4 : s.price;
+    });
+    return total;
+  })();
+
   const bgTheme = resolveBackground(config);
 
   // 상단 메뉴 아이콘 (public/ 의 png를 경로로 사용)
@@ -602,6 +617,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           showMemo={showMemo}
           dayNotePos={dayNotePos}
           onEditMemo={() => setShowDayNotes(true)}
+          monthlyCost={monthlyCost}
         />
         <div
           className="tj-divider"

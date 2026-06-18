@@ -19,6 +19,9 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
   const [durMode, setDurMode] = useState(DUR_PRESETS.includes(initDur) ? String(initDur) : 'custom');
   const [customDur, setCustomDur] = useState(String(initDur));
 
+  const [priceType, setPriceType] = useState(subject?.priceType || 'month');
+  const [priceStr, setPriceStr] = useState(subject?.price ? String(subject.price) : '');
+
   useEffect(() => {
     if (nameInputRef.current) nameInputRef.current.focus();
   }, []);
@@ -27,7 +30,8 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
     const name = nameInputRef.current.value.trim();
     if (!name) return;
     const duration = durMode === 'custom' ? (parseInt(customDur, 10) || 60) : parseInt(durMode, 10);
-    onSave({ name, duration, colorIndex });
+    const price = parseInt(priceStr, 10) || 0;
+    onSave({ name, duration, colorIndex, price, priceType });
   }
   
   function handleKeyDown(e) {
@@ -84,6 +88,24 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
               autoFocus
             />
           )}
+        </label>
+
+        <label>
+          <span>학원비 (선택)</span>
+          <div className="tj-mode-strip">
+            <button type="button" className={priceType === 'month' ? 'active' : ''} onClick={() => setPriceType('month')}>한달치</button>
+            <button type="button" className={priceType === 'session' ? 'active' : ''} onClick={() => setPriceType('session')}>회당</button>
+          </div>
+          <input
+            type="number"
+            min="0"
+            step="1000"
+            value={priceStr}
+            placeholder="원 (비우면 계산 안 함)"
+            onChange={(e) => setPriceStr(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{ marginTop: '6px' }}
+          />
         </label>
         
         {accents ? (

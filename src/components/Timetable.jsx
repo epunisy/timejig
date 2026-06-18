@@ -32,6 +32,7 @@ export default function Timetable({
   showMemo,
   dayNotePos,
   onEditMemo,
+  monthlyCost,
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -378,6 +379,9 @@ export default function Timetable({
         ))}
       </div>
       {dayNotePos === 'bottom' && memoRow}
+      {monthlyCost > 0 && (
+        <div className="tj-cost">₩{monthlyCost.toLocaleString()}</div>
+      )}
     </div>
   );
 }
