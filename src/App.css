@@ -179,9 +179,8 @@ html, body {
   min-width: 0;
   overflow: hidden;
 }
-.tj-tt-cur-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tj-tt-current:hover { color: #000; }
-.tj-tt-cur-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tj-tt-cur-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .tj-tt-caret { color: #888; font-size: 15px; line-height: 1; }
 
 .tj-tt-backdrop { position: fixed; inset: 0; z-index: 150; }
