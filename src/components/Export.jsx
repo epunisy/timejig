@@ -260,15 +260,15 @@ export default function Export({ data, onBack }) {
   
   return (
     <div className="tj-app">
-      <div className="tj-topbar" style={{ position: 'relative', justifyContent: 'flex-start' }}>
-        <button className="tj-icon-btn" onClick={onBack}>{t('backButton')}</button>
-        <div style={{ 
-          position: 'absolute', 
-          left: '50%', 
-          transform: 'translateX(-50%)', 
-          fontSize: '14px', 
-          fontWeight: 500 
+      <div className="tj-topbar" style={{ position: 'relative', justifyContent: 'flex-end' }}>
+        <div style={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontSize: '14px',
+          fontWeight: 500
         }}>{t('backgroundTitle')}</div>
+        <button className="tj-modal-x" onClick={onBack} aria-label="닫기">×</button>
       </div>
       
       <div className="tj-export">

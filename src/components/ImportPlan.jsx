@@ -87,7 +87,10 @@ export default function ImportPlan({ onClose, onApply }) {
   return (
     <div className="tj-modal-bg" onClick={onClose}>
       <div className="tj-modal lg" onClick={(e) => e.stopPropagation()}>
-        <h3>주간학습계획표 불러오기</h3>
+        <div className="tj-modal-head">
+          <h3>주간학습계획표 불러오기</h3>
+          <button className="tj-modal-x" onClick={onClose} aria-label="닫기">×</button>
+        </div>
 
         {status === 'idle' && (
           <>

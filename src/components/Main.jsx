@@ -461,7 +461,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const isDragging = dragSubject !== null || internalDragging;
 
   // 요일별 메모 — 시간표 안의 한 행으로 표시. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
-  const dayNotePos = config.dayNotePos === 'top' ? 'top' : 'bottom';
+  const dayNotePos = config.dayNotePos === 'bottom' ? 'bottom' : 'top';
 
   const bgTheme = resolveBackground(config);
 

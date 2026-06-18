@@ -112,7 +112,10 @@ export default function Settings({
   return (
     <div className="tj-modal-bg" onClick={handleClose}>
       <div className="tj-modal lg" onClick={(e) => e.stopPropagation()}>
-        <h3>{t('settings')}</h3>
+        <div className="tj-modal-head">
+          <h3>{t('settings')}</h3>
+          <button className="tj-modal-x" onClick={handleClose} aria-label="닫기">×</button>
+        </div>
         
         <label>
           <span>{t('timetableName')}</span>
@@ -219,7 +222,7 @@ export default function Settings({
             {[['top', '상단 표시'], ['bottom', '하단 표시']].map(([key, label]) => (
               <button
                 key={key}
-                className={(config.dayNotePos === 'top' ? 'top' : 'bottom') === key ? 'active' : ''}
+                className={(config.dayNotePos === 'bottom' ? 'bottom' : 'top') === key ? 'active' : ''}
                 onClick={() => onConfigChange({ ...config, dayNotePos: key })}
               >{label}</button>
             ))}

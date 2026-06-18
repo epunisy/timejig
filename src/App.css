@@ -382,8 +382,10 @@ html, body {
   font-size: 10px;
   color: #3a4a5a;
   min-width: 0;
-  overflow-wrap: anywhere;
   line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
 }
 .tj-memo-cell:last-child { border-right: none; }
 .tj-memo-label { text-align: center; font-weight: 600; }
@@ -730,6 +732,25 @@ html, body {
 .tj-modal.lg { width: 420px; }
 
 .tj-modal h3 { margin: 0; font-size: 13px; font-weight: 500; }
+
+/* 모달 제목줄 + 닫기(X) */
+.tj-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tj-modal-x {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  color: #999;
+  padding: 0 4px;
+  font-family: inherit;
+}
+.tj-modal-x:hover { color: #333; }
 
 .tj-modal label {
   display: flex;
