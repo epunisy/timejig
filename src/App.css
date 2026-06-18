@@ -152,6 +152,7 @@ html, body {
   align-items: center;
   gap: 0;
   justify-content: flex-end;
+  order: 1; /* 두 줄 위아래 교체: 이름·서식 줄을 아래로 */
 }
 .tj-topbar-r1 .tj-ttbar { min-width: 0; }
 .tj-topbar-r1 .tj-cta-settings { flex-shrink: 0; }
