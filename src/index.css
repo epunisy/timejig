@@ -12,6 +12,9 @@
 
 html, body {
   background: #fff;
+  /* 모바일 브라우저가 회전/확대 시 글자 크기를 멋대로 키워 정렬이 깨지는 것 방지 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -22,6 +25,10 @@ body {
   color: #222;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 모든 기기에서 텍스트가 칸 밖으로 넘치지 않게: 한글은 단어 단위로,
+     긴 영문/숫자/URL은 강제로 줄바꿈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 #root {
