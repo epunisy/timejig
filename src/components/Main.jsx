@@ -465,6 +465,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
 
   const bgTheme = resolveBackground(config);
 
+  // 상단 메뉴 아이콘 (public/ 의 png를 경로로 사용)
+  const menuIco = { width: '13px', height: '13px', flexShrink: 0 };
+
   return (
     <div
       className={'tj-app tj-app-main' + (bgTheme.dark ? ' tj-app-dark' : '')}
@@ -563,10 +566,18 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           )}
         </div>
         <div className="tj-topbar-actions">
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
-          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>{showMemo ? '메모닫기' : '메모보기'}</button>
-          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>주간학습계획표</button>
-          <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
+            <img src="/icon_settings.png" alt="" style={menuIco} />서식설정
+          </button>
+          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
+            <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
+          </button>
+          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
+            <img src="/icon_weekly.png" alt="" style={menuIco} />주간학습계획표
+          </button>
+          <button className="tj-cta" onClick={onGoExport}>
+            <img src="/icon_lockscreen.png" alt="" style={menuIco} />모바일 잠금화면
+          </button>
         </div>
       </div>
       
