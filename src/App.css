@@ -157,16 +157,13 @@ html, body {
 /* 메모보기 토글이 켜진 상태 */
 .tj-topbar-actions .tj-cta.on { color: #111; font-weight: 600; }
 
-/* 시간표 이름 박스 — 맨 위(로고 박스 위)에 독립 박스로. 이름이 길어도 안 가려짐 */
-.tj-ttbar-row {
-  order: -1;
-  flex-shrink: 0;
-  background: #fff;
-  border: 0.5px solid #d8d8d8;
-  padding: 5px 12px;
-  box-sizing: border-box;
+/* 로고+메뉴는 윗줄, 시간표 이름은 같은 박스 안 아랫줄(전체 폭) → 이름이 길어도 안 잘림 */
+.tj-topbar-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.tj-ttbar-row .tj-tt-current { max-width: 100%; }
+.tj-app-main .tj-tt-current { max-width: 100%; }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
 .tj-ttbar { position: relative; flex: 0 1 auto; min-width: 0; }
@@ -335,7 +332,13 @@ html, body {
   overflow: hidden;
   gap: 8px;
 }
-.tj-app-main .tj-topbar { flex-shrink: 0; }
+.tj-app-main .tj-topbar {
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  padding: 7px 12px;
+}
 .tj-app-main .tj-layout {
   flex: 1;
   min-height: 0;
@@ -380,16 +383,15 @@ html, body {
 .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 
 /* 요일별 메모 — 시간표 안의 한 행 (요일 블록과 같은 그레이, 메모보기 토글로 표시) */
-/* 메모 행 — 요일 헤더와 같은 그레이, 내용은 세로 가운데 정렬 */
+/* 메모 행 — 라벨만 그레이, 내용 칸은 흰색, 구분선은 시간표 라인색. 내용 세로 가운데 정렬 */
 .tj-memo-row {
   display: grid;
-  background: #ececec;
-  border-top: 1px solid #fff;
+  background: #fff;
+  border-top: 1px solid #ececec;
   cursor: pointer;
 }
 .tj-memo-label, .tj-memo-cell {
   box-sizing: border-box;
-  border-right: 1px solid #fff;
   padding: 3px 4px;
   font-size: 10px;
   color: #444;
@@ -399,14 +401,16 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-/* 메모 내용 — 입력한 줄바꿈 그대로, 글씨 크기 고정, 여러 줄이면 칸이 세로로 커짐 */
+/* 메모 내용 — 흰 배경, 입력한 줄바꿈 그대로, 글씨 크기 고정, 여러 줄이면 칸이 세로로 커짐 */
 .tj-memo-cell {
+  background: #fff;
+  border-right: 1px solid #ececec;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   text-align: center;
 }
 .tj-memo-cell:last-child { border-right: none; }
-.tj-memo-label { white-space: nowrap; color: #555; font-weight: 600; }
+.tj-memo-label { background: #ececec; border-right: 1px solid #fff; white-space: nowrap; color: #555; font-weight: 600; }
 
 /* ===== 시간표 ===== */
 .tj-grid {

@@ -474,6 +474,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
+        <div className="tj-topbar-top">
         <img
           src="/logo2.png"
           alt="TimeJig"
@@ -495,8 +496,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             <img src="/icon_lockscreen.png" alt="" style={{ ...menuIco, width: '17px' }} />모바일 잠금화면
           </button>
         </div>
-      </div>
-      <div className="tj-ttbar-row">
+        </div>
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
