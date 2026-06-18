@@ -492,7 +492,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             <img src="/icon_weekly.png" alt="" style={menuIco} />주간학습계획표
           </button>
           <button className="tj-cta" onClick={onGoExport}>
-            <img src="/icon_lockscreen.png" alt="" style={{ ...menuIco, width: '20px', height: '20px' }} />모바일 잠금화면
+            <img src="/icon_lockscreen.png" alt="" style={{ ...menuIco, width: '17px' }} />모바일 잠금화면
           </button>
         </div>
       </div>
