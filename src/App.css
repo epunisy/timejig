@@ -149,7 +149,7 @@ html, body {
 }
 .tj-topbar-r1 {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0;
   justify-content: flex-end;
   order: 1; /* 두 줄 위아래 교체: 이름·서식 줄을 아래로 */
@@ -170,7 +170,7 @@ html, body {
 /* 메모보기 토글이 켜진 상태 */
 .tj-topbar .tj-cta.on { color: #111; font-weight: 600; }
 /* 시간표 이름 버튼을 서식설정과 같은 글씨/줄높이로 맞춰 위아래 정렬 */
-.tj-app-main .tj-tt-current { max-width: 100%; padding: 1px 6px; font-size: 10px; line-height: 1.25; margin-top: -1px; }
+.tj-app-main .tj-tt-current { max-width: 100%; padding: 1px 6px; font-size: 10px; line-height: 1.25; }
 .tj-app-main .tj-tt-caret { font-size: 12px; }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
