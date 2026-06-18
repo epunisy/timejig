@@ -303,7 +303,7 @@ export default function Timetable({
   const memoText = (v) => !v ? '' : (typeof v === 'string' ? v : [v.supplies, v.notes].filter(Boolean).join(' / '));
   const memoRow = showMemo ? (
     <div className="tj-memo-row" style={{ gridTemplateColumns: colTpl }} onClick={onEditMemo}>
-      <div className="tj-memo-label">메모</div>
+      <div className="tj-memo-label">{config.dayLang === 'en' ? 'MEMO' : '메모'}</div>
       {days.map(d => <div key={d} className="tj-memo-cell">{memoText(dayNotes?.[d])}</div>)}
     </div>
   ) : null;

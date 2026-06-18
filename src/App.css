@@ -371,7 +371,7 @@ html, body {
 /* 요일별 메모 — 시간표 안의 한 행 (요일 블록과 같은 그레이, 메모보기 토글로 표시) */
 .tj-memo-row {
   display: grid;
-  background: #ececec;
+  background: #e6f0fb;
   border-top: 1px solid #fff;
   cursor: pointer;
 }
@@ -379,8 +379,8 @@ html, body {
   box-sizing: border-box;
   border-right: 1px solid #fff;
   padding: 3px 4px;
-  font-size: 9px;
-  color: #444;
+  font-size: 10px;
+  color: #3a4a5a;
   min-width: 0;
   overflow-wrap: anywhere;
   line-height: 1.3;
