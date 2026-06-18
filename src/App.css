@@ -437,7 +437,8 @@ html, body {
   margin-bottom: 5px;
   background: #f0f0f0;
 }
-.tj-cost-bar > div { height: 100%; }
+.tj-cost-bar > div { height: 100%; border-right: 2px solid #fff; }
+.tj-cost-bar > div:last-child { border-right: none; }
 .tj-cost-legend {
   display: flex;
   flex-wrap: wrap;
