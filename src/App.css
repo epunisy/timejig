@@ -139,30 +139,27 @@ html, body {
 }
 
 /* 로고 오른쪽 메뉴 묶음 — 2줄 그리드로, 로고 높이를 넘지 않게 컴팩트하게 우측 정렬 */
-.tj-topbar-actions {
-  margin-left: auto;
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 3px 6px;
-  align-content: center;
-  justify-items: end;
+/* 상단 박스 2줄 — r1: 로고·시간표이름·서식설정 / r2: 주간학습계획표·모바일잠금화면·메모보기 */
+.tj-topbar-r1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.tj-topbar-actions .tj-cta {
-  padding: 1px 6px;
+.tj-topbar-r1 .tj-ttbar { flex: 1; min-width: 0; }
+.tj-topbar-r1 .tj-cta-settings { flex-shrink: 0; }
+.tj-topbar-r2 {
+  display: flex;
+  gap: 6px;
+}
+.tj-topbar-r2 .tj-cta { flex: 1; justify-content: center; }
+.tj-topbar-r1 .tj-cta, .tj-topbar-r2 .tj-cta {
+  padding: 2px 6px;
   font-size: 10px;
   line-height: 1.25;
   white-space: nowrap;
 }
 /* 메모보기 토글이 켜진 상태 */
-.tj-topbar-actions .tj-cta.on { color: #111; font-weight: 600; }
-
-/* 로고+메뉴는 윗줄, 시간표 이름은 같은 박스 안 아랫줄(전체 폭) → 이름이 길어도 안 잘림 */
-.tj-topbar-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.tj-topbar .tj-cta.on { color: #111; font-weight: 600; }
 .tj-app-main .tj-tt-current { max-width: 100%; }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
@@ -387,11 +384,13 @@ html, body {
 .tj-memo-row {
   display: grid;
   background: #fff;
-  border-top: 1px solid #ececec;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   cursor: pointer;
 }
 .tj-memo-label, .tj-memo-cell {
   box-sizing: border-box;
+  border-right: 1px solid #ddd;
   padding: 3px 4px;
   font-size: 10px;
   color: #444;
@@ -404,13 +403,12 @@ html, body {
 /* 메모 내용 — 흰 배경, 입력한 줄바꿈 그대로, 글씨 크기 고정, 여러 줄이면 칸이 세로로 커짐 */
 .tj-memo-cell {
   background: #fff;
-  border-right: 1px solid #ececec;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   text-align: center;
 }
 .tj-memo-cell:last-child { border-right: none; }
-.tj-memo-label { background: #ececec; border-right: 1px solid #fff; white-space: nowrap; color: #555; font-weight: 600; }
+.tj-memo-label { background: #ececec; white-space: nowrap; color: #555; font-weight: 600; }
 
 /* ===== 시간표 ===== */
 .tj-grid {
