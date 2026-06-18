@@ -1,3 +1,19 @@
+# 타임지그 (TimeJig)
+
+## 주간학습계획표 자동 입력 (AI)
+
+`api/parse-plan.js` (Vercel 서버리스 함수)가 학교 주간학습계획표 사진/PDF를 Claude 비전으로 읽어
+시간표 블록과 요일별 준비물·참고사항으로 구조화합니다.
+
+**필수 환경변수 (Vercel 프로젝트 설정 → Environment Variables):**
+
+- `ANTHROPIC_API_KEY` — Anthropic API 키 (필수)
+- `TIMEJIG_PARSE_MODEL` — (선택) 사용할 모델. 기본 `claude-opus-4-8`. 비용을 줄이려면 `claude-sonnet-4-6`.
+
+키를 등록한 뒤 재배포해야 기능이 동작합니다. 스캔 1회당 소액의 API 비용이 발생합니다.
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -6,8 +6,18 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import TutorialList from './TutorialList';
+import ImportPlan from './ImportPlan';
+import DayNotes from './DayNotes';
 import { resolveBackground, bgStyle } from '../App';
 import { clearData } from '../storage';
+
+function timeToMin(t) {
+  const parts = String(t).split(':');
+  const h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  if (Number.isNaN(h)) return NaN;
+  return h * 60 + (Number.isNaN(m) ? 0 : m);
+}
 
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
@@ -22,6 +32,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [resetNumbers, setResetNumbers] = useState(null);
+  const [showImportPlan, setShowImportPlan] = useState(false);
+  const [showDayNotes, setShowDayNotes] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -336,7 +348,110 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   function handleTimetableNameChange(name) {
     updateTimetable(tt => ({ ...tt, name: name.trim() || tt.name }));
   }
-  
+
+  function handleDayNotesSave(notes) {
+    updateTimetable(tt => ({ ...tt, dayNotes: notes }));
+  }
+
+  // 주간학습계획표 파싱 결과를 시간표에 반영
+  function handlePlanImport(parsed, mode) {
+    const days = (parsed.days || []).filter(d => (d.periods || []).length || d.supplies || d.notes);
+
+    // 모든 교시의 절대 분 범위
+    let minStart = Infinity, maxEnd = -Infinity;
+    days.forEach(d => (d.periods || []).forEach(p => {
+      const s = timeToMin(p.start), e = timeToMin(p.end);
+      if (Number.isFinite(s)) minStart = Math.min(minStart, s);
+      if (Number.isFinite(e)) maxEnd = Math.max(maxEnd, e);
+    }));
+
+    // 등장 요일
+    const presentDays = days.map(d => d.day);
+    const needSun = presentDays.includes('일');
+    const needSat = presentDays.includes('토');
+
+    // 과목 이름 → id (기존 재사용, 없으면 생성)
+    const subjects = [...data.subjects];
+    const nameToId = {};
+    subjects.forEach(s => { nameToId[s.name] = s.id; });
+    let colorSeed = subjects.length;
+    let idSeed = Date.now();
+    function ensureSubject(name, durationMin) {
+      if (nameToId[name]) return nameToId[name];
+      const id = ++idSeed;
+      subjects.push({ id, name, duration: durationMin || 40, colorIndex: colorSeed++, active: true });
+      nameToId[name] = id;
+      return id;
+    }
+    function buildBlocks(startHour) {
+      const base = startHour * 60;
+      const blocks = [];
+      days.forEach(d => (d.periods || []).forEach(p => {
+        const s = timeToMin(p.start), e = timeToMin(p.end);
+        if (!Number.isFinite(s) || !Number.isFinite(e) || e <= s) return;
+        const subjectId = ensureSubject((p.subject || '').trim() || '수업', e - s);
+        blocks.push({ id: ++idSeed, subjectId, day: d.day, start: s - base, end: e - base });
+      }));
+      return blocks;
+    }
+
+    // 요일별 메모
+    const newDayNotes = {};
+    days.forEach(d => {
+      const s = (d.supplies || '').trim(), t = (d.notes || '').trim();
+      if (s || t) newDayNotes[d.day] = { supplies: s, notes: t };
+    });
+
+    const hasTimes = Number.isFinite(minStart) && Number.isFinite(maxEnd);
+    const schoolStartHour = hasTimes ? Math.floor(minStart / 60) : config.startHour;
+    const schoolEndHour = hasTimes ? Math.ceil(maxEnd / 60) : config.endHour;
+
+    if (mode === 'new') {
+      const startHour = schoolStartHour;
+      const endHour = Math.max(schoolEndHour, startHour + 1);
+      const weekRange = needSun ? 'mon-sun' : needSat ? 'mon-sat' : 'mon-fri';
+      const newConfig = { ...config, startHour, endHour, weekRange };
+      const blocks = buildBlocks(startHour);
+      const newId = Math.max(0, ...data.timetables.map(t => t.id)) + 1;
+      setData({
+        ...data,
+        subjects,
+        timetables: [...data.timetables, {
+          id: newId, name: '학교 시간표', blocks, config: newConfig, dayNotes: newDayNotes,
+        }],
+        activeTT: newId,
+      });
+    } else {
+      const oldStart = config.startHour;
+      const newStartHour = Math.min(oldStart, schoolStartHour);
+      const newEndHour = Math.max(config.endHour, schoolEndHour);
+      let weekRange = config.weekRange;
+      if (needSun) weekRange = 'mon-sun';
+      else if (needSat && weekRange === 'mon-fri') weekRange = 'mon-sat';
+      const delta = (oldStart - newStartHour) * 60;
+      const schoolBlocks = buildBlocks(newStartHour);
+      const mergedNotes = { ...(activeTT.dayNotes || {}) };
+      Object.keys(newDayNotes).forEach(d => {
+        const prev = mergedNotes[d] || { supplies: '', notes: '' };
+        mergedNotes[d] = {
+          supplies: [prev.supplies, newDayNotes[d].supplies].filter(Boolean).join(' / '),
+          notes: [prev.notes, newDayNotes[d].notes].filter(Boolean).join(' / '),
+        };
+      });
+      setData({
+        ...data,
+        subjects,
+        timetables: data.timetables.map(tt => tt.id === data.activeTT ? {
+          ...tt,
+          config: { ...tt.config, startHour: newStartHour, endHour: newEndHour, weekRange },
+          blocks: [...tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })), ...schoolBlocks],
+          dayNotes: mergedNotes,
+        } : tt),
+      });
+    }
+    setShowImportPlan(false);
+  }
+
   function handleTutorialClose() {
     // 어느 버튼으로 닫든 한 번 본 것으로 기록 → 다음 진입부터 자동으로 안 뜸
     setShowTutorial(false);
@@ -441,6 +556,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
                 ) : (
                   <button className="tj-tt-addrow" onClick={() => setAddingTT(true)}>+ 새 시간표</button>
                 )}
+                <button className="tj-tt-addrow" onClick={() => { setTtMenuOpen(false); setShowImportPlan(true); }}>📋 주간학습계획표 불러오기</button>
+                <button className="tj-tt-addrow" onClick={() => { setTtMenuOpen(false); setShowDayNotes(true); }}>📝 요일별 메모</button>
               </div>
             </>
           )}
@@ -557,6 +674,22 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
             </div>
           </div>
         </div>
+      )}
+
+      {showImportPlan && (
+        <ImportPlan
+          onClose={() => setShowImportPlan(false)}
+          onApply={handlePlanImport}
+        />
+      )}
+
+      {showDayNotes && (
+        <DayNotes
+          config={config}
+          dayNotes={activeTT.dayNotes}
+          onSave={handleDayNotesSave}
+          onClose={() => setShowDayNotes(false)}
+        />
       )}
 
       {showTutorial && (
