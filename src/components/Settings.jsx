@@ -18,6 +18,7 @@ export default function Settings({
   onConfigChange,
   onTimetableNameChange,
   onShowTutorial,
+  onEditDayNotes,
   onClose,
 }) {
   const ttNameRef = useRef(null);
@@ -210,6 +211,28 @@ export default function Settings({
               >{label}</button>
             ))}
           </div>
+        </label>
+
+        <label>
+          <span>요일별 메모</span>
+          <div className="tj-mode-strip">
+            {[['none', '없음'], ['top', '상단'], ['bottom', '하단']].map(([key, label]) => (
+              <button
+                key={key}
+                className={(config.dayNotePos || 'none') === key ? 'active' : ''}
+                onClick={() => onConfigChange({ ...config, dayNotePos: key })}
+              >{label}</button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={onEditDayNotes}
+            style={{
+              marginTop: '6px', width: '100%', minHeight: '34px', boxSizing: 'border-box',
+              background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
+              fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
+            }}
+          >📝 요일별 메모 내용 입력/수정</button>
         </label>
 
         <label>

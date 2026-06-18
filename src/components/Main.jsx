@@ -375,7 +375,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
     const nameToId = {};
     subjects.forEach(s => { nameToId[s.name] = s.id; });
     let colorSeed = subjects.length;
-    let idSeed = Date.now();
+    let idSeed = Math.max(0, ...data.subjects.map(s => s.id),
+      ...data.timetables.flatMap(t => (t.blocks || []).map(b => b.id)));
     function ensureSubject(name, durationMin) {
       if (nameToId[name]) return nameToId[name];
       const id = ++idSeed;
@@ -459,7 +460,28 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   }
   
   const isDragging = dragSubject !== null || internalDragging;
-  
+
+  // 요일별 메모 스트립 (서식설정의 위치 옵션에 따라 시간표 위/아래에 표시)
+  const dayNotePos = config.dayNotePos || 'none';
+  const dayNoteStrip = (() => {
+    if (dayNotePos === 'none') return null;
+    const notes = activeTT.dayNotes || {};
+    const dayCount = config.weekRange === 'mon-fri' ? 5 : config.weekRange === 'mon-sat' ? 6 : 7;
+    const days = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount)
+      .filter(d => notes[d] && (notes[d].supplies || notes[d].notes));
+    return (
+      <div className="tj-daynote-strip" onClick={() => setShowDayNotes(true)}>
+        {days.length === 0
+          ? <span className="tj-daynote-empty">📝 요일별 메모 — 눌러서 입력</span>
+          : days.map(d => (
+            <span key={d} className="tj-daynote-item">
+              <b>{d}</b>{notes[d].supplies ? ' 🎒' + notes[d].supplies : ''}{notes[d].notes ? ' 📌' + notes[d].notes : ''}
+            </span>
+          ))}
+      </div>
+    );
+  })();
+
   const bgTheme = resolveBackground(config);
 
   return (
@@ -475,7 +497,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onClick={handleLogoClick}
           style={{ cursor: 'pointer' }}
         />
-        <div className="tj-topbar-main">
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
@@ -556,16 +577,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
                 ) : (
                   <button className="tj-tt-addrow" onClick={() => setAddingTT(true)}>+ 새 시간표</button>
                 )}
-                <button className="tj-tt-addrow" onClick={() => { setTtMenuOpen(false); setShowImportPlan(true); }}>📋 주간학습계획표 불러오기</button>
-                <button className="tj-tt-addrow" onClick={() => { setTtMenuOpen(false); setShowDayNotes(true); }}>📝 요일별 메모</button>
               </div>
             </>
           )}
         </div>
         <div className="tj-topbar-actions">
           <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
+          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>📋 주간학습계획표</button>
           <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
-        </div>
         </div>
       </div>
       
@@ -574,6 +593,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
+        {dayNotePos === 'top' && dayNoteStrip}
         <Timetable
           config={config}
           blocks={activeTT.blocks}
@@ -583,6 +603,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
         />
+        {dayNotePos === 'bottom' && dayNoteStrip}
         <div
           className="tj-divider"
           onMouseDown={handleDividerDown}
@@ -637,6 +658,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
           onShowTutorial={() => { setShowSettings(false); setShowHelp(true); }}
+          onEditDayNotes={() => { setShowSettings(false); setShowDayNotes(true); }}
           onClose={() => setShowSettings(false)}
         />
       )}
