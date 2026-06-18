@@ -154,11 +154,8 @@ html, body {
   line-height: 1.25;
   white-space: nowrap;
 }
-/* 세 번째 메뉴(모바일 잠금화면)는 둘째 줄에서 오른쪽 끝으로 */
-.tj-topbar-actions .tj-cta:last-child {
-  grid-column: 1 / -1;
-  justify-self: end;
-}
+/* 메모보기 토글이 켜진 상태 */
+.tj-topbar-actions .tj-cta.on { color: #111; font-weight: 600; }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
 .tj-ttbar { position: relative; flex: 0 1 auto; min-width: 0; }
@@ -371,25 +368,29 @@ html, body {
 }
 .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 
-/* 요일별 메모 스트립 — 시간표 위/아래에 표시 (서식설정에서 위치 선택) */
-.tj-daynote-strip {
+/* 요일별 메모 — 요일에 맞춘 표 (시간표 위/아래, 메모보기 토글로 표시) */
+.tj-daynote-table {
   flex: 0 0 auto;
+  max-height: 26%;
+  overflow: auto;
   background: #fff;
-  border: 0.5px solid #e2e2e2;
-  padding: 5px 8px;
-  font-size: 10px;
-  color: #555;
-  line-height: 1.45;
-  max-height: 22%;
-  overflow-y: auto;
+  border: 0.5px solid #ddd;
   cursor: pointer;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 12px;
-  word-break: keep-all;
 }
-.tj-daynote-strip .tj-daynote-item b { color: #333; margin-right: 1px; }
-.tj-daynote-empty { color: #aaa; }
+.tj-dn-grid { display: grid; }
+.tj-dn-corner, .tj-dn-head, .tj-dn-rowlabel, .tj-dn-cell {
+  border-right: 0.5px solid #eee;
+  border-bottom: 0.5px solid #eee;
+  box-sizing: border-box;
+  font-size: 9px;
+  padding: 3px 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tj-dn-head { background: #ececec; color: #444; font-weight: 600; text-align: center; }
+.tj-dn-corner { background: #ececec; }
+.tj-dn-rowlabel { background: #f6f6f6; color: #777; font-weight: 600; text-align: center; }
+.tj-dn-cell { color: #555; }
 
 /* ===== 시간표 ===== */
 .tj-grid {

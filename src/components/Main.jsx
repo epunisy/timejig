@@ -19,6 +19,9 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
+const ALL_DAYS = ['월', '화', '수', '목', '금', '토', '일'];
+const ALL_DAYS_EN = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
@@ -34,6 +37,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [resetNumbers, setResetNumbers] = useState(null);
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [showDayNotes, setShowDayNotes] = useState(false);
+  const [showMemo, setShowMemo] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -461,23 +465,24 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const isDragging = dragSubject !== null || internalDragging;
 
-  // 요일별 메모 스트립 (서식설정의 위치 옵션에 따라 시간표 위/아래에 표시)
-  const dayNotePos = config.dayNotePos || 'none';
-  const dayNoteStrip = (() => {
-    if (dayNotePos === 'none') return null;
+  // 요일별 메모 — 요일에 맞춘 표. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
+  const dayNotePos = config.dayNotePos === 'top' ? 'top' : 'bottom';
+  const dayNoteTable = (() => {
     const notes = activeTT.dayNotes || {};
     const dayCount = config.weekRange === 'mon-fri' ? 5 : config.weekRange === 'mon-sat' ? 6 : 7;
-    const days = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount)
-      .filter(d => notes[d] && (notes[d].supplies || notes[d].notes));
+    const days = ALL_DAYS.slice(0, dayCount);
+    const labels = (config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, dayCount);
+    const colTpl = `36px repeat(${dayCount}, 1fr)`;
     return (
-      <div className="tj-daynote-strip" onClick={() => setShowDayNotes(true)}>
-        {days.length === 0
-          ? <span className="tj-daynote-empty">📝 요일별 메모 — 눌러서 입력</span>
-          : days.map(d => (
-            <span key={d} className="tj-daynote-item">
-              <b>{d}</b>{notes[d].supplies ? ' 🎒' + notes[d].supplies : ''}{notes[d].notes ? ' 📌' + notes[d].notes : ''}
-            </span>
-          ))}
+      <div className="tj-daynote-table" onClick={() => setShowDayNotes(true)} title="눌러서 메모 편집">
+        <div className="tj-dn-grid" style={{ gridTemplateColumns: colTpl }}>
+          <div className="tj-dn-corner" />
+          {labels.map((l, i) => <div key={'h' + i} className="tj-dn-head">{l}</div>)}
+          <div className="tj-dn-rowlabel">준비물</div>
+          {days.map(d => <div key={'s' + d} className="tj-dn-cell">{notes[d]?.supplies || ''}</div>)}
+          <div className="tj-dn-rowlabel">참고</div>
+          {days.map(d => <div key={'n' + d} className="tj-dn-cell">{notes[d]?.notes || ''}</div>)}
+        </div>
       </div>
     );
   })();
@@ -583,7 +588,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         </div>
         <div className="tj-topbar-actions">
           <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">⚙ 서식설정</button>
-          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>📋 주간학습계획표</button>
+          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>{showMemo ? '메모닫기' : '메모보기'}</button>
+          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>주간학습계획표</button>
           <button className="tj-cta" onClick={onGoExport}>모바일 잠금화면</button>
         </div>
       </div>
@@ -593,7 +599,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
-        {dayNotePos === 'top' && dayNoteStrip}
+        {showMemo && dayNotePos === 'top' && dayNoteTable}
         <Timetable
           config={config}
           blocks={activeTT.blocks}
@@ -603,7 +609,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
         />
-        {dayNotePos === 'bottom' && dayNoteStrip}
+        {showMemo && dayNotePos === 'bottom' && dayNoteTable}
         <div
           className="tj-divider"
           onMouseDown={handleDividerDown}

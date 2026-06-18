@@ -214,12 +214,12 @@ export default function Settings({
         </label>
 
         <label>
-          <span>요일별 메모</span>
+          <span>요일별 메모 위치</span>
           <div className="tj-mode-strip">
-            {[['none', '없음'], ['top', '상단'], ['bottom', '하단']].map(([key, label]) => (
+            {[['top', '상단 표시'], ['bottom', '하단 표시']].map(([key, label]) => (
               <button
                 key={key}
-                className={(config.dayNotePos || 'none') === key ? 'active' : ''}
+                className={(config.dayNotePos === 'top' ? 'top' : 'bottom') === key ? 'active' : ''}
                 onClick={() => onConfigChange({ ...config, dayNotePos: key })}
               >{label}</button>
             ))}
@@ -232,7 +232,7 @@ export default function Settings({
               background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
               fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
             }}
-          >📝 요일별 메모 내용 입력/수정</button>
+          >요일별 메모 내용 입력/수정</button>
         </label>
 
         <label>
