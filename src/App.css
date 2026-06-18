@@ -150,18 +150,18 @@ html, body {
 .tj-topbar-r1 {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 0;
   justify-content: flex-end;
 }
 .tj-topbar-r1 .tj-ttbar { min-width: 0; }
 .tj-topbar-r1 .tj-cta-settings { flex-shrink: 0; }
 .tj-topbar-r2 {
   display: flex;
-  gap: 3px;
+  gap: 0;
   justify-content: flex-end;
 }
 .tj-topbar-r1 .tj-cta, .tj-topbar-r2 .tj-cta {
-  padding: 1px 4px;
+  padding: 1px 3px;
   font-size: 10px;
   line-height: 1.25;
   white-space: nowrap;
