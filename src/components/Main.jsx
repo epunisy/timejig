@@ -19,8 +19,6 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
-const ALL_DAYS = ['월', '화', '수', '목', '금', '토', '일'];
-
 export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
@@ -462,23 +460,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   
   const isDragging = dragSubject !== null || internalDragging;
 
-  // 요일별 메모 — 요일에 맞춘 표. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
+  // 요일별 메모 — 시간표 안의 한 행으로 표시. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
   const dayNotePos = config.dayNotePos === 'top' ? 'top' : 'bottom';
-  const dayNoteTable = (() => {
-    const notes = activeTT.dayNotes || {};
-    const dayCount = config.weekRange === 'mon-fri' ? 5 : config.weekRange === 'mon-sat' ? 6 : 7;
-    const days = ALL_DAYS.slice(0, dayCount);
-    const colTpl = `36px repeat(${dayCount}, 1fr)`;
-    const toText = (v) => !v ? '' : (typeof v === 'string' ? v : [v.supplies, v.notes].filter(Boolean).join(' / '));
-    return (
-      <div className="tj-daynote-table" onClick={() => setShowDayNotes(true)} title="눌러서 메모 편집">
-        <div className="tj-dn-grid" style={{ gridTemplateColumns: colTpl }}>
-          <div className="tj-dn-rowlabel">메모</div>
-          {days.map(d => <div key={d} className="tj-dn-cell">{toText(notes[d])}</div>)}
-        </div>
-      </div>
-    );
-  })();
 
   const bgTheme = resolveBackground(config);
 
@@ -592,7 +575,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
-        {showMemo && dayNotePos === 'top' && dayNoteTable}
         <Timetable
           config={config}
           blocks={activeTT.blocks}
@@ -601,8 +583,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           dragSubject={dragSubject}
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
+          dayNotes={activeTT.dayNotes}
+          showMemo={showMemo}
+          dayNotePos={dayNotePos}
+          onEditMemo={() => setShowDayNotes(true)}
         />
-        {showMemo && dayNotePos === 'bottom' && dayNoteTable}
         <div
           className="tj-divider"
           onMouseDown={handleDividerDown}

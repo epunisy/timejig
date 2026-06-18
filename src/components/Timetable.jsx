@@ -20,14 +20,18 @@ function getEventPoint(e) {
   return { x: e.clientX, y: e.clientY };
 }
 
-export default function Timetable({ 
-  config, 
-  blocks, 
-  subjects, 
+export default function Timetable({
+  config,
+  blocks,
+  subjects,
   onBlocksChange,
   dragSubject,
   onDragEnd,
   onInternalDraggingChange,
+  dayNotes,
+  showMemo,
+  dayNotePos,
+  onEditMemo,
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -296,14 +300,23 @@ export default function Timetable({
   if (fontFamily) gridStyle.fontFamily = fontFamily;
   if (bgBorder) gridStyle.borderColor = bgBorder;
 
+  const memoText = (v) => !v ? '' : (typeof v === 'string' ? v : [v.supplies, v.notes].filter(Boolean).join(' / '));
+  const memoRow = showMemo ? (
+    <div className="tj-memo-row" style={{ gridTemplateColumns: colTpl }} onClick={onEditMemo}>
+      <div className="tj-memo-label">메모</div>
+      {days.map(d => <div key={d} className="tj-memo-cell">{memoText(dayNotes?.[d])}</div>)}
+    </div>
+  ) : null;
+
   return (
     <div className="tj-grid" style={gridStyle}>
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map((d, i) => <div key={d} className="tj-day-head">{dayLabels[i]}</div>)}
       </div>
-      <div 
-        className="tj-grid-body" 
+      {dayNotePos === 'top' && memoRow}
+      <div
+        className="tj-grid-body"
         ref={gridBodyRef}
         style={{ gridTemplateColumns: colTpl, height: bodyHeight + 'px' }}
       >
@@ -364,6 +377,7 @@ export default function Timetable({
           </div>
         ))}
       </div>
+      {dayNotePos === 'bottom' && memoRow}
     </div>
   );
 }

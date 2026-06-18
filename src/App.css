@@ -368,27 +368,25 @@ html, body {
 }
 .tj-app-main .tj-divider:active .tj-divider-grip { background: #9a9a9a; }
 
-/* 요일별 메모 — 요일에 맞춘 표 (시간표 위/아래, 메모보기 토글로 표시) */
-.tj-daynote-table {
-  flex: 0 0 auto;
-  max-height: 30%;
-  overflow: auto;
-  background: #fff;
-  border: 0.5px solid #ddd;
+/* 요일별 메모 — 시간표 안의 한 행 (요일 블록과 같은 그레이, 메모보기 토글로 표시) */
+.tj-memo-row {
+  display: grid;
+  background: #ececec;
+  border-top: 1px solid #fff;
   cursor: pointer;
 }
-.tj-dn-grid { display: grid; }
-.tj-dn-rowlabel, .tj-dn-cell {
-  border-right: 0.5px solid #eee;
+.tj-memo-label, .tj-memo-cell {
   box-sizing: border-box;
-  font-size: 9px;
+  border-right: 1px solid #fff;
   padding: 3px 4px;
+  font-size: 9px;
+  color: #444;
   min-width: 0;
   overflow-wrap: anywhere;
+  line-height: 1.3;
 }
-.tj-dn-rowlabel { background: #ececec; color: #555; font-weight: 600; text-align: center; }
-.tj-dn-cell { color: #555; }
-.tj-dn-cell:last-child { border-right: none; }
+.tj-memo-cell:last-child { border-right: none; }
+.tj-memo-label { text-align: center; font-weight: 600; }
 
 /* ===== 시간표 ===== */
 .tj-grid {
