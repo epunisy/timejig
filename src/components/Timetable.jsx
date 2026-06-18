@@ -380,7 +380,7 @@ export default function Timetable({
       </div>
       {dayNotePos === 'bottom' && memoRow}
       {monthlyCost > 0 && (
-        <div className="tj-cost">₩{monthlyCost.toLocaleString()}</div>
+        <div className="tj-cost">₩{monthlyCost.toLocaleString()}/month</div>
       )}
     </div>
   );

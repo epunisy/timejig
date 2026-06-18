@@ -111,16 +111,15 @@ export default function SubjectModal({ subject, config, subjectCount, onSave, on
         {accents ? (
           <label>
             <span>{t('colorBand')}</span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${accents.length}, 1fr)`, gap: '6px' }}>
               {accents.map((c, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setColorIndex(i)}
                   style={{
-                    width: '30px',
                     height: '30px',
-                    flex: '0 0 auto',
+                    minWidth: 0,
                     background: '#fff',
                     border: '1px solid #aaa',
                     borderLeft: `6px solid ${c}`,
