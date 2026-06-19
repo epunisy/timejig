@@ -146,10 +146,9 @@ export default function Palette({
           })
         )}
       </div>
-      {monthlyCost > 0 && (
-        <div className="tj-edu">
+      <div className="tj-edu">
           <div className="tj-edu-head">월 교육비</div>
-          {accents && (
+          {accents && monthlyCost > 0 && (
             <>
               <div className="tj-cost-bar">
                 {CATEGORIES.map((cat, i) => {
@@ -179,8 +178,7 @@ export default function Palette({
             </>
           )}
           <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}</div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
