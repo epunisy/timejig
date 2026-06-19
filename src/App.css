@@ -1045,6 +1045,12 @@ html, body {
 .ttut-notch { width: 34px; height: 4px; background: #cfd8e3; border-radius: 3px; margin: 0 auto 6px; }
 .ttut-clock { text-align: center; font-size: 14px; font-weight: 700; color: #46607e; margin-bottom: 7px; }
 
+/* 콜라주(여러 명) mock */
+.ttut-collage { display: flex; flex-direction: column; gap: 9px; align-items: stretch; width: 104px; }
+.ttut-mini-name { font-size: 8px; color: #46607e; font-weight: 700; margin-bottom: 2px; }
+.ttut-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #d7e0ea; background: #fff; }
+.ttut-mini-grid > span { height: 12px; border-right: 1px solid #eef2f6; border-bottom: 1px solid #eef2f6; box-sizing: border-box; }
+
 /* ===== 튜토리얼 (스포트라이트 코치마크) ===== */
 .tj-coach-bg {
   position: fixed;
