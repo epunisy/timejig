@@ -67,7 +67,7 @@ export default function ImportPlan({ onClose, onApply }) {
       const json = await res.json();
       if (!res.ok || !json.ok) throw new Error(json.error || '읽기에 실패했어요.');
       const days = (json.parsed.days || []).filter(d => d.periods?.length || d.supplies || d.notes);
-      if (days.length === 0) throw new Error('계획표에서 시간표를 찾지 못했어요. 표 전체가 선명하게 나오게 다시 찍어 주세요.');
+      if (days.length === 0) throw new Error('사진에서 시간표를 찾지 못했어요. 표 전체가 선명하게 나오게 다시 찍어 주세요.');
       setParsed({ ...json.parsed, days });
       setStatus('review');
     } catch (err) {
@@ -88,15 +88,16 @@ export default function ImportPlan({ onClose, onApply }) {
     <div className="tj-modal-bg" onClick={onClose}>
       <div className="tj-modal lg" onClick={(e) => e.stopPropagation()}>
         <div className="tj-modal-head">
-          <h3>주간학습계획표 불러오기</h3>
+          <h3>사진으로 시간표 불러오기</h3>
           <button className="tj-modal-x" onClick={onClose} aria-label="닫기">×</button>
         </div>
 
         {status === 'idle' && (
           <>
             <div style={{ fontSize: '12px', color: '#666', lineHeight: 1.6, marginBottom: '12px' }}>
-              학교에서 받은 <b>주간학습계획표</b>를 사진이나 PDF로 올리면, AI가 읽어서 오전 학교 시간표와
-              요일별 준비물·참고사항을 자동으로 채워줘요.
+              <b>시간표 사진이나 PDF</b>를 올리면 AI가 읽어서 자동으로 채워줘요.
+              학교 주간학습계획표·학원 시간표·직접 만든 표 등 무엇이든 OK.
+              요일별 준비물·참고사항이 있으면 같이 가져와요.
               <br />
               <span style={{ color: '#999', fontSize: '11px' }}>표 전체가 선명하게 보이도록 찍어주세요.</span>
             </div>
@@ -150,13 +151,13 @@ export default function ImportPlan({ onClose, onApply }) {
             </div>
 
             <div className="tj-mode-strip" style={{ marginBottom: '4px' }}>
-              <button className={mode === 'expand' ? 'active' : ''} onClick={() => setMode('expand')}>내 시간표에 추가</button>
-              <button className={mode === 'new' ? 'active' : ''} onClick={() => setMode('new')}>학교 시간표 새로 만들기</button>
+              <button className={mode === 'expand' ? 'active' : ''} onClick={() => setMode('expand')}>지금 시간표에 추가</button>
+              <button className={mode === 'new' ? 'active' : ''} onClick={() => setMode('new')}>새 시간표로 만들기</button>
             </div>
             <div style={{ fontSize: '10px', color: '#999', marginBottom: '10px', lineHeight: 1.4 }}>
               {mode === 'expand'
-                ? '지금 보는 시간표의 시간 범위를 오전까지 자동으로 넓혀 학교 일정을 함께 표시해요.'
-                : '학교 일정만 담은 시간표를 새로 만들어요.'}
+                ? '지금 보는 시간표에 합쳐요. 시간 범위가 모자라면 자동으로 넓혀줘요.'
+                : '불러온 내용으로 새 시간표를 만들어요.'}
             </div>
 
             <div className="tj-modal-actions">

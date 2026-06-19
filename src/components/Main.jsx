@@ -420,7 +420,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         ...data,
         subjects,
         timetables: [...data.timetables, {
-          id: newId, name: '학교 시간표', blocks, config: newConfig, dayNotes: newDayNotes,
+          id: newId, name: '불러온 시간표', blocks, config: newConfig, dayNotes: newDayNotes,
         }],
         activeTT: newId,
       });
@@ -593,7 +593,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
         </div>
         <div className="tj-topbar-r2">
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
-            <img src="/icon_weekly.png" alt="" style={menuIco} />주간학습계획표
+            <img src="/icon_weekly.png" alt="" style={menuIco} />사진 불러오기
           </button>
           <button className="tj-cta" onClick={onGoExport}>
             <img src="/icon_lockscreen.png" alt="" style={{ ...menuIco, width: '17px' }} />모바일 잠금화면

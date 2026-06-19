@@ -1,6 +1,23 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { t } from '../i18n';
 import { getAccents, getFontFamily, CATEGORIES } from '../App';
+
+// 비밀번호 입력칸의 눈 아이콘 같은 표시(보임/숨김)
+function Eye({ off }) {
+  return off ? (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20C5 20 1 12 1 12a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  ) : (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
 
 const LONG_PRESS_MS = 500;
 const MOVE_THRESHOLD = 8;
@@ -19,6 +36,7 @@ export default function Palette({
   const accents = getAccents(config.accent);
   const fontFamily = getFontFamily(config.font);
   const itemRefs = useRef({});
+  const [costHidden, setCostHidden] = useState(false);
   
   useEffect(() => {
     const cleanups = [];
@@ -45,8 +63,8 @@ export default function Palette({
       }
       
       function handleStart(e) {
-        // ✎ 수정 버튼을 누른 경우엔 드래그/롱프레스 시작하지 않음 (버튼 클릭으로 편집)
-        if (e.target.closest && e.target.closest('.tj-pal-edit')) return;
+        // 버튼(수정/숨김 등)을 누른 경우엔 드래그/롱프레스 시작하지 않음 — 버튼 클릭 중 과목이 움직이는 오작동 방지
+        if (e.target.closest && e.target.closest('button')) return;
         if (!subject.active) return;
         e.preventDefault();
         const p = getPoint(e);
@@ -111,7 +129,7 @@ export default function Palette({
         <h3>{t('subjects')}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
           <button className="tj-add-btn" onClick={onAddSubject}>+</button>
-          <button className="tj-add-btn" onClick={onToggleCollapse} aria-label="과목 접기/펼치기">{collapsed ? '▴' : '▾'}</button>
+          <button className="tj-eye-btn" onClick={onToggleCollapse} aria-label="과목 숨기기"><Eye off={collapsed} /></button>
         </div>
       </div>
       <div className="tj-pal-hint">
@@ -152,8 +170,11 @@ export default function Palette({
         )}
       </div>
       <div className="tj-edu">
-          <div className="tj-edu-head">월 교육비</div>
-          {accents && monthlyCost > 0 && (
+          <div className="tj-edu-head">
+            <span>월 교육비</span>
+            <button className="tj-eye-btn" onClick={() => setCostHidden(h => !h)} aria-label="교육비 숨기기"><Eye off={costHidden} /></button>
+          </div>
+          {!costHidden && accents && monthlyCost > 0 && (
             <>
               <div className="tj-cost-bar">
                 {CATEGORIES.map((cat, i) => {
@@ -182,7 +203,7 @@ export default function Palette({
               </div>
             </>
           )}
-          <div className="tj-cost-total">₩{monthlyCost.toLocaleString()}</div>
+          <div className="tj-cost-total">{costHidden ? '₩ •••••' : '₩' + monthlyCost.toLocaleString()}</div>
       </div>
     </div>
   );
