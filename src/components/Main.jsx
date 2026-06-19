@@ -33,6 +33,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [showDayNotes, setShowDayNotes] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
+  const [palCollapsed, setPalCollapsed] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -493,9 +494,13 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
-        <span className="tj-logo-wrap" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
-        </span>
+        <img
+          src="/logo2.png"
+          alt="TimeJig"
+          className="tj-logo-top"
+          onClick={handleLogoClick}
+          style={{ cursor: 'pointer' }}
+        />
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
         <div className="tj-ttbar">
@@ -601,7 +606,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       </div>
 
       <div
-        className="tj-layout"
+        className={'tj-layout' + (palCollapsed ? ' pal-collapsed' : '')}
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
@@ -635,6 +640,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
           onDragStart={handlePaletteDragStart}
           monthlyCost={monthlyCost}
           categoryCosts={categoryCosts}
+          collapsed={palCollapsed}
+          onToggleCollapse={() => setPalCollapsed(c => !c)}
         />
       </div>
       

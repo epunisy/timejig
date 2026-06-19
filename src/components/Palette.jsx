@@ -13,6 +13,8 @@ export default function Palette({
   onDragStart,
   monthlyCost,
   categoryCosts,
+  collapsed,
+  onToggleCollapse,
 }) {
   const accents = getAccents(config.accent);
   const fontFamily = getFontFamily(config.font);
@@ -104,10 +106,13 @@ export default function Palette({
   }, [subjects, onDragStart, onEditSubject]);
   
   return (
-    <div className="tj-palette">
+    <div className={'tj-palette' + (collapsed ? ' collapsed' : '')}>
       <div className="tj-pal-head">
         <h3>{t('subjects')}</h3>
-        <button className="tj-add-btn" onClick={onAddSubject}>+</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          <button className="tj-add-btn" onClick={onAddSubject}>+</button>
+          <button className="tj-add-btn" onClick={onToggleCollapse} aria-label="과목 접기/펼치기">{collapsed ? '▴' : '▾'}</button>
+        </div>
       </div>
       <div className="tj-pal-hint">
         이곳에 과목을 추가한 뒤, 시간표로 드래그해 보세요.<br />

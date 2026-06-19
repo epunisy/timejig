@@ -123,10 +123,10 @@ export default function Export({ data, onBack }) {
     const colW = (boxW - timeColW) / days.length;
     const gap = Math.round(boxH * 0.03);
 
-    // 시간표가 1개일 때 세로로 너무 길어지지 않게 높이 제한 + 세로 가운데 정렬
+    // 1개면 화면을 가능한 한 채우고, 여러 개(콜라주)면 너무 길어지지 않게 높이 제한
     const rawWrapH = (boxH - gap * (n - 1)) / n;
     const maxWrapH = Math.round(boxW * 1.05);
-    const wrapH = Math.min(rawWrapH, maxWrapH);
+    const wrapH = n === 1 ? rawWrapH : Math.min(rawWrapH, maxWrapH);
     const usedH = wrapH * n + gap * (n - 1);
     const offsetTop = Math.max(0, Math.round((boxH - usedH) / 2));
 

@@ -49,7 +49,9 @@ export default function Setup({ onDone }) {
   
   return (
     <div className="tj-setup">
-      <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
+      <span className="tj-setup-logo-wrap">
+        <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
+      </span>
       <div className="tj-setup-greeting">
         {t('welcome')}{'\n'}{t('setupGuide')}
       </div>

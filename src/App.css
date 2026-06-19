@@ -68,7 +68,24 @@ html, body {
 .tj-setup img.tj-setup-logo {
   width: 132px;
   height: auto;
+  display: block;
+}
+/* 첫 화면 로고 — 살짝 빛이 스치는 글린트(로고 모양에만) */
+.tj-setup-logo-wrap {
+  position: relative;
+  display: inline-block;
   margin: 4px auto 0;
+}
+.tj-setup-logo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 43%, rgba(255, 255, 255, 0.9) 50%, transparent 57%);
+  background-size: 300% 100%;
+  -webkit-mask: url(/logo.png) center / contain no-repeat;
+  mask: url(/logo.png) center / contain no-repeat;
+  animation: tjLogoShine 4s ease-in-out infinite;
 }
 
 .tj-setup-greeting {
@@ -295,30 +312,15 @@ html, body {
 
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
-/* 로고 — 살짝 빛이 스치는 글린트 효과(로고 모양에만) */
-.tj-logo-wrap {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
-  vertical-align: middle;
-  transform: scaleY(0.92);
-}
 .tj-logo-top {
   height: 27px;
   width: auto;
-  display: block;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+  transform: scaleY(0.92);
 }
-.tj-logo-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(115deg, transparent 43%, rgba(255, 255, 255, 0.85) 50%, transparent 57%);
-  background-size: 300% 100%;
-  -webkit-mask: url(/logo2.png) center / contain no-repeat;
-  mask: url(/logo2.png) center / contain no-repeat;
-  animation: tjLogoShine 5s ease-in-out infinite;
-}
+/* 글린트(빛 스침) 애니메이션 — 첫 화면(설정) 로고에만 사용 */
 @keyframes tjLogoShine {
   0% { background-position: 160% 0; }
   18% { background-position: -160% 0; }
@@ -382,6 +384,13 @@ html, body {
 }
 /* 스크롤해도 요일 헤더는 위에 고정 */
 .tj-app-main .tj-grid-header { position: sticky; top: 0; z-index: 60; }
+/* 과목팔레트 접기 — head만 남기고 목록·교육비 숨김, 시간표가 커짐 */
+.tj-app-main .tj-palette.collapsed { flex: 0 0 auto; }
+.tj-palette.collapsed .tj-pal-hint,
+.tj-palette.collapsed .tj-pal-list,
+.tj-palette.collapsed .tj-edu { display: none; }
+.tj-app-main .tj-layout.pal-collapsed .tj-divider { display: none; }
+
 .tj-app-main .tj-palette {
   order: 1;
   position: static;
