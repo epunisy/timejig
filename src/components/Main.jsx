@@ -493,13 +493,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial }) {
       style={bgStyle(bgTheme)}
     >
       <div className="tj-topbar">
-        <img
-          src="/logo2.png"
-          alt="TimeJig"
-          className="tj-logo-top"
-          onClick={handleLogoClick}
-          style={{ cursor: 'pointer' }}
-        />
+        <span className="tj-logo-wrap" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
+        </span>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
         <div className="tj-ttbar">

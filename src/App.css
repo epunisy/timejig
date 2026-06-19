@@ -295,13 +295,34 @@ html, body {
 
 .tj-action-row { display: flex; gap: 8px; align-items: center; }
 
+/* 로고 — 살짝 빛이 스치는 글린트 효과(로고 모양에만) */
+.tj-logo-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transform: scaleY(0.92);
+}
 .tj-logo-top {
   height: 27px;
   width: auto;
-  flex-shrink: 0;
-  display: inline-block;
-  vertical-align: middle;
-  transform: scaleY(0.92);
+  display: block;
+}
+.tj-logo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 43%, rgba(255, 255, 255, 0.85) 50%, transparent 57%);
+  background-size: 300% 100%;
+  -webkit-mask: url(/logo2.png) center / contain no-repeat;
+  mask: url(/logo2.png) center / contain no-repeat;
+  animation: tjLogoShine 5s ease-in-out infinite;
+}
+@keyframes tjLogoShine {
+  0% { background-position: 160% 0; }
+  18% { background-position: -160% 0; }
+  100% { background-position: -160% 0; }
 }
 
 .tj-cta, .tj-icon-btn {
