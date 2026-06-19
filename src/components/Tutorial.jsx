@@ -47,7 +47,7 @@ function MiniGrid({ memo, cost, drag, plan }) {
           <div className="ttut-arrow">⤵</div>
         </div>
       )}
-      {plan && <div className="ttut-badge">📋 사진 → AI 자동입력</div>}
+      {plan && <div className="ttut-badge">📷 사진 → AI 자동입력</div>}
     </div>
   );
 }
@@ -77,7 +77,7 @@ function MiniThumb({ name, cells }) {
 
 const SLIDES = [
   { title: '과목 만들고 드래그!', desc: '과목을 끌어다 시간표에 톡 놓으면 끝.', view: <MiniGrid drag /> },
-  { title: '학습계획표 사진 자동입력', desc: '학교 주간학습계획표 사진만 올리면 AI가 채워줘요.', view: <MiniGrid plan /> },
+  { title: '사진으로 시간표 자동입력', desc: '학교·학원 시간표 사진만 올리면 AI가 자동으로 채워줘요.', view: <MiniGrid plan /> },
   { title: '요일 메모 + 월 교육비', desc: '준비물 메모와 한 달 학원비까지 자동으로.', view: <MiniGrid memo cost /> },
   { title: '잠금화면으로 저장', desc: '완성한 시간표를 폰 배경화면 이미지로!', view: <Phone><MiniGrid /></Phone> },
   {
