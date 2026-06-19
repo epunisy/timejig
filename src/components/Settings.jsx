@@ -19,6 +19,9 @@ export default function Settings({
   onTimetableNameChange,
   onShowTutorial,
   onEditDayNotes,
+  user,
+  onSignIn,
+  onSignOut,
   onClose,
 }) {
   const ttNameRef = useRef(null);
@@ -296,7 +299,33 @@ export default function Settings({
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
-        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '14px', marginTop: '4px' }}>
+        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <span style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
+                ☁ {user.email} · 동기화 중
+              </span>
+              <button
+                onClick={onSignOut}
+                style={{ flexShrink: 0, minHeight: '32px', padding: '0 12px', background: 'transparent', border: '0.5px solid #ccc', color: '#666', fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer' }}
+              >로그아웃</button>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={onSignIn}
+                style={{ width: '100%', minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              >
+                <span style={{ fontWeight: 700, color: '#4285F4' }}>G</span> Google로 로그인 (백업·동기화)
+              </button>
+              <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
+                로그인하면 시간표가 내 계정에 저장돼, 기기를 바꾸거나 앱을 지워도 그대로 불러올 수 있어요.
+              </div>
+            </>
+          )}
+        </div>
+
+        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>
             글꼴 제공: Google Fonts (SIL Open Font License)
           </div>

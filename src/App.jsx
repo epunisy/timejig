@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { saveData, loadData } from './storage';
 import Setup from './components/Setup';
 import Main from './components/Main';
 import Export from './components/Export';
+import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle } from './firebase';
 
 // 색띠 옵션
 export const ACCENT_PASTEL = [
@@ -200,7 +201,50 @@ function App() {
       saveData(data);
     }
   }, [data, mode]);
-  
+
+  // ===== 구글 로그인 + 클라우드 동기화 =====
+  const [user, setUser] = useState(null);
+  const dataRef = useRef(data);
+  const skipSaveRef = useRef(false);
+  useEffect(() => { dataRef.current = data; }, [data]);
+
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
+
+  // 로그인하면: 클라우드 데이터 실시간 구독. 없으면 현재 기기 데이터 업로드.
+  useEffect(() => {
+    if (!user) return;
+    const ref = doc(db, 'users', user.uid);
+    let first = true;
+    const unsub = onSnapshot(ref, (snap) => {
+      if (snap.metadata.hasPendingWrites) return; // 내 쓰기 메아리는 무시
+      if (snap.exists() && snap.data().data) {
+        skipSaveRef.current = true;
+        setData(normalizeData(snap.data().data));
+        if (mode === 'setup') setMode('main');
+      } else if (first) {
+        setDoc(ref, { data: dataRef.current, updatedAt: Date.now() }).catch(() => {});
+      }
+      first = false;
+    }, () => {});
+    return unsub;
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 데이터 변경 시 클라우드에 저장(디바운스). 원격 적용 직후엔 건너뜀.
+  useEffect(() => {
+    if (!user) return;
+    if (skipSaveRef.current) { skipSaveRef.current = false; return; }
+    const id = setTimeout(() => {
+      setDoc(doc(db, 'users', user.uid), { data, updatedAt: Date.now() }).catch(() => {});
+    }, 800);
+    return () => clearTimeout(id);
+  }, [data, user]);
+
+  async function handleSignIn() {
+    try { await signInGoogle(); }
+    catch { alert('로그인에 실패했어요. 잠시 후 다시 시도해 주세요.'); }
+  }
+  function handleSignOut() { signOutGoogle(); }
+
   // 시작 화면에서 "시작하기" 눌렀을 때 (이름·시간 범위 반영)
   function handleSetupDone(name, startHour, endHour, accent) {
     const config = { ...DEFAULT_STATE.config };
@@ -230,6 +274,9 @@ function App() {
           setData={setData}
           autoTutorial={justSetup}
           onGoExport={() => setMode('export')}
+          user={user}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
         />
       )}
       {mode === 'export' && (
