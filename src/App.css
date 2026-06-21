@@ -143,6 +143,20 @@ html, body {
   white-space: pre-line;
 }
 
+/* 첫 화면 미리보기 — 돌아가기 버튼 */
+.tj-setup-back {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 2px 0;
+  margin-bottom: -4px;
+}
+.tj-setup-back:active { opacity: 0.6; }
+
 /* 첫 화면 — 기존 사용자용 로그인(클라우드에서 불러오기) */
 .tj-setup-login {
   margin-top: 6px;

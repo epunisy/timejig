@@ -18,6 +18,7 @@ export default function Settings({
   onConfigChange,
   onTimetableNameChange,
   onShowTutorial,
+  onPreviewSetup,
   user,
   onSignIn,
   onSignOut,
@@ -109,6 +110,13 @@ export default function Settings({
       onTimetableNameChange(ttNameRef.current.value);
     }
     onShowTutorial();
+  }
+
+  function handlePreviewSetup() {
+    if (ttNameRef.current) {
+      onTimetableNameChange(ttNameRef.current.value);
+    }
+    if (onPreviewSetup) onPreviewSetup();
   }
   
   return (
@@ -300,6 +308,21 @@ export default function Settings({
               </div>
             </>
           )}
+        </div>
+
+        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
+          <button
+            type="button"
+            onClick={handlePreviewSetup}
+            style={{
+              width: '100%', minHeight: '34px', boxSizing: 'border-box',
+              background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
+              fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
+            }}
+          >첫 화면 미리보기</button>
+          <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
+            앱을 처음 켰을 때 나오는 화면을 미리 봐요. (데이터는 그대로예요)
+          </div>
         </div>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>

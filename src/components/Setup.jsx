@@ -8,17 +8,19 @@ function getRandomName() {
   return NAME_SAMPLES[Math.floor(Math.random() * NAME_SAMPLES.length)];
 }
 
-export default function Setup({ onDone, onSignIn }) {
+export default function Setup({ onDone, onSignIn, preview, onBack }) {
   const inputRef = useRef(null);
   const composingRef = useRef(false);
   const randomNameRef = useRef(getRandomName());
 
   useEffect(() => {
-    if (inputRef.current) inputRef.current.focus();
-  }, []);
+    if (!preview && inputRef.current) inputRef.current.focus();
+  }, [preview]);
 
   // 시간 범위·색띠 등은 기본값으로 시작 — 나중에 서식설정에서 변경
   function handleStart() {
+    // 미리보기에서는 데이터를 만들지 않고 그냥 돌아감 (기존 데이터 보호)
+    if (preview) { if (onBack) onBack(); return; }
     const finalName = inputRef.current.value.trim();
     onDone(finalName);
   }
@@ -31,6 +33,9 @@ export default function Setup({ onDone, onSignIn }) {
 
   return (
     <div className="tj-setup">
+      {preview && (
+        <button className="tj-setup-back" onClick={onBack}>← 돌아가기 (미리보기)</button>
+      )}
       <span className="tj-setup-logo-wrap">
         <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
       </span>

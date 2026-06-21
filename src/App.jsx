@@ -194,6 +194,9 @@ function App() {
   // 방금 "시작하기"로 들어온 진짜 첫 진입인지 (이때만 튜토리얼 자동 표시)
   const [justSetup, setJustSetup] = useState(false);
 
+  // 첫 화면 미리보기 (데이터 변경 없이 보기만)
+  const [setupPreview, setSetupPreview] = useState(false);
+
   // 데이터 바뀔 때마다 자동 저장 (설정 완료 후 메인/내보내기에서만)
   useEffect(() => {
     if (mode === 'main' || mode === 'export') {
@@ -329,7 +332,15 @@ function App() {
   return (
     <>
       {mode === 'setup' && <Setup onDone={handleSetupDone} onSignIn={handleSignIn} />}
-      {mode === 'main' && (
+      {mode === 'main' && setupPreview && (
+        <Setup
+          preview
+          onBack={() => setSetupPreview(false)}
+          onDone={() => setSetupPreview(false)}
+          onSignIn={handleSignIn}
+        />
+      )}
+      {mode === 'main' && !setupPreview && (
         <Main
           data={data}
           setData={setData}
@@ -339,6 +350,7 @@ function App() {
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onLogoSync={handleLogoSync}
+          onPreviewSetup={() => setSetupPreview(true)}
         />
       )}
       {mode === 'export' && (
