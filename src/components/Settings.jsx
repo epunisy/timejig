@@ -319,9 +319,9 @@ export default function Settings({
               background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
               fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
             }}
-          >첫 화면 미리보기</button>
+          >첫 화면에서 새 시간표 만들기</button>
           <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-            처음 화면을 보고, 거기서 새 시간표도 만들 수 있어요. (기존 시간표는 그대로)
+            앱 첫 화면처럼 이름을 정해 새 시간표를 만들어요. (기존 시간표는 그대로)
           </div>
         </div>
 

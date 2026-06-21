@@ -33,7 +33,7 @@ export default function Setup({ onDone, onSignIn, preview, onBack }) {
   return (
     <div className="tj-setup">
       {preview && (
-        <button className="tj-setup-back" onClick={onBack}>← 돌아가기 (미리보기)</button>
+        <button className="tj-setup-back" onClick={onBack}>← 돌아가기</button>
       )}
       <span className="tj-setup-logo-wrap">
         <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
