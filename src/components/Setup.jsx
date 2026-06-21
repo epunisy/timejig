@@ -8,7 +8,7 @@ function getRandomName() {
   return NAME_SAMPLES[Math.floor(Math.random() * NAME_SAMPLES.length)];
 }
 
-export default function Setup({ onDone }) {
+export default function Setup({ onDone, onSignIn }) {
   const inputRef = useRef(null);
   const composingRef = useRef(false);
   const randomNameRef = useRef(getRandomName());
@@ -53,6 +53,13 @@ export default function Setup({ onDone }) {
         {t('start')}
       </button>
       <div className="tj-setup-hint">시간·색·글꼴 등은{'\n'}나중에 ⚙ 서식설정에서 바꿀 수 있어요.</div>
+
+      <div className="tj-setup-login">
+        <div className="tj-setup-login-q">이미 만든 시간표가 있나요?</div>
+        <button className="tj-setup-login-btn" onClick={onSignIn}>
+          <span className="tj-g">G</span> 구글로 로그인해서 불러오기
+        </button>
+      </div>
     </div>
   );
 }

@@ -143,6 +143,34 @@ html, body {
   white-space: pre-line;
 }
 
+/* 첫 화면 — 기존 사용자용 로그인(클라우드에서 불러오기) */
+.tj-setup-login {
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 0.5px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.tj-setup-login-q { font-size: 11px; color: #888; }
+.tj-setup-login-btn {
+  min-height: 40px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 0.5px solid #d8d8d8;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.tj-setup-login-btn:active { background: #f7f7f7; }
+.tj-setup-login-btn .tj-g { font-weight: 700; color: #4285F4; }
+
 /* ===== 상단 바 ===== */
 .tj-topbar {
   display: flex;

@@ -328,7 +328,7 @@ function App() {
 
   return (
     <>
-      {mode === 'setup' && <Setup onDone={handleSetupDone} />}
+      {mode === 'setup' && <Setup onDone={handleSetupDone} onSignIn={handleSignIn} />}
       {mode === 'main' && (
         <Main
           data={data}
