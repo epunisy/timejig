@@ -589,6 +589,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
+        <button className="tj-cta" onClick={user ? onSignOut : onSignIn}>
+          {user ? '로그아웃' : '로그인'}
+        </button>
         <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
           <img src="/icon_settings.png" alt="" style={menuIco} />서식설정
         </button>
@@ -605,9 +608,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           </button>
           <button className={'tj-cta' + (locked ? ' on' : '')} onClick={() => setLocked(l => !l)}>
             {locked ? '🔒 고정됨' : '🔓 고정'}
-          </button>
-          <button className="tj-cta" onClick={user ? onSignOut : onSignIn}>
-            {user ? '로그아웃' : '로그인'}
           </button>
         </div>
         </div>
