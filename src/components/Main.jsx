@@ -603,9 +603,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
             {showMemo ? '📝 메모닫기' : '📝 메모보기'}
           </button>
-          <button className={'tj-cta' + (locked ? ' on' : '')} onClick={() => setLocked(l => !l)}>
-            {locked ? '🔒 고정됨' : '🔓 고정'}
-          </button>
         </div>
         </div>
       </div>
@@ -615,6 +612,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
+        <button
+          className={'tj-lock-fab' + (locked ? ' on' : '')}
+          onClick={() => setLocked(l => !l)}
+          aria-label="시간표 고정/해제"
+          title={locked ? '고정됨 (눌러서 해제)' : '고정 (눌러서 잠금)'}
+        >{locked ? '🔒' : '🔓'}</button>
         <Timetable
           config={config}
           blocks={activeTT.blocks}
