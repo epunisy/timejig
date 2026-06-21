@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth, GoogleAuthProvider,
-  signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged,
+  signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged, getRedirectResult,
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 
@@ -37,6 +37,10 @@ export async function signInGoogle() {
 
 export function signOutGoogle() {
   return signOut(auth);
+}
+
+export function checkRedirect() {
+  return getRedirectResult(auth);
 }
 
 export { onAuthStateChanged, doc, getDoc, setDoc, onSnapshot };

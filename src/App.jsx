@@ -4,7 +4,7 @@ import { saveData, loadData } from './storage';
 import Setup from './components/Setup';
 import Main from './components/Main';
 import Export from './components/Export';
-import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle } from './firebase';
+import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle, checkRedirect } from './firebase';
 
 // 색띠 옵션
 export const ACCENT_PASTEL = [
@@ -209,6 +209,10 @@ function App() {
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
+  // 리디렉트 로그인 결과/에러 확인 (진단용)
+  useEffect(() => {
+    checkRedirect().catch((e) => alert('로그인 오류(redirect): ' + (e?.code || e?.message || e)));
+  }, []);
 
   // 로그인하면: 클라우드 데이터 실시간 구독. 없으면 현재 기기 데이터 업로드.
   useEffect(() => {
@@ -241,7 +245,7 @@ function App() {
 
   async function handleSignIn() {
     try { await signInGoogle(); }
-    catch { alert('로그인에 실패했어요. 잠시 후 다시 시도해 주세요.'); }
+    catch (e) { alert('로그인 오류: ' + (e?.code || e?.message || e)); }
   }
   function handleSignOut() { signOutGoogle(); }
 
