@@ -20,6 +20,8 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+// 로그인할 때 항상 계정 선택 창을 띄움 — 브라우저에 로그인된 계정으로 자동 로그인되는 것 방지
+provider.setCustomParameters({ prompt: 'select_account' });
 
 // 데스크톱은 팝업, 막히면(모바일/웹뷰) 리디렉트로 폴백
 export async function signInGoogle() {
