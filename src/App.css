@@ -169,10 +169,10 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: space-between;
+  justify-content: flex-end;
   order: 0;
 }
-.tj-topbar-r1 .tj-ttbar { min-width: 0; flex: 1; }
+.tj-topbar-r1 .tj-ttbar { min-width: 0; }
 /* 아랫줄: 메뉴 묶음 */
 .tj-topbar-r2 {
   display: flex;
@@ -184,11 +184,11 @@ html, body {
 /* 시간표 이름 — 타이틀 */
 .tj-app-main .tj-tt-current {
   max-width: 100%;
-  padding: 2px 2px;
-  font-size: 13px;
-  font-weight: 700;
+  padding: 2px 4px;
+  font-size: 11px;
+  font-weight: 400;
   line-height: 1.3;
-  color: #222;
+  color: #444;
 }
 .tj-app-main .tj-tt-caret { font-size: 11px; color: #aab; }
 /* 로그인 — 톤 맞춘 소프트 칩 */
@@ -220,10 +220,9 @@ html, body {
   transform: translateY(1px);
 }
 .tj-topbar-r2 .tj-cta.on {
-  color: #1f6fd6;
-  font-weight: 700;
-  background: #e6f0fd;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+  background: #e7e9ed;
+  color: #333;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
