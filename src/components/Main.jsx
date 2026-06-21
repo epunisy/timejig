@@ -587,7 +587,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           )}
         </div>
         <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
-          {user ? '👤 로그아웃' : '👤 로그인'}
+          {user ? '로그아웃' : '로그인'}
         </button>
         </div>
         <div className="tj-topbar-r2">
