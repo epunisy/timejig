@@ -175,7 +175,8 @@ html, body {
 .tj-topbar-r1 .tj-cta-settings { flex-shrink: 0; }
 .tj-topbar-r2 {
   display: flex;
-  gap: 0;
+  flex-wrap: wrap;
+  gap: 0 2px;
   justify-content: flex-end;
 }
 .tj-topbar-r1 .tj-cta, .tj-topbar-r2 .tj-cta {

@@ -32,6 +32,7 @@ export default function Timetable({
   showMemo,
   dayNotePos,
   onEditMemo,
+  locked,
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -133,6 +134,7 @@ export default function Timetable({
   }, [dragSubject, blocks, days, totalMin]);
   
   function handleBlockStart(e, block) {
+    if (locked) return; // 고정 상태면 블록이 안 움직임
     e.preventDefault();
     setInternalDrag(block);
     onInternalDraggingChange(true);

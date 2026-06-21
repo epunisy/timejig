@@ -34,6 +34,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [showDayNotes, setShowDayNotes] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
+  const [locked, setLocked] = useState(false);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -276,6 +277,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   }
   
   function handleDragEnd(dropInfo) {
+    if (locked) { setDragSubject(null); return; }
     if (dropInfo && dragSubject) {
       updateTimetable(tt => ({
         ...tt,
@@ -601,6 +603,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
             <img src="/icon_memo.png" alt="" style={menuIco} />{showMemo ? '메모닫기' : '메모보기'}
           </button>
+          <button className={'tj-cta' + (locked ? ' on' : '')} onClick={() => setLocked(l => !l)}>
+            {locked ? '🔒 고정됨' : '🔓 고정'}
+          </button>
+          <button className="tj-cta" onClick={user ? onSignOut : onSignIn}>
+            {user ? '로그아웃' : '로그인'}
+          </button>
         </div>
         </div>
       </div>
@@ -622,6 +630,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           showMemo={showMemo}
           dayNotePos={dayNotePos}
           onEditMemo={() => setShowDayNotes(true)}
+          locked={locked}
         />
         <div
           className="tj-divider"
