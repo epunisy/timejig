@@ -205,6 +205,8 @@ function App() {
   const [user, setUser] = useState(null);
   const dataRef = useRef(data);
   const skipSaveRef = useRef(false);
+  // 클라우드 첫 동기화(서버 응답)를 받기 전엔 업로드 금지 — 빈 데이터로 클라우드를 덮어쓰는 사고 방지
+  const cloudReadyRef = useRef(false);
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
@@ -213,28 +215,34 @@ function App() {
     checkRedirect().catch((e) => alert('로그인 오류(redirect): ' + (e?.code || e?.message || e)));
   }, []);
 
-  // 로그인하면: 클라우드 데이터 실시간 구독. 없으면 현재 기기 데이터 업로드.
+  // 로그인하면: 클라우드 데이터 실시간 구독. 없으면(서버가 '문서 없음' 확인 시) 현재 기기 데이터 업로드.
   useEffect(() => {
     if (!user) return;
+    cloudReadyRef.current = false;
     const ref = doc(db, 'users', user.uid);
     let first = true;
     const unsub = onSnapshot(ref, (snap) => {
       if (snap.metadata.hasPendingWrites) return; // 내 쓰기 메아리는 무시
       if (snap.exists() && snap.data().data) {
+        // 클라우드에 데이터가 있음 → 이 기기에 반영 (캐시든 서버든 클라우드가 진실)
         skipSaveRef.current = true;
         setData(normalizeData(snap.data().data));
         if (mode === 'setup') setMode('main');
-      } else if (first) {
-        setDoc(ref, { data: dataRef.current, updatedAt: Date.now() }).catch(() => {});
+        cloudReadyRef.current = true;
+      } else if (!snap.metadata.fromCache) {
+        // 서버가 '문서 없음'을 확인해줬을 때만 최초 업로드 — 캐시 단계의 빈 상태로 덮어쓰지 않음
+        if (first) setDoc(ref, { data: dataRef.current, updatedAt: Date.now() }).catch(() => {});
+        cloudReadyRef.current = true;
       }
       first = false;
     }, () => {});
-    return unsub;
+    return () => { cloudReadyRef.current = false; unsub(); };
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 데이터 변경 시 클라우드에 저장(디바운스). 원격 적용 직후엔 건너뜀.
   useEffect(() => {
     if (!user) return;
+    if (!cloudReadyRef.current) return; // 첫 동기화 전엔 업로드 금지 (빈 데이터로 덮어쓰기 방지)
     if (skipSaveRef.current) { skipSaveRef.current = false; return; }
     const id = setTimeout(() => {
       setDoc(doc(db, 'users', user.uid), { data, updatedAt: Date.now() }).catch(() => {});
