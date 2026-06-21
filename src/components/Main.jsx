@@ -586,14 +586,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
-        <button className="tj-cta" onClick={user ? onSignOut : onSignIn}>
+        <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
           {user ? '👤 로그아웃' : '👤 로그인'}
-        </button>
-        <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
-          ⚙️ 서식설정
         </button>
         </div>
         <div className="tj-topbar-r2">
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
+            ⚙️ 서식설정
+          </button>
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
             📷 사진 불러오기
           </button>
