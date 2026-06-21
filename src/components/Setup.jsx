@@ -1,15 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { t } from '../i18n';
-
-function pad(n) { return String(n).padStart(2, '0'); }
-
-function hourOptions(min, max) {
-  const opts = [];
-  for (let h = min; h <= max; h++) {
-    opts.push({ value: h, label: pad(h) + ':00' });
-  }
-  return opts;
-}
 
 // 본인 딸들 이름
 const NAME_SAMPLES = ['민주', '민정'];
@@ -19,34 +9,26 @@ function getRandomName() {
 }
 
 export default function Setup({ onDone }) {
-  const [startHour, setStartHour] = useState(12);
-  const [endHour, setEndHour] = useState(21);
-  const [accent, setAccent] = useState('pastel');
-  const [randomName] = useState(getRandomName);
-  
   const inputRef = useRef(null);
   const composingRef = useRef(false);
-  
+  const randomNameRef = useRef(getRandomName());
+
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, []);
-  
+
+  // 시간 범위·색띠 등은 기본값으로 시작 — 나중에 서식설정에서 변경
   function handleStart() {
     const finalName = inputRef.current.value.trim();
-    onDone(finalName, startHour, endHour, accent);
+    onDone(finalName);
   }
-  
+
   function handleKeyDown(e) {
     if (e.key === 'Enter' && !composingRef.current) {
       handleStart();
     }
   }
-  
-  function handleStartHourChange(h) {
-    setStartHour(h);
-    if (endHour <= h) setEndHour(h + 1);
-  }
-  
+
   return (
     <div className="tj-setup">
       <span className="tj-setup-logo-wrap">
@@ -55,69 +37,22 @@ export default function Setup({ onDone }) {
       <div className="tj-setup-greeting">
         {t('welcome')}{'\n'}{t('setupGuide')}
       </div>
-      
+
       <input
         ref={inputRef}
         type="text"
         className="tj-name-input tj-name-input-small"
-        placeholder={`예: ${randomName}`}
+        placeholder={`예: ${randomNameRef.current}`}
         onCompositionStart={() => { composingRef.current = true; }}
         onCompositionEnd={() => { composingRef.current = false; }}
         onKeyDown={handleKeyDown}
         autoComplete="off"
       />
-      
-      <div style={{ textAlign: 'left' }}>
-        <div style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>
-          시간
-        </div>
-        <div className="tj-time-row">
-          <select
-            value={startHour}
-            onChange={(e) => handleStartHourChange(parseInt(e.target.value, 10))}
-            style={{ minHeight: '40px', boxSizing: 'border-box', padding: '0 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
-          >
-            {hourOptions(0, 23).map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-          <div className="dash">–</div>
-          <select
-            value={endHour}
-            onChange={(e) => setEndHour(parseInt(e.target.value, 10))}
-            style={{ minHeight: '40px', boxSizing: 'border-box', padding: '0 12px', border: '0.5px solid #d8d8d8', fontSize: '14px', fontFamily: 'inherit', background: '#fff', color: '#222' }}
-          >
-            {hourOptions(startHour + 1, 24).map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div style={{ textAlign: 'left' }}>
-        <div style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>
-          {t('colorBand')}
-        </div>
-        <div className="tj-mode-strip">
-          <button
-            className={accent === 'pastel' ? 'active' : ''}
-            onClick={() => setAccent('pastel')}
-          >{t('accentPastel')}</button>
-          <button
-            className={accent === 'mono' ? 'active' : ''}
-            onClick={() => setAccent('mono')}
-          >{t('accentMono')}</button>
-          <button
-            className={accent === 'none' ? 'active' : ''}
-            onClick={() => setAccent('none')}
-          >{t('accentNone')}</button>
-        </div>
-      </div>
 
       <button className="tj-setup-cta" onClick={handleStart}>
         {t('start')}
       </button>
-      <div className="tj-setup-hint">월–토(MON–SAT)로 시작해요.{'\n'}나중에 ⚙ 서식설정에서 다 바꿀 수 있어요.</div>
+      <div className="tj-setup-hint">시간·색·글꼴 등은{'\n'}나중에 ⚙ 서식설정에서 바꿀 수 있어요.</div>
     </div>
   );
 }
