@@ -10,7 +10,7 @@ const CELLS = [
   [0, -1, 2, 3],
 ];
 
-function MiniGrid({ memo, cost, drag, plan }) {
+function MiniGrid({ memo, cost, drag, plan, lock }) {
   return (
     <div className="ttut-tt">
       <div className="ttut-grid">
@@ -27,8 +27,8 @@ function MiniGrid({ memo, cost, drag, plan }) {
       </div>
       {memo && (
         <div className="ttut-memo">
-          <span className="lab">메모</span>
-          <span>실내화</span><span>받아쓰기</span><span /><span>준비물</span>
+          <div className="lab">메모</div>
+          <div className="txt">월: 실내화 · 화: 받아쓰기 시험</div>
         </div>
       )}
       {cost && (
@@ -38,7 +38,7 @@ function MiniGrid({ memo, cost, drag, plan }) {
             <i style={{ width: '33%', background: COL[2] }} />
             <i style={{ width: '25%', background: COL[1] }} />
           </div>
-          <div className="ttut-won">월 ₩320,000</div>
+          <div className="ttut-won">월 교육비 ₩320,000</div>
         </div>
       )}
       {drag && (
@@ -48,6 +48,20 @@ function MiniGrid({ memo, cost, drag, plan }) {
         </div>
       )}
       {plan && <div className="ttut-badge">📷 사진 → AI 자동입력</div>}
+      {lock && <div className="ttut-badge ttut-badge-lock">📌 고정됨</div>}
+    </div>
+  );
+}
+
+// 로그인/클라우드 동기화 mock
+function CloudSync() {
+  return (
+    <div className="ttut-sync">
+      <span className="ttut-sync-dev">📱</span>
+      <span className="ttut-sync-link">↔</span>
+      <span className="ttut-sync-cloud">☁️</span>
+      <span className="ttut-sync-link">↔</span>
+      <span className="ttut-sync-dev">💻</span>
     </div>
   );
 }
@@ -77,12 +91,12 @@ function MiniThumb({ name, cells }) {
 
 const SLIDES = [
   { title: '과목 만들고 드래그!', desc: '과목을 끌어다 시간표에 톡 놓으면 끝.', view: <MiniGrid drag /> },
-  { title: '사진으로 시간표 자동입력', desc: '학교·학원 시간표 사진만 올리면 AI가 자동으로 채워줘요.', view: <MiniGrid plan /> },
-  { title: '요일 메모 + 월 교육비', desc: '준비물 메모와 한 달 학원비까지 자동으로.', view: <MiniGrid memo cost /> },
-  { title: '잠금화면으로 저장', desc: '완성한 시간표를 폰 배경화면 이미지로!', view: <Phone><MiniGrid /></Phone> },
+  { title: '사진 한 장이면 자동완성', desc: '학교·학원 시간표 사진만 올리면 AI가 알아서 채워줘요.', view: <MiniGrid plan /> },
+  { title: '메모 · 월 교육비 한눈에', desc: '준비물 메모와 한 달 학원비를 과목 아래에서 바로 확인해요.', view: <MiniGrid memo cost /> },
+  { title: '실수로 안 움직이게 📌 고정', desc: '‘고정하기’를 누르면 시간표가 잠겨 잘못 드래그되지 않아요.', view: <MiniGrid lock /> },
   {
-    title: '둘이면 한 화면에 함께!',
-    desc: '첫째·둘째 시간표를 같이 골라 하나의 잠금화면으로 만들 수 있어요.',
+    title: '잠금화면으로 저장 ✨',
+    desc: '완성한 시간표를 폰 배경화면 이미지로! 둘이면 한 화면에 함께 담을 수도 있어요.',
     view: (
       <Phone>
         <div className="ttut-collage">
@@ -92,6 +106,7 @@ const SLIDES = [
       </Phone>
     ),
   },
+  { title: '로그인하면 어디서나 그대로', desc: '구글 로그인 한 번이면 기기를 바꿔도 시간표가 자동으로 따라와요.', view: <CloudSync /> },
 ];
 
 export default function Tutorial({ onClose }) {

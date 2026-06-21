@@ -86,12 +86,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고를 누르면 최신 앱·시간표 불러오기(새로고침) — 다른 기기 변경/앱 업데이트 반영
+  // 로고를 누르면 앱을 최신 버전으로 업데이트(새로고침). 기기 간 시간표 동기화는 자동이라 여기선 다루지 않음.
   function handleLogoClick() {
     setConfirmDialog({
-      title: '최신으로 불러오기',
-      message: '다른 기기에서 바꾼 시간표와 최신 앱 업데이트를 불러옵니다.<br><span style="color:#888; font-size:11px;">저장된 내용은 그대로예요. 잠깐 새로고침돼요.</span>',
-      confirmText: '불러오기',
+      title: '최신 버전으로 업데이트',
+      message: '앱을 최신 버전으로 업데이트할까요?<br><span style="color:#888; font-size:11px;">저장된 시간표는 그대로예요. 잠깐 새로고침돼요.</span>',
+      confirmText: '업데이트',
       onYes: () => { if (onLogoSync) onLogoSync(); },
     });
   }
