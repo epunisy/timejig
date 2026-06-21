@@ -145,7 +145,7 @@ export function bgStyle(theme) {
 const DEFAULT_CONFIG = {
   accent: 'pastel',
   weekRange: 'mon-sat',
-  startHour: 12,
+  startHour: 9,
   endHour: 21,
   font: 'gowun',
   fontScale: 'lg',
@@ -329,6 +329,21 @@ function App() {
     setMode('main');
   }
 
+  // 첫 화면 미리보기에서 '시작하기' — 기존 데이터는 그대로 두고, 그 이름으로 새 시간표를 추가 생성
+  function handlePreviewCreate(name) {
+    const baseConfig = { ...DEFAULT_CONFIG };
+    const newId = Math.max(0, ...data.timetables.map(t => t.id)) + 1;
+    setData({
+      ...data,
+      timetables: [
+        ...data.timetables,
+        { id: newId, name: name || `시간표${newId}`, blocks: [], config: { ...baseConfig } },
+      ],
+      activeTT: newId,
+    });
+    setSetupPreview(false);
+  }
+
   return (
     <>
       {mode === 'setup' && <Setup onDone={handleSetupDone} onSignIn={handleSignIn} />}
@@ -336,7 +351,7 @@ function App() {
         <Setup
           preview
           onBack={() => setSetupPreview(false)}
-          onDone={() => setSetupPreview(false)}
+          onDone={handlePreviewCreate}
           onSignIn={handleSignIn}
         />
       )}

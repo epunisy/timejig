@@ -321,7 +321,7 @@ export default function Settings({
             }}
           >첫 화면 미리보기</button>
           <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-            앱을 처음 켰을 때 나오는 화면을 미리 봐요. (데이터는 그대로예요)
+            처음 화면을 보고, 거기서 새 시간표도 만들 수 있어요. (기존 시간표는 그대로)
           </div>
         </div>
 

@@ -14,13 +14,12 @@ export default function Setup({ onDone, onSignIn, preview, onBack }) {
   const randomNameRef = useRef(getRandomName());
 
   useEffect(() => {
-    if (!preview && inputRef.current) inputRef.current.focus();
-  }, [preview]);
+    if (inputRef.current) inputRef.current.focus();
+  }, []);
 
   // 시간 범위·색띠 등은 기본값으로 시작 — 나중에 서식설정에서 변경
+  // (미리보기에서는 onDone 이 '새 시간표 추가'로 연결됨 — 기존 데이터는 그대로)
   function handleStart() {
-    // 미리보기에서는 데이터를 만들지 않고 그냥 돌아감 (기존 데이터 보호)
-    if (preview) { if (onBack) onBack(); return; }
     const finalName = inputRef.current.value.trim();
     onDone(finalName);
   }
