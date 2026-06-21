@@ -207,6 +207,10 @@ function App() {
   const skipSaveRef = useRef(false);
   // 클라우드 첫 동기화(서버 응답)를 받기 전엔 업로드 금지 — 빈 데이터로 클라우드를 덮어쓰는 사고 방지
   const cloudReadyRef = useRef(false);
+  // 마지막으로 클라우드와 일치했던 데이터(JSON) — 충돌 감지의 기준점
+  const syncedRef = useRef(null);
+  // 양쪽이 서로 다르게 바뀌었을 때 띄우는 충돌 안내 ({ remote, remoteStr })
+  const [conflict, setConflict] = useState(null);
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
@@ -219,19 +223,33 @@ function App() {
   useEffect(() => {
     if (!user) return;
     cloudReadyRef.current = false;
+    syncedRef.current = null;
     const ref = doc(db, 'users', user.uid);
     let first = true;
     const unsub = onSnapshot(ref, (snap) => {
       if (snap.metadata.hasPendingWrites) return; // 내 쓰기 메아리는 무시
       if (snap.exists() && snap.data().data) {
-        // 클라우드에 데이터가 있음 → 이 기기에 반영 (캐시든 서버든 클라우드가 진실)
-        skipSaveRef.current = true;
-        setData(normalizeData(snap.data().data));
-        if (mode === 'setup') setMode('main');
+        const remote = normalizeData(snap.data().data);
+        const remoteStr = JSON.stringify(remote);
         cloudReadyRef.current = true;
+        if (remoteStr === syncedRef.current) return; // 기준점과 같음 → 새로운 변경 없음
+        const localStr = JSON.stringify(dataRef.current);
+        if (syncedRef.current === null || localStr === syncedRef.current) {
+          // 이 기기엔 따로 바꾼 게 없음 → 클라우드 최신을 그대로 반영
+          syncedRef.current = remoteStr;
+          skipSaveRef.current = true;
+          setData(remote);
+          if (mode === 'setup') setMode('main');
+        } else {
+          // 양쪽이 서로 다르게 바뀜 → 덮어쓰기 전에 사용자에게 물어봄
+          setConflict({ remote, remoteStr });
+        }
       } else if (!snap.metadata.fromCache) {
         // 서버가 '문서 없음'을 확인해줬을 때만 최초 업로드 — 캐시 단계의 빈 상태로 덮어쓰지 않음
-        if (first) setDoc(ref, { data: dataRef.current, updatedAt: Date.now() }).catch(() => {});
+        if (first) {
+          setDoc(ref, { data: dataRef.current, updatedAt: Date.now() }).catch(() => {});
+          syncedRef.current = JSON.stringify(dataRef.current);
+        }
         cloudReadyRef.current = true;
       }
       first = false;
@@ -239,16 +257,48 @@ function App() {
     return () => { cloudReadyRef.current = false; unsub(); };
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 데이터 변경 시 클라우드에 저장(디바운스). 원격 적용 직후엔 건너뜀.
+  // 데이터 변경 시 클라우드에 저장(디바운스). 원격 적용 직후/충돌 대기 중엔 건너뜀.
   useEffect(() => {
     if (!user) return;
     if (!cloudReadyRef.current) return; // 첫 동기화 전엔 업로드 금지 (빈 데이터로 덮어쓰기 방지)
+    if (conflict) return; // 충돌 해결 전엔 업로드 보류
     if (skipSaveRef.current) { skipSaveRef.current = false; return; }
+    const localStr = JSON.stringify(data);
+    if (localStr === syncedRef.current) return; // 바뀐 게 없으면 업로드 안 함
     const id = setTimeout(() => {
       setDoc(doc(db, 'users', user.uid), { data, updatedAt: Date.now() }).catch(() => {});
+      syncedRef.current = localStr;
     }, 800);
     return () => clearTimeout(id);
-  }, [data, user]);
+  }, [data, user, conflict]);
+
+  // 충돌 해결 — 다른 기기(클라우드) 최신을 사용
+  function resolveUseRemote() {
+    if (!conflict) return;
+    syncedRef.current = conflict.remoteStr;
+    skipSaveRef.current = true;
+    setData(conflict.remote);
+    setConflict(null);
+  }
+  // 충돌 해결 — 이 기기 내용을 유지하고 클라우드에 덮어씀
+  function resolveKeepMine() {
+    const local = dataRef.current;
+    const localStr = JSON.stringify(local);
+    syncedRef.current = localStr; // 기준점을 내 것으로 → 서버 메아리를 충돌로 오인하지 않음
+    setConflict(null);
+    if (user) setDoc(doc(db, 'users', user.uid), { data: local, updatedAt: Date.now() }).catch(() => {});
+  }
+
+  // 로고 클릭 — 최신 앱(코드)과 최신 시간표를 함께 불러옴
+  async function handleLogoSync() {
+    try {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.update()));
+      }
+    } catch { /* 무시하고 새로고침 */ }
+    window.location.reload();
+  }
 
   async function handleSignIn() {
     try { await signInGoogle(); }
@@ -288,6 +338,7 @@ function App() {
           user={user}
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
+          onLogoSync={handleLogoSync}
         />
       )}
       {mode === 'export' && (
@@ -296,6 +347,27 @@ function App() {
           setData={setData}
           onBack={() => setMode('main')}
         />
+      )}
+
+      {conflict && (
+        <div className="tj-modal-bg">
+          <div className="tj-modal" onClick={(e) => e.stopPropagation()} style={{ width: '340px' }}>
+            <h3>다른 기기의 최신 변경</h3>
+            <div className="tj-confirm-msg">
+              다른 기기에서 시간표를 바꿨어요.<br />
+              어느 내용을 사용할까요?
+              <br /><span style={{ color: '#888', fontSize: '11px' }}>선택하지 않은 쪽 변경은 사라집니다.</span>
+            </div>
+            <div className="tj-modal-actions" style={{ flexDirection: 'column', gap: '8px' }}>
+              <button className="primary" style={{ width: '100%' }} onClick={resolveUseRemote}>
+                최신으로 불러오기 (다른 기기 내용)
+              </button>
+              <button style={{ width: '100%' }} onClick={resolveKeepMine}>
+                이 기기 내용 유지
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

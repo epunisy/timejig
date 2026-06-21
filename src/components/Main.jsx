@@ -7,7 +7,6 @@ import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
 import { resolveBackground, bgStyle, CATEGORIES } from '../App';
-import { clearData } from '../storage';
 
 function timeToMin(t) {
   const parts = String(t).split(':');
@@ -17,7 +16,7 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
-export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut }) {
+export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut, onLogoSync }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -28,7 +27,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
-  const [resetNumbers, setResetNumbers] = useState(null);
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -88,45 +86,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고를 누르면 전체 초기화 — 이중 확인(예 → 짝수 고르기)
-  function makeResetNumbers() {
-    // 짝수는 딱 1개, 나머지 3개는 홀수 (정답이 한 개뿐이라 더 신중해짐)
-    const odds = [];
-    while (odds.length < 3) {
-      const n = 11 + 2 * Math.floor(Math.random() * 45); // 11~99 홀수
-      if (!odds.includes(n)) odds.push(n);
-    }
-    const even = 10 + 2 * Math.floor(Math.random() * 45); // 10~98 짝수 (홀수와 자동으로 겹치지 않음)
-    const arr = [...odds, even];
-    // 짝수가 항상 마지막에 오지 않도록 섞기
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
+  // 로고를 누르면 최신 앱·시간표 불러오기(새로고침) — 다른 기기 변경/앱 업데이트 반영
   function handleLogoClick() {
     setConfirmDialog({
-      title: '처음부터 다시 시작',
-      message: '모든 시간표를 삭제하고, 새로 시작하시겠습니까?<br><span style="color:#888; font-size:11px;">배치된 모든 블록·과목·설정이 사라집니다.</span>',
-      confirmText: '예',
-      onYes: () => setResetNumbers(makeResetNumbers()),
+      title: '최신으로 불러오기',
+      message: '다른 기기에서 바꾼 시간표와 최신 앱 업데이트를 불러옵니다.<br><span style="color:#888; font-size:11px;">저장된 내용은 그대로예요. 잠깐 새로고침돼요.</span>',
+      confirmText: '불러오기',
+      onYes: () => { if (onLogoSync) onLogoSync(); },
     });
-  }
-
-  function handleResetPick(n) {
-    if (n % 2 === 0) {
-      clearData();
-      window.location.reload();
-    } else {
-      setResetNumbers(null);
-      setConfirmDialog({
-        title: '초기화 취소',
-        message: '짝수가 아니라서 초기화를 취소했어요.',
-        infoOnly: true,
-      });
-    }
   }
 
   function updateTimetable(updater) {
@@ -682,34 +649,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           {...confirmDialog}
           onClose={() => setConfirmDialog(null)}
         />
-      )}
-
-      {resetNumbers && (
-        <div className="tj-modal-bg" onClick={() => setResetNumbers(null)}>
-          <div className="tj-modal" onClick={(e) => e.stopPropagation()} style={{ width: '320px' }}>
-            <div className="tj-confirm-msg">
-              모든 시간표가 삭제됩니다.<br />
-              계속하시려면 아래 숫자 중 <b>짝수</b>를 선택하세요.
-            </div>
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', margin: '16px 0' }}>
-              {resetNumbers.map(n => (
-                <button
-                  key={n}
-                  onClick={() => handleResetPick(n)}
-                  style={{
-                    minWidth: '56px', minHeight: '48px',
-                    fontSize: '18px', fontWeight: 600,
-                    border: '0.5px solid #ccc', background: '#fff',
-                    cursor: 'pointer', fontFamily: 'inherit',
-                  }}
-                >{n}</button>
-              ))}
-            </div>
-            <div className="tj-modal-actions">
-              <button onClick={() => setResetNumbers(null)}>취소</button>
-            </div>
-          </div>
-        </div>
       )}
 
       {showImportPlan && (
