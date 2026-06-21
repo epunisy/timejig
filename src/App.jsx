@@ -152,7 +152,6 @@ const DEFAULT_CONFIG = {
   dayLang: 'en',
   bg: 'graph',
   bgImage: null,
-  dayNotePos: 'top', // 요일별 메모 위치: top | bottom (표시 여부는 메모보기 토글)
 };
 
 // 기본값

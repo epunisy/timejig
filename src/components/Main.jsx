@@ -6,7 +6,6 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
-import DayNotes from './DayNotes';
 import { resolveBackground, bgStyle, CATEGORIES } from '../App';
 import { clearData } from '../storage';
 
@@ -31,8 +30,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [resetNumbers, setResetNumbers] = useState(null);
   const [showImportPlan, setShowImportPlan] = useState(false);
-  const [showDayNotes, setShowDayNotes] = useState(false);
-  const [showMemo, setShowMemo] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
   const [locked, setLocked] = useState(false);
   const newTTInputRef = useRef(null);
@@ -353,8 +350,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     updateTimetable(tt => ({ ...tt, name: name.trim() || tt.name }));
   }
 
-  function handleDayNotesSave(notes) {
-    updateTimetable(tt => ({ ...tt, dayNotes: notes }));
+  function handleMemoChange(memo) {
+    updateTimetable(tt => ({ ...tt, memo }));
   }
 
   // 주간학습계획표 파싱 결과를 시간표에 반영
@@ -400,12 +397,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       return blocks;
     }
 
-    // 요일별 메모 (준비물 + 참고를 한 줄 메모로 합침)
-    const newDayNotes = {};
-    days.forEach(d => {
-      const memo = [(d.supplies || '').trim(), (d.notes || '').trim()].filter(Boolean).join(' / ');
-      if (memo) newDayNotes[d.day] = memo;
-    });
+    // 메모 (요일별 준비물·참고를 한 메모로 합침 — "월: …" 형태로 줄바꿈)
+    const memoLines = days.map(d => {
+      const m = [(d.supplies || '').trim(), (d.notes || '').trim()].filter(Boolean).join(' / ');
+      return m ? `${d.day}: ${m}` : null;
+    }).filter(Boolean).join('\n');
 
     const hasTimes = Number.isFinite(minStart) && Number.isFinite(maxEnd);
     const schoolStartHour = hasTimes ? Math.floor(minStart / 60) : config.startHour;
@@ -422,7 +418,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         ...data,
         subjects,
         timetables: [...data.timetables, {
-          id: newId, name: '불러온 시간표', blocks, config: newConfig, dayNotes: newDayNotes,
+          id: newId, name: '불러온 시간표', blocks, config: newConfig, memo: memoLines,
         }],
         activeTT: newId,
       });
@@ -435,12 +431,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       else if (needSat && weekRange === 'mon-fri') weekRange = 'mon-sat';
       const delta = (oldStart - newStartHour) * 60;
       const schoolBlocks = buildBlocks(newStartHour);
-      const mergedNotes = { ...(activeTT.dayNotes || {}) };
-      Object.keys(newDayNotes).forEach(d => {
-        const prev = mergedNotes[d];
-        const prevStr = !prev ? '' : (typeof prev === 'string' ? prev : [prev.supplies, prev.notes].filter(Boolean).join(' / '));
-        mergedNotes[d] = [prevStr, newDayNotes[d]].filter(Boolean).join(' / ');
-      });
+      const mergedMemo = [(activeTT.memo || '').trim(), memoLines].filter(Boolean).join('\n');
       setData({
         ...data,
         subjects,
@@ -448,7 +439,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           ...tt,
           config: { ...tt.config, startHour: newStartHour, endHour: newEndHour, weekRange },
           blocks: [...tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })), ...schoolBlocks],
-          dayNotes: mergedNotes,
+          memo: mergedMemo,
         } : tt),
       });
     }
@@ -462,9 +453,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   }
   
   const isDragging = dragSubject !== null || internalDragging;
-
-  // 요일별 메모 — 시간표 안의 한 행으로 표시. 위치(상단/하단)는 서식설정, 표시 여부는 '메모보기' 토글.
-  const dayNotePos = config.dayNotePos === 'bottom' ? 'bottom' : 'top';
 
   // 한 달 학원비 — 회당: 금액 × 주간 배치횟수 × 4주, 한달치: 과목당 1회 합산. 분류별로도 합산.
   const { monthlyCost, categoryCosts } = (() => {
@@ -600,8 +588,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           <button className="tj-cta" onClick={onGoExport}>
             📱 모바일 잠금화면
           </button>
-          <button className={'tj-cta' + (showMemo ? ' on' : '')} onClick={() => setShowMemo(s => !s)}>
-            {showMemo ? '📝 메모닫기' : '📝 메모보기'}
+          <button className={'tj-cta' + (locked ? ' on' : '')} onClick={() => setLocked(l => !l)}>
+            {locked ? '📌 고정해제' : '📌 고정하기'}
           </button>
         </div>
         </div>
@@ -612,12 +600,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         ref={layoutRef}
         style={paletteH ? { '--tj-pal-h': paletteH + 'px' } : undefined}
       >
-        <button
-          className={'tj-lock-fab' + (locked ? ' on' : '')}
-          onClick={() => setLocked(l => !l)}
-          aria-label="시간표 고정/해제"
-          title={locked ? '고정됨 (눌러서 해제)' : '고정 (눌러서 잠금)'}
-        >{locked ? '🔒' : '🔓'}</button>
         <Timetable
           config={config}
           blocks={activeTT.blocks}
@@ -626,10 +608,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           dragSubject={dragSubject}
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
-          dayNotes={activeTT.dayNotes}
-          showMemo={showMemo}
-          dayNotePos={dayNotePos}
-          onEditMemo={() => setShowDayNotes(true)}
           locked={locked}
         />
         <div
@@ -651,6 +629,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           categoryCosts={categoryCosts}
           collapsed={palCollapsed}
           onToggleCollapse={() => setPalCollapsed(c => !c)}
+          memo={activeTT.memo || ''}
+          onMemoChange={handleMemoChange}
         />
       </div>
       
@@ -690,7 +670,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
           onShowTutorial={() => { setShowSettings(false); setShowTutorial(true); }}
-          onEditDayNotes={() => { setShowSettings(false); setShowDayNotes(true); }}
           user={user}
           onSignIn={onSignIn}
           onSignOut={onSignOut}
@@ -737,15 +716,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         <ImportPlan
           onClose={() => setShowImportPlan(false)}
           onApply={handlePlanImport}
-        />
-      )}
-
-      {showDayNotes && (
-        <DayNotes
-          config={config}
-          dayNotes={activeTT.dayNotes}
-          onSave={handleDayNotesSave}
-          onClose={() => setShowDayNotes(false)}
         />
       )}
 

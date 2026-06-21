@@ -32,11 +32,14 @@ export default function Palette({
   categoryCosts,
   collapsed,
   onToggleCollapse,
+  memo,
+  onMemoChange,
 }) {
   const accents = getAccents(config.accent);
   const fontFamily = getFontFamily(config.font);
   const itemRefs = useRef({});
   const [costHidden, setCostHidden] = useState(false);
+  const [memoHidden, setMemoHidden] = useState(false);
   
   useEffect(() => {
     const cleanups = [];
@@ -204,6 +207,21 @@ export default function Palette({
             </>
           )}
           <div className="tj-cost-total">{costHidden ? '₩ •••••' : '₩' + monthlyCost.toLocaleString()}</div>
+      </div>
+      <div className="tj-memo-box">
+        <div className="tj-memo-box-head">
+          <span>메모</span>
+          <button className="tj-eye-btn" onClick={() => setMemoHidden(h => !h)} aria-label="메모 숨기기"><Eye off={memoHidden} /></button>
+        </div>
+        {!memoHidden && (
+          <textarea
+            className="tj-memo-input"
+            value={memo}
+            onChange={(e) => onMemoChange(e.target.value)}
+            placeholder="메모를 입력하세요 (준비물·할 일 등)"
+            rows={3}
+          />
+        )}
       </div>
     </div>
   );
