@@ -181,49 +181,49 @@ html, body {
   justify-content: flex-end;
   order: 1;
 }
-/* 시간표 이름 — 타이틀(플랫) */
+/* 시간표 이름 — 타이틀 */
 .tj-app-main .tj-tt-current {
   max-width: 100%;
   padding: 2px 2px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   line-height: 1.3;
-  color: #333;
+  color: #222;
 }
-.tj-app-main .tj-tt-caret { font-size: 12px; }
-/* 로그인 — 작은 칩(메뉴와 구분) */
+.tj-app-main .tj-tt-caret { font-size: 11px; color: #aab; }
+/* 로그인 — 톤 맞춘 소프트 칩 */
 .tj-login {
   flex-shrink: 0;
-  font-size: 10px;
-  padding: 3px 11px;
+  font-size: 11px;
+  padding: 4px 13px;
   color: #555;
-  background: #f3f4f6;
-  border: 0.5px solid #d6d6d6;
+  background: #f5f6f8;
+  border: none;
   border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
 }
-.tj-login:active { transform: translateY(1px); }
-/* 입체감 있는 알약 메뉴 버튼(아랫줄) */
+.tj-login:active { box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); transform: translateY(1px); }
+/* 메뉴 버튼 — 부드러운 소프트 칩 + 은은한 그림자 */
 .tj-topbar-r2 .tj-cta {
-  padding: 3px 9px;
-  font-size: 10px;
+  padding: 4px 11px;
+  font-size: 11px;
   line-height: 1.3;
   white-space: nowrap;
-  color: #444;
-  background: #fff;
-  border: 0.5px solid #dadada;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+  color: #4a4a4a;
+  background: #f5f6f8;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
 }
 .tj-topbar-r2 .tj-cta:active {
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
   transform: translateY(1px);
 }
 .tj-topbar-r2 .tj-cta.on {
   color: #1f6fd6;
-  font-weight: 600;
-  background: #eaf2fd;
-  border-color: #b9d4f3;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+  font-weight: 700;
+  background: #e6f0fd;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 /* ===== 시간표 목록 (드롭다운) ===== */
