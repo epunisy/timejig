@@ -13,7 +13,7 @@ const firebaseConfig = {
   projectId: 'timejig-1af48',
   storageBucket: 'timejig-1af48.firebasestorage.app',
   messagingSenderId: '365198863627',
-  appId: '1:365198863627:web:0ed8a8a66a0d28a509060e',
+  appId: '1:365198863627:web:34a5fd21f152a8ac09060e',
 };
 
 const app = initializeApp(firebaseConfig);
