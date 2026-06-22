@@ -9,9 +9,10 @@ import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, si
 
 // 무드 팔레트 — 8가지 분류(국·영·수·사·과·예체능·기타·FreeTime)에 1:1로 매핑되는 색 조합
 export const MOODS = {
-  sky:  ['#FFFFFF', '#6DB7FF', '#CFEAFF', '#76C7F2', '#A8D8FF', '#8EDFE6', '#BFE8D8', '#C9D1D9'],
-  pink: ['#F6C1CC', '#F7CAD0', '#D6C2F0', '#FFF3E2', '#FFFFFF', '#B8E0D2', '#B7C9A8', '#BDE0FE'],
-  cozy: ['#222222', '#355070', '#FFFFFF', '#F7F3E9', '#DCC5A1', '#8D6E63', '#C9D1D9', '#76C7F2'],
+  // 순서 = 분류: 국어·영어·수학·사회·과학·예체능·기타·FreeTime
+  sky:  ['#5BA8E0', '#46C2B6', '#9FD7F2', '#7ED9A8', '#9FB0E8', '#CBE89A', '#B8C2CC', '#6E78C4'],
+  pink: ['#F4A9BC', '#F7C6A0', '#E8A6D6', '#C9B0E8', '#F3D58C', '#ADD9C2', '#D9B89C', '#B7C4E8'],
+  cozy: ['#A78B6F', '#7E94A6', '#C7A98B', '#9CAE8E', '#D9A6A0', '#B5A6C4', '#C2C6BE', '#E0C58C'],
 };
 export const MOOD_LIST = [
   { key: 'sky', label: '스카이', desc: '깨끗하고 시원한' },
