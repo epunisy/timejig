@@ -7,32 +7,33 @@ import Export from './components/Export';
 import ConfirmDialog from './components/ConfirmDialog';
 import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle, checkRedirect } from './firebase';
 
-// 색띠 옵션
-export const ACCENT_PASTEL = [
-  '#B5D4F4','#9FE1CB','#F5C4B3','#CECBF6',
-  '#FAC775','#F4C0D1','#C0DD97','#D3D1C7'
-];
-export const ACCENT_MONO = [
-  '#E0E0E0','#C4C4C4','#A8A8A8','#888888',
-  '#666666','#444444','#222222','#000000'
+// 무드 팔레트 — 8가지 분류(국·영·수·사·과·예체능·기타·FreeTime)에 1:1로 매핑되는 색 조합
+export const MOODS = {
+  sky:  ['#FFFFFF', '#6DB7FF', '#CFEAFF', '#76C7F2', '#A8D8FF', '#8EDFE6', '#BFE8D8', '#C9D1D9'],
+  pink: ['#F6C1CC', '#F7CAD0', '#D6C2F0', '#FFF3E2', '#FFFFFF', '#B8E0D2', '#B7C9A8', '#BDE0FE'],
+  cozy: ['#222222', '#355070', '#FFFFFF', '#F7F3E9', '#DCC5A1', '#8D6E63', '#C9D1D9', '#76C7F2'],
+};
+export const MOOD_LIST = [
+  { key: 'sky', label: '스카이', desc: '깨끗하고 시원한' },
+  { key: 'pink', label: '핑크', desc: '사랑스럽고 부드러운' },
+  { key: 'cozy', label: '코지', desc: '차분하고 데일리한' },
 ];
 
 export function getAccents(accent) {
-  if (accent === 'pastel') return ACCENT_PASTEL;
-  return null; // 'none' / 'custom' 은 팔레트가 없음(직접선택은 과목별 색을 따로 가짐)
+  return MOODS[accent] || null; // sky/pink/cozy → 8색, none → null
 }
 
-// 과목 하나의 색 — '직접선택'이면 과목 지정색, '파스텔'이면 분류(colorIndex) 팔레트색, '없음'이면 색 없음
+// 과목 하나의 색 — 분류(colorIndex)에 해당하는 무드 색. '없음'이면 색 없음.
 export function getSubjectColor(config, subject) {
   if (!subject) return null;
-  if (config.accent === 'custom') return subject.color || '#D9D9D9';
-  if (config.accent === 'pastel') return ACCENT_PASTEL[(subject.colorIndex || 0) % ACCENT_PASTEL.length];
-  return null;
+  const pal = MOODS[config.accent];
+  if (!pal) return null;
+  return pal[(subject.colorIndex || 0) % pal.length];
 }
 
-// 월 교육비 분류별 띠그래프 색 — 색을 쓰면(파스텔/직접선택) 분류 구분용 파스텔, '없음'이면 null
+// 월 교육비 분류별 띠그래프 색 — 무드 팔레트(없음이면 null)
 export function getCategoryColors(config) {
-  return config.accent === 'none' ? null : ACCENT_PASTEL;
+  return MOODS[config.accent] || null;
 }
 
 // 색 채우기 방식: true=칸 전체, false=왼쪽 색띠
@@ -48,8 +49,8 @@ export function textColorOn(hex) {
   return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#333' : '#fff';
 }
 
-// 과목 분류(색띠) — 분류 = 색. 색띠 그래프(포션)도 이 분류로 묶는다.
-export const CATEGORIES = ['국어', '영어', '수학', '사회', '과학', '예체능', '기타'];
+// 과목 분류 — 무드 8색에 1:1 매핑. 월 교육비 포션(띠그래프)도 이 분류로 묶는다.
+export const CATEGORIES = ['국어', '영어', '수학', '사회', '과학', '예체능', '기타', 'FreeTime'];
 
 // 글씨체 (시간표/잠금화면에만 적용) — 나중에 골라서 줄일 예정
 export const FONTS = [
@@ -169,7 +170,7 @@ export function bgStyle(theme) {
 
 // 기본 표시 설정 — 시간표마다 각자 보유. 전역 config 는 새 시간표용 기본값 + paletteH 보관용.
 const DEFAULT_CONFIG = {
-  accent: 'pastel',
+  accent: 'sky',
   weekRange: 'mon-sat',
   startHour: 9,
   endHour: 21,
@@ -195,7 +196,8 @@ const DEFAULT_STATE = {
 // 설정 보정 — 빠진 키는 기본값으로 채우고, 없어진 옵션(흑백)은 파스텔로 옮긴다.
 function fixConfig(c) {
   const cfg = { ...DEFAULT_CONFIG, ...(c || {}) };
-  if (cfg.accent === 'mono') cfg.accent = 'pastel'; // 흑백 제거 → 파스텔로 대체
+  // 옛 색 옵션(pastel/mono/custom)은 무드로 이전 → 기본 무드 'sky'
+  if (!['sky', 'pink', 'cozy', 'none'].includes(cfg.accent)) cfg.accent = 'sky';
   if (cfg.colorFill !== 'full') cfg.colorFill = 'band';
   return cfg;
 }

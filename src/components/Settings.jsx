@@ -1,6 +1,6 @@
 import { useRef, Fragment } from 'react';
 import { t } from '../i18n';
-import { FONTS, BACKGROUNDS, FONT_SCALES } from '../App';
+import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -199,26 +199,37 @@ export default function Settings({
         </label>
         
         <label>
-          <span>색</span>
-          <div className="tj-mode-strip">
+          <span>색 (무드)</span>
+          <div className="tj-mood-list">
+            {MOOD_LIST.map(m => (
+              <button
+                key={m.key}
+                type="button"
+                className={'tj-mood' + (config.accent === m.key ? ' active' : '')}
+                onClick={() => setAccent(m.key)}
+              >
+                <span className="tj-mood-info">
+                  <span className="tj-mood-name">{m.label}</span>
+                  <span className="tj-mood-desc">{m.desc}</span>
+                </span>
+                <span className="tj-mood-swatches">
+                  {MOODS[m.key].map((c, i) => (
+                    <span key={i} className="tj-mood-sw" style={{ background: c }} />
+                  ))}
+                </span>
+              </button>
+            ))}
             <button
-              className={config.accent === 'pastel' ? 'active' : ''}
-              onClick={() => setAccent('pastel')}
-            >파스텔</button>
-            <button
-              className={config.accent === 'none' ? 'active' : ''}
+              type="button"
+              className={'tj-mood' + (config.accent === 'none' ? ' active' : '')}
               onClick={() => setAccent('none')}
-            >없음</button>
-            <button
-              className={config.accent === 'custom' ? 'active' : ''}
-              onClick={() => setAccent('custom')}
-            >직접선택</button>
+            >
+              <span className="tj-mood-info">
+                <span className="tj-mood-name">컬러 없음</span>
+                <span className="tj-mood-desc">색 없이 깔끔하게</span>
+              </span>
+            </button>
           </div>
-          {config.accent === 'custom' && (
-            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
-              과목을 추가·수정할 때 그 과목의 색을 직접 고를 수 있어요.
-            </div>
-          )}
         </label>
 
         <label>
