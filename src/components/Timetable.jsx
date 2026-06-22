@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { getAccents, getFontFamily, getFontScale, resolveBackground } from '../App';
+import { getFontFamily, getFontScale, resolveBackground, getSubjectColor, isFullFill, textColorOn } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -49,8 +49,7 @@ export default function Timetable({
   useEffect(() => {
     if (!dragSubject) return;
     
-    const palAcc = getAccents(config.accent);
-    const palColor = palAcc ? palAcc[dragSubject.colorIndex % palAcc.length] : '#888';
+    const palColor = getSubjectColor(config, dragSubject) || '#888';
 
     function handleMove(e) {
       const p = getEventPoint(e);
@@ -141,8 +140,7 @@ export default function Timetable({
 
     const dragSubj = subjects.find(s => s.id === internalDrag.subjectId);
     const dragLabel = dragSubj ? dragSubj.name : '';
-    const intAcc = getAccents(config.accent);
-    const intColor = (intAcc && dragSubj) ? intAcc[dragSubj.colorIndex % intAcc.length] : '#888';
+    const intColor = getSubjectColor(config, dragSubj) || '#888';
 
     function handleMove(e) {
       e.preventDefault();
@@ -286,8 +284,8 @@ export default function Timetable({
   const hours = [];
   for (let h = config.startHour; h <= config.endHour; h++) hours.push(h);
   const colTpl = `${COL_W_LABEL}px repeat(${days.length}, 1fr)`;
-  const accents = getAccents(config.accent);
-  
+  const fullFill = isFullFill(config);
+
   const fontFamily = getFontFamily(config.font);
   const bgBorder = resolveBackground(config).border;
   const fontScale = getFontScale(config.fontScale);
@@ -346,9 +344,16 @@ export default function Timetable({
                 zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
-              if (accents) {
-                style.borderLeftColor = accents[subj.colorIndex % accents.length];
-                className += ' with-accent';
+              const c = getSubjectColor(config, subj);
+              if (c) {
+                if (fullFill) {
+                  style.background = c;
+                  style.color = textColorOn(c);
+                  className += ' with-fill';
+                } else {
+                  style.borderLeftColor = c;
+                  className += ' with-accent';
+                }
               }
               return (
                 <div

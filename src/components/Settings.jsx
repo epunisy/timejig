@@ -76,6 +76,10 @@ export default function Settings({
     onConfigChange({ ...config, accent });
   }
 
+  function setColorFill(colorFill) {
+    onConfigChange({ ...config, colorFill });
+  }
+
   function setFont(font) {
     onConfigChange({ ...config, font });
   }
@@ -195,21 +199,45 @@ export default function Settings({
         </label>
         
         <label>
-          <span>{t('colorBand')}</span>
+          <span>색</span>
           <div className="tj-mode-strip">
             <button
               className={config.accent === 'pastel' ? 'active' : ''}
               onClick={() => setAccent('pastel')}
-            >{t('accentPastel')}</button>
-            <button
-              className={config.accent === 'mono' ? 'active' : ''}
-              onClick={() => setAccent('mono')}
-            >{t('accentMono')}</button>
+            >파스텔</button>
             <button
               className={config.accent === 'none' ? 'active' : ''}
               onClick={() => setAccent('none')}
-            >{t('accentNone')}</button>
+            >없음</button>
+            <button
+              className={config.accent === 'custom' ? 'active' : ''}
+              onClick={() => setAccent('custom')}
+            >직접선택</button>
           </div>
+          {config.accent === 'custom' && (
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
+              과목을 추가·수정할 때 그 과목의 색을 직접 고를 수 있어요.
+            </div>
+          )}
+        </label>
+
+        <label>
+          <span>색 채우기</span>
+          <div className="tj-mode-strip">
+            <button
+              className={(config.colorFill || 'band') === 'band' ? 'active' : ''}
+              onClick={() => setColorFill('band')}
+            >색띠</button>
+            <button
+              className={config.colorFill === 'full' ? 'active' : ''}
+              onClick={() => setColorFill('full')}
+            >칸 전체</button>
+          </div>
+          {config.accent === 'none' && (
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
+              ‘색: 없음’ 이라 색은 표시되지 않아요.
+            </div>
+          )}
         </label>
 
         <label>

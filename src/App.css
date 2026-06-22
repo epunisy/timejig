@@ -658,6 +658,11 @@ html, body {
   padding-left: 2px;
 }
 
+/* 칸 전체 색칠 — 배경색은 인라인, 글씨는 블록 글씨색(자동 대비) 상속 */
+.tj-block.with-fill { border-color: rgba(0, 0, 0, 0.12); }
+.tj-block.with-fill .nm,
+.tj-block.with-fill .tm { color: inherit; }
+
 .tj-block .nm {
   font-weight: 400;
   font-size: var(--tj-nm, 10px);
@@ -753,6 +758,9 @@ html, body {
 }
 
 .tj-pal-item.with-accent { border-left-width: 6px; }
+.tj-pal-item.with-fill { border-color: rgba(0, 0, 0, 0.12); }
+.tj-pal-item.with-fill .tj-pal-name,
+.tj-pal-item.with-fill .tj-pal-dur { color: inherit; }
 
 /* 과목 카드 수정 버튼 (우상단 ✎) */
 .tj-pal-edit {

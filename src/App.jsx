@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
-import { saveData, loadData } from './storage';
+import { saveData, loadData, clearData } from './storage';
 import Setup from './components/Setup';
 import Main from './components/Main';
 import Export from './components/Export';
+import ConfirmDialog from './components/ConfirmDialog';
 import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle, checkRedirect } from './firebase';
 
 // 색띠 옵션
@@ -18,8 +19,33 @@ export const ACCENT_MONO = [
 
 export function getAccents(accent) {
   if (accent === 'pastel') return ACCENT_PASTEL;
-  if (accent === 'mono') return ACCENT_MONO;
+  return null; // 'none' / 'custom' 은 팔레트가 없음(직접선택은 과목별 색을 따로 가짐)
+}
+
+// 과목 하나의 색 — '직접선택'이면 과목 지정색, '파스텔'이면 분류(colorIndex) 팔레트색, '없음'이면 색 없음
+export function getSubjectColor(config, subject) {
+  if (!subject) return null;
+  if (config.accent === 'custom') return subject.color || '#D9D9D9';
+  if (config.accent === 'pastel') return ACCENT_PASTEL[(subject.colorIndex || 0) % ACCENT_PASTEL.length];
   return null;
+}
+
+// 월 교육비 분류별 띠그래프 색 — 색을 쓰면(파스텔/직접선택) 분류 구분용 파스텔, '없음'이면 null
+export function getCategoryColors(config) {
+  return config.accent === 'none' ? null : ACCENT_PASTEL;
+}
+
+// 색 채우기 방식: true=칸 전체, false=왼쪽 색띠
+export function isFullFill(config) {
+  return (config.colorFill || 'band') === 'full';
+}
+
+// 색을 칸 전체로 채울 때 글씨색 — 배경이 밝으면 진회색, 어두우면 흰색
+export function textColorOn(hex) {
+  if (!hex || hex[0] !== '#') return '#444';
+  const h = hex.length === 4 ? '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3] : hex;
+  const r = parseInt(h.slice(1, 3), 16), g = parseInt(h.slice(3, 5), 16), b = parseInt(h.slice(5, 7), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#333' : '#fff';
 }
 
 // 과목 분류(색띠) — 분류 = 색. 색띠 그래프(포션)도 이 분류로 묶는다.
@@ -152,6 +178,7 @@ const DEFAULT_CONFIG = {
   dayLang: 'en',
   bg: 'graph',
   bgImage: null,
+  colorFill: 'band', // 색 채우기: band(왼쪽 띠) | full(칸 전체)
 };
 
 // 기본값
@@ -165,15 +192,22 @@ const DEFAULT_STATE = {
   tutorialDone: false,
 };
 
-// 예전 데이터(시간표별 config 없음) 마이그레이션 — 각 시간표에 전역 config 를 복사해 넣는다.
+// 설정 보정 — 빠진 키는 기본값으로 채우고, 없어진 옵션(흑백)은 파스텔로 옮긴다.
+function fixConfig(c) {
+  const cfg = { ...DEFAULT_CONFIG, ...(c || {}) };
+  if (cfg.accent === 'mono') cfg.accent = 'pastel'; // 흑백 제거 → 파스텔로 대체
+  if (cfg.colorFill !== 'full') cfg.colorFill = 'band';
+  return cfg;
+}
+
+// 예전 데이터 마이그레이션 — 각 시간표에 config 를 채우고, 설정값을 보정한다.
 function normalizeData(data) {
   if (!data || !Array.isArray(data.timetables)) return data;
-  const base = data.config || DEFAULT_CONFIG;
+  const base = fixConfig(data.config);
   return {
     ...data,
-    timetables: data.timetables.map(tt =>
-      tt.config ? tt : { ...tt, config: { ...base } }
-    ),
+    config: base,
+    timetables: data.timetables.map(tt => ({ ...tt, config: fixConfig(tt.config || base) })),
   };
 }
 
@@ -196,6 +230,9 @@ function App() {
 
   // 첫 화면 미리보기 (데이터 변경 없이 보기만)
   const [setupPreview, setSetupPreview] = useState(false);
+
+  // 로그아웃 확인 (로그아웃하면 이 기기의 로컬 데이터를 비움 — 클라우드 백업은 유지)
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   // 데이터 바뀔 때마다 자동 저장 (설정 완료 후 메인/내보내기에서만)
   useEffect(() => {
@@ -307,7 +344,13 @@ function App() {
     try { await signInGoogle(); }
     catch (e) { alert('로그인 오류: ' + (e?.code || e?.message || e)); }
   }
-  function handleSignOut() { signOutGoogle(); }
+  function handleSignOut() { setConfirmLogout(true); }
+  async function doSignOut() {
+    setConfirmLogout(false);
+    try { await signOutGoogle(); } catch { /* 무시 */ }
+    clearData();            // 이 기기의 로컬 데이터 비움 (클라우드 백업은 그대로)
+    window.location.reload(); // 새로고침 → 첫 화면
+  }
 
   // 시작 화면에서 "시작하기" 눌렀을 때 (이름·시간 범위 반영)
   function handleSetupDone(name, startHour, endHour, accent) {
@@ -373,6 +416,16 @@ function App() {
           data={data}
           setData={setData}
           onBack={() => setMode('main')}
+        />
+      )}
+
+      {confirmLogout && (
+        <ConfirmDialog
+          title="로그아웃"
+          message={'로그아웃하면 이 기기에서 시간표가 사라져요.<br><span style="color:#888; font-size:11px;">클라우드 백업은 남아 있어, 다시 로그인하면 그대로 불러와요.</span>'}
+          confirmText="로그아웃"
+          onYes={doSignOut}
+          onClose={() => setConfirmLogout(false)}
         />
       )}
 

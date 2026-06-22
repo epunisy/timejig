@@ -2,9 +2,17 @@ import { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import { getAccents, CATEGORIES } from '../App';
 
+// 직접선택 색 팔레트 (밝은 톤 위주 — 칸 전체로 채워도 글씨가 보이게)
+const CUSTOM_COLORS = [
+  '#F4A8A8', '#F6C28B', '#F7E08B', '#BFE3A0', '#9FE1CB', '#9CD3EF',
+  '#B5D4F4', '#C9B8F0', '#E7B5DE', '#D8C3A5', '#C9CED4', '#9AA3AD',
+];
+
 export default function SubjectModal({ subject, config, onSave, onCancel, onDelete }) {
   const accents = getAccents(config.accent);
+  const isCustomColor = config.accent === 'custom';
   const isEdit = subject !== null;
+  const [customColor, setCustomColor] = useState(subject?.color || CUSTOM_COLORS[0]);
 
   // 분류 = 색띠. 기존 데이터 호환: category 없으면 colorIndex로 추정, 그것도 없으면 '기타'
   const initCategory = subject?.category
@@ -33,7 +41,7 @@ export default function SubjectModal({ subject, config, onSave, onCancel, onDele
     const duration = durMode === 'custom' ? (parseInt(customDur, 10) || 60) : parseInt(durMode, 10);
     const price = parseInt(priceStr, 10) || 0;
     const colorIndex = Math.max(0, CATEGORIES.indexOf(category));
-    onSave({ name, duration, colorIndex, price, priceType, category });
+    onSave({ name, duration, colorIndex, price, priceType, category, color: customColor });
   }
   
   function handleKeyDown(e) {
@@ -110,8 +118,34 @@ export default function SubjectModal({ subject, config, onSave, onCancel, onDele
           />
         </label>
         
+        {isCustomColor && (
+          <label>
+            <span>색 (직접선택)</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px' }}>
+              {CUSTOM_COLORS.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  aria-label={'색 ' + c}
+                  onClick={() => setCustomColor(c)}
+                  style={{
+                    height: '28px', background: c, cursor: 'pointer',
+                    border: customColor.toLowerCase() === c.toLowerCase() ? '2px solid #222' : '1px solid #ddd',
+                  }}
+                />
+              ))}
+            </div>
+            <input
+              type="color"
+              value={customColor}
+              onChange={(e) => setCustomColor(e.target.value)}
+              style={{ marginTop: '6px', width: '100%', height: '30px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}
+            />
+          </label>
+        )}
+
         <label>
-          <span>분류 (색띠)</span>
+          <span>분류{accents ? ' (색)' : ' (학원비 묶음)'}</span>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
             {CATEGORIES.map((cat, i) => (
               <button
@@ -132,11 +166,13 @@ export default function SubjectModal({ subject, config, onSave, onCancel, onDele
               >{cat}</button>
             ))}
           </div>
-          {!accents && (
-            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
-              색띠는 [서식설정 → 색띠: 없음]이라 색은 표시되지 않지만 분류는 저장돼요.
-            </div>
-          )}
+          <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
+            {isCustomColor
+              ? '분류는 월 교육비를 묶는 데 쓰여요. 색은 위에서 직접 골라요.'
+              : config.accent === 'none'
+                ? '‘색: 없음’ 이라 색은 표시되지 않지만 분류는 저장돼요.'
+                : '분류에 따라 색이 정해져요.'}
+          </div>
         </label>
         
         <div className="tj-modal-actions">

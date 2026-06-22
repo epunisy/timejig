@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getAccents, getFontFamily, getFontScale, resolveBackground, bgStyle } from '../App';
+import { getFontFamily, getFontScale, resolveBackground, bgStyle, getSubjectColor, textColorOn } from '../App';
 
 const ALL_DAYS = ['월','화','수','목','금','토','일'];
 const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -18,24 +18,13 @@ export default function Export({ data, onBack }) {
   const [formatBasis, setFormatBasis] = useState(data.activeTT);
   const captureRef = useRef(null);
 
-  // 콜라주 서식 기준 — 선택한 시간표 중 어느 시간표의 설정(시간대·요일·배경·글꼴)으로 통일해 그릴지.
+  // 서식 기준 — 콜라주에서 '글꼴·배경'만 이 시간표 기준으로 통일 (시간대·요일·색은 각 시간표 그대로).
   const formatTTId = selection.includes(formatBasis) ? formatBasis : (selection[0] ?? data.activeTT);
   const fmtConfig = (data.timetables.find(t => t.id === formatTTId)?.config) || data.config;
 
-  const dayCount = fmtConfig.weekRange === 'mon-fri' ? 5
-    : fmtConfig.weekRange === 'mon-sat' ? 6 : 7;
-  const days = ALL_DAYS.slice(0, dayCount);
-  const dayLabels = (fmtConfig.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
-  const totalMin = (fmtConfig.endHour - fmtConfig.startHour) * 60;
-  const accents = getAccents(fmtConfig.accent);
+  // 배경은 화면 전체에 적용 → 서식 기준 시간표의 배경으로 통일
   const bgTheme = resolveBackground(fmtConfig);
-  
-  function fmtTime(min) {
-    const h = fmtConfig.startHour + Math.floor(min / 60);
-    const m = min % 60;
-    return pad(h) + ':' + pad(m);
-  }
-  
+
   function togglePick(id) {
     if (selection.includes(id)) {
       setSelection(selection.filter(x => x !== id));
@@ -113,14 +102,6 @@ export default function Export({ data, onBack }) {
   //  전부 명시적 px + 1px 테두리로 계산 → 미리보기와 PNG가 동일하게 나옴)
   function renderSchedules(boxW, boxH) {
     const n = selectedTTs.length || 1;
-    const startHour = fmtConfig.startHour;
-    const hourCount = fmtConfig.endHour - startHour;
-    const hours = [];
-    for (let h = startHour; h <= fmtConfig.endHour; h++) hours.push(h);
-
-    // 왼쪽 시간축 + 요일 컬럼
-    const timeColW = Math.max(10, Math.round(boxW * 0.08));
-    const colW = (boxW - timeColW) / days.length;
     const gap = Math.round(boxH * 0.03);
 
     // 1개면 화면을 가능한 한 채우고, 여러 개(콜라주)면 너무 길어지지 않게 높이 제한
@@ -130,130 +111,154 @@ export default function Export({ data, onBack }) {
     const usedH = wrapH * n + gap * (n - 1);
     const offsetTop = Math.max(0, Math.round((boxH - usedH) / 2));
 
-    // 요일·과목명·시간표 이름 모두 동일한 폰트 크기 (요일 글자 기준)
-    const font = Math.max(7, Math.round(colW * 0.18));
-    const labelFont = font;
-    const labelH = Math.round(labelFont * 1.6);
-    const headFont = font;
-    // 요일 헤더 높이를 시간축 폭과 동일하게 (코너가 정사각형이 되어 균형있게)
-    const headH = Math.max(Math.round(headFont * 1.8), timeColW);
-    // 과목 블록 글씨만 사용자 배율 적용 (요일/이름/시간축은 비율 유지)
-    const blockFont = Math.max(6, Math.round(font * getFontScale(fmtConfig.fontScale)));
-    const timeFont = Math.max(5, Math.round(font * 0.85));
-    const timeLabelH = Math.round(timeFont * 1.2);
-    const accentW = Math.max(3, Math.round(colW * 0.06));
-    const schedH = Math.max(0, wrapH - labelH);
-    const bodyH = Math.max(0, schedH - headH);
-
+    // 글꼴만 통일 (서식 기준 시간표 기준)
     const fontFamily = getFontFamily(fmtConfig.font);
 
     return (
       <div style={{ width: boxW + 'px', height: boxH + 'px', boxSizing: 'border-box', paddingTop: offsetTop + 'px', ...(fontFamily ? { fontFamily } : {}) }}>
-        {selectedTTs.map((tt, wi) => (
-          <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
-            {/* 시간표 이름 — 배경 밝기에 따라 글씨색 자동, 사진 위에선 외곽 그림자로 가독성 */}
-            <div style={{
-              height: labelH + 'px', lineHeight: labelH + 'px',
-              fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
-              textShadow: bgTheme.image ? bgTheme.shadow : undefined,
-              paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
-            }}>{tt.name}</div>
+        {selectedTTs.map((tt, wi) => {
+          // 각 시간표는 자기 서식(시간대·요일·색·색채우기)을 그대로 사용
+          const cfg = tt.config || data.config;
+          const ttDayCount = cfg.weekRange === 'mon-fri' ? 5 : cfg.weekRange === 'mon-sat' ? 6 : 7;
+          const ttDays = ALL_DAYS.slice(0, ttDayCount);
+          const ttDayLabels = (cfg.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, ttDayCount);
+          const startHour = cfg.startHour;
+          const endHour = cfg.endHour;
+          const hourCount = endHour - startHour;
+          const ttTotalMin = hourCount * 60;
+          const hours = [];
+          for (let h = startHour; h <= endHour; h++) hours.push(h);
+          const fullFill = (cfg.colorFill || 'band') === 'full';
+          const fmtT = (min) => { const h = startHour + Math.floor(min / 60); const m = min % 60; return pad(h) + ':' + pad(m); };
 
-            <div style={{
-              height: schedH + 'px', boxSizing: 'border-box',
-              border: '1px solid ' + (bgTheme.border || '#ddd'), background: '#fff', overflow: 'hidden',
-            }}>
-              {/* 헤더 — 시간축 코너 + 요일 (찐그레이 글자 + 연그레이 바탕) */}
-              <div style={{ display: 'flex', height: headH + 'px' }}>
-                <div style={{
-                  width: timeColW + 'px', boxSizing: 'border-box',
-                  background: '#ececec', borderRight: '1px solid #fff',
-                }}></div>
-                {days.map((d, i) => (
-                  <div key={d} style={{
-                    width: colW + 'px', boxSizing: 'border-box',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: headFont + 'px', fontWeight: 600, color: '#444',
-                    background: '#ececec',
-                    borderRight: i < days.length - 1 ? '1px solid #fff' : 'none',
-                  }}>{dayLabels[i]}</div>
-                ))}
-              </div>
-              {/* 본문 — 시간축 + 요일별 컬럼 + 블록 */}
-              <div style={{ display: 'flex', height: bodyH + 'px' }}>
-                {/* 왼쪽 시간축 (요일과 동일한 연그레이 바탕) */}
-                <div style={{
-                  width: timeColW + 'px', boxSizing: 'border-box', position: 'relative',
-                  background: '#ececec', borderRight: '1px solid #fff',
-                }}>
-                  {hours.map((h, i) => {
-                    let topPx = (i / hourCount) * bodyH;
-                    if (i === hourCount) topPx = bodyH - timeLabelH;
-                    return (
-                      <div key={h} style={{
-                        position: 'absolute', left: 0, right: 0, top: topPx + 'px',
-                        height: timeLabelH + 'px', lineHeight: timeLabelH + 'px',
-                        textAlign: 'center', fontSize: timeFont + 'px', color: '#444',
-                      }}>{pad(h)}</div>
-                    );
-                  })}
+          const timeColW = Math.max(10, Math.round(boxW * 0.08));
+          const colW = (boxW - timeColW) / ttDays.length;
+          const font = Math.max(7, Math.round(colW * 0.18));
+          const labelFont = font;
+          const labelH = Math.round(labelFont * 1.6);
+          const headFont = font;
+          const headH = Math.max(Math.round(headFont * 1.8), timeColW);
+          const blockFont = Math.max(6, Math.round(font * getFontScale(cfg.fontScale)));
+          const timeFont = Math.max(5, Math.round(font * 0.85));
+          const timeLabelH = Math.round(timeFont * 1.2);
+          const accentW = Math.max(3, Math.round(colW * 0.06));
+          const schedH = Math.max(0, wrapH - labelH);
+          const bodyH = Math.max(0, schedH - headH);
+
+          return (
+            <div key={tt.id} style={{ height: wrapH + 'px', marginBottom: (wi < n - 1 ? gap : 0) + 'px' }}>
+              {/* 시간표 이름 — 배경 밝기에 따라 글씨색 자동, 사진 위에선 외곽 그림자로 가독성 */}
+              <div style={{
+                height: labelH + 'px', lineHeight: labelH + 'px',
+                fontSize: labelFont + 'px', fontWeight: 500, color: bgTheme.text,
+                textShadow: bgTheme.image ? bgTheme.shadow : undefined,
+                paddingLeft: '2px', overflow: 'hidden', whiteSpace: 'nowrap',
+              }}>{tt.name}</div>
+
+              <div style={{
+                height: schedH + 'px', boxSizing: 'border-box',
+                border: '1px solid ' + (bgTheme.border || '#ddd'), background: '#fff', overflow: 'hidden',
+              }}>
+                {/* 헤더 — 시간축 코너 + 요일 (찐그레이 글자 + 연그레이 바탕) */}
+                <div style={{ display: 'flex', height: headH + 'px' }}>
+                  <div style={{
+                    width: timeColW + 'px', boxSizing: 'border-box',
+                    background: '#ececec', borderRight: '1px solid #fff',
+                  }}></div>
+                  {ttDays.map((d, i) => (
+                    <div key={d} style={{
+                      width: colW + 'px', boxSizing: 'border-box',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: headFont + 'px', fontWeight: 600, color: '#444',
+                      background: '#ececec',
+                      borderRight: i < ttDays.length - 1 ? '1px solid #fff' : 'none',
+                    }}>{ttDayLabels[i]}</div>
+                  ))}
                 </div>
-                {days.map((d, i) => (
-                  <div key={d} style={{
-                    width: colW + 'px', boxSizing: 'border-box', position: 'relative',
-                    borderRight: i < days.length - 1 ? '1px solid #ececec' : 'none',
+                {/* 본문 — 시간축 + 요일별 컬럼 + 블록 */}
+                <div style={{ display: 'flex', height: bodyH + 'px' }}>
+                  {/* 왼쪽 시간축 (요일과 동일한 연그레이 바탕) */}
+                  <div style={{
+                    width: timeColW + 'px', boxSizing: 'border-box', position: 'relative',
+                    background: '#ececec', borderRight: '1px solid #fff',
                   }}>
-                    {/* 시간 눈금선 */}
-                    {hours.slice(1, hourCount).map((h, j) => (
-                      <div key={'l' + h} style={{
-                        position: 'absolute', left: 0, right: 0,
-                        top: (((j + 1) / hourCount) * bodyH) + 'px',
-                        height: '1px', background: '#eee',
-                      }}></div>
-                    ))}
-                    {tt.blocks.filter(b => b.day === d).map(b => {
-                      const subj = data.subjects.find(s => s.id === b.subjectId);
-                      if (!subj) return null;
-                      const top = (b.start / totalMin) * bodyH;
-                      const h = ((b.end - b.start) / totalMin) * bodyH;
-                      const blkStyle = {
-                        position: 'absolute', left: 0, right: 0,
-                        top: top + 'px', height: h + 'px',
-                        boxSizing: 'border-box',
-                        background: '#fff', border: '1px solid #bbb',
-                        display: 'flex', flexDirection: 'column',
-                        alignItems: 'center', justifyContent: 'center',
-                        overflow: 'hidden', padding: '0 1px',
-                      };
-                      if (accents) {
-                        blkStyle.borderLeft = accentW + 'px solid ' + accents[subj.colorIndex % accents.length];
-                      }
+                    {hours.map((h, i) => {
+                      let topPx = (i / hourCount) * bodyH;
+                      if (i === hourCount) topPx = bodyH - timeLabelH;
                       return (
-                        <div key={b.id} style={blkStyle}>
-                          {/* 과목명 — 찐그레이 */}
-                          <span style={{
-                            fontSize: blockFont + 'px', fontWeight: 400, color: '#444',
-                            lineHeight: 1.15, textAlign: 'center',
-                            maxWidth: '100%', overflow: 'hidden',
-                            wordBreak: 'keep-all', overflowWrap: 'break-word',
-                          }}>{subj.name}</span>
-                          {showTimeNow && (
-                            <span style={{
-                              fontSize: Math.max(4, Math.round(font * 0.8)) + 'px',
-                              color: '#444', lineHeight: 1.2, marginTop: '1px',
-                              textAlign: 'center', whiteSpace: 'normal',
-                              overflowWrap: 'break-word', maxWidth: '100%',
-                            }}>{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</span>
-                          )}
-                        </div>
+                        <div key={h} style={{
+                          position: 'absolute', left: 0, right: 0, top: topPx + 'px',
+                          height: timeLabelH + 'px', lineHeight: timeLabelH + 'px',
+                          textAlign: 'center', fontSize: timeFont + 'px', color: '#444',
+                        }}>{pad(h)}</div>
                       );
                     })}
                   </div>
-                ))}
+                  {ttDays.map((d, i) => (
+                    <div key={d} style={{
+                      width: colW + 'px', boxSizing: 'border-box', position: 'relative',
+                      borderRight: i < ttDays.length - 1 ? '1px solid #ececec' : 'none',
+                    }}>
+                      {/* 시간 눈금선 */}
+                      {hours.slice(1, hourCount).map((h, j) => (
+                        <div key={'l' + h} style={{
+                          position: 'absolute', left: 0, right: 0,
+                          top: (((j + 1) / hourCount) * bodyH) + 'px',
+                          height: '1px', background: '#eee',
+                        }}></div>
+                      ))}
+                      {tt.blocks.filter(b => b.day === d).map(b => {
+                        const subj = data.subjects.find(s => s.id === b.subjectId);
+                        if (!subj) return null;
+                        const top = (b.start / ttTotalMin) * bodyH;
+                        const h = ((b.end - b.start) / ttTotalMin) * bodyH;
+                        const col = getSubjectColor(cfg, subj);
+                        const blkStyle = {
+                          position: 'absolute', left: 0, right: 0,
+                          top: top + 'px', height: h + 'px',
+                          boxSizing: 'border-box',
+                          background: '#fff', border: '1px solid #bbb',
+                          display: 'flex', flexDirection: 'column',
+                          alignItems: 'center', justifyContent: 'center',
+                          overflow: 'hidden', padding: '0 1px',
+                        };
+                        let txtColor = '#444';
+                        if (col) {
+                          if (fullFill) {
+                            blkStyle.background = col;
+                            blkStyle.border = '1px solid rgba(0,0,0,0.12)';
+                            txtColor = textColorOn(col);
+                          } else {
+                            blkStyle.borderLeft = accentW + 'px solid ' + col;
+                          }
+                        }
+                        return (
+                          <div key={b.id} style={blkStyle}>
+                            {/* 과목명 */}
+                            <span style={{
+                              fontSize: blockFont + 'px', fontWeight: 400, color: txtColor,
+                              lineHeight: 1.15, textAlign: 'center',
+                              maxWidth: '100%', overflow: 'hidden',
+                              wordBreak: 'keep-all', overflowWrap: 'break-word',
+                            }}>{subj.name}</span>
+                            {showTimeNow && (
+                              <span style={{
+                                fontSize: Math.max(4, Math.round(font * 0.8)) + 'px',
+                                color: txtColor, lineHeight: 1.2, marginTop: '1px',
+                                textAlign: 'center', whiteSpace: 'normal',
+                                overflowWrap: 'break-word', maxWidth: '100%',
+                              }}>{fmtT(b.start)}~<wbr />{fmtT(b.end)}</span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }
@@ -309,7 +314,7 @@ export default function Export({ data, onBack }) {
                 ))}
               </div>
               <div style={{ fontSize: '10px', color: '#888', marginTop: '4px', lineHeight: 1.4 }}>
-                선택한 시간표들을 이 시간표의 서식(시간대·요일·배경·글꼴)으로 통일해 그려요.
+                선택한 시간표들의 글꼴·배경만 이 시간표 기준으로 통일해요.<br />시간대·요일·색은 각 시간표 그대로예요.
               </div>
             </div>
           )}

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { t } from '../i18n';
-import { getAccents, getFontFamily, CATEGORIES } from '../App';
+import { getFontFamily, CATEGORIES, getSubjectColor, getCategoryColors, isFullFill, textColorOn } from '../App';
 
 // 비밀번호 입력칸의 눈 아이콘 같은 표시(보임/숨김)
 function Eye({ off }) {
@@ -35,7 +35,8 @@ export default function Palette({
   memo,
   onMemoChange,
 }) {
-  const accents = getAccents(config.accent);
+  const catColors = getCategoryColors(config);
+  const fullFill = isFullFill(config);
   const fontFamily = getFontFamily(config.font);
   const itemRefs = useRef({});
   const [costHidden, setCostHidden] = useState(false);
@@ -147,9 +148,16 @@ export default function Palette({
             const style = {};
             let className = 'tj-pal-item';
             if (!s.active) className += ' inactive';
-            if (accents) {
-              style.borderLeftColor = accents[s.colorIndex % accents.length];
-              className += ' with-accent';
+            const c = getSubjectColor(config, s);
+            if (c) {
+              if (fullFill) {
+                style.background = c;
+                style.color = textColorOn(c);
+                className += ' with-fill';
+              } else {
+                style.borderLeftColor = c;
+                className += ' with-accent';
+              }
             }
             return (
               <div 
@@ -177,7 +185,7 @@ export default function Palette({
             <span>월 교육비</span>
             <button className="tj-eye-btn" onClick={() => setCostHidden(h => !h)} aria-label="교육비 숨기기"><Eye off={costHidden} /></button>
           </div>
-          {!costHidden && accents && monthlyCost > 0 && (
+          {!costHidden && catColors && monthlyCost > 0 && (
             <>
               <div className="tj-cost-bar">
                 {CATEGORIES.map((cat, i) => {
@@ -186,7 +194,7 @@ export default function Palette({
                   return (
                     <div
                       key={cat}
-                      style={{ width: (amt / monthlyCost * 100) + '%', background: accents[i % accents.length] }}
+                      style={{ width: (amt / monthlyCost * 100) + '%', background: catColors[i % catColors.length] }}
                       title={`${cat} ₩${amt.toLocaleString()}`}
                     />
                   );
@@ -198,7 +206,7 @@ export default function Palette({
                   if (!amt) return null;
                   return (
                     <span key={cat} className="tj-cost-leg">
-                      <span className="dot" style={{ background: accents[i % accents.length] }} />
+                      <span className="dot" style={{ background: catColors[i % catColors.length] }} />
                       {cat} ₩{amt.toLocaleString()}
                     </span>
                   );
