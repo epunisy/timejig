@@ -212,13 +212,14 @@ html, body {
   flex-shrink: 0;
 }
 
-/* 로고 메뉴 칩 — 모바일은 ☰ 눌렀을 때만(menu-open), PC는 항상 노출 */
-.tj-topbar-r2 .tj-logo-chip { display: none; }
-.tj-topbar-r2.menu-open .tj-logo-chip { display: inline-flex; }
+/* 로고 메뉴 칩 — 모바일은 ☰ 눌렀을 때만(menu-open), PC는 항상 노출
+   (.tj-cta.tj-logo-chip 로 .tj-cta 통일 규칙보다 우선순위 높임) */
+.tj-topbar-r2 .tj-cta.tj-logo-chip { display: none; }
+.tj-topbar-r2.menu-open .tj-cta.tj-logo-chip { display: inline-flex; }
 
 @media (min-width: 900px) {
-  .tj-menu-btn { display: none; }                       /* PC는 ☰ 숨김 */
-  .tj-topbar-r2 .tj-logo-chip { display: inline-flex; } /* PC는 항상 한 줄로 노출 */
+  .tj-menu-btn { display: none; }                               /* PC는 ☰ 숨김 */
+  .tj-topbar-r2 .tj-cta.tj-logo-chip { display: inline-flex; }  /* PC는 항상 한 줄로 노출 */
 }
 
 /* ===== 상단 바 ===== */
