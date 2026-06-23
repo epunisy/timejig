@@ -455,11 +455,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         />
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
-        <div className="tj-undoredo">
-          <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" title="되돌리기">↶</button>
-          <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
-        </div>
-        <div className="tj-r1-right">
         <div className="tj-ttbar">
           <button
             className="tj-tt-current"
@@ -544,16 +539,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
-        <button
-          className={'tj-lockbtn' + (locked ? ' on' : '')}
-          onClick={() => setLocked(l => !l)}
-          aria-pressed={locked}
-          title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
-        >{locked ? '🔒' : '🔓'}</button>
         <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
           {user ? '로그아웃' : '로그인'}
         </button>
-        </div>
         </div>
         <div className="tj-topbar-r2">
           <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
@@ -564,6 +552,19 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           </button>
           <button className="tj-cta" onClick={onGoExport}>
             📱 모바일 잠금화면
+          </button>
+          <div className="tj-undoredo">
+            <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" title="되돌리기">↶</button>
+            <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
+          </div>
+          <button
+            className={'tj-switch' + (locked ? ' on' : '')}
+            onClick={() => setLocked(l => !l)}
+            aria-pressed={locked}
+            title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
+          >
+            <span className="tj-switch-ico">{locked ? '🔒' : '🔓'}</span>
+            <span className="tj-switch-track"><span className="tj-switch-knob" /></span>
           </button>
         </div>
         </div>

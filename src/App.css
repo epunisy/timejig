@@ -211,7 +211,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: space-between;
+  justify-content: flex-end;
   order: 0;
 }
 .tj-topbar-r1 .tj-ttbar { min-width: 0; }
@@ -309,6 +309,7 @@ html, body {
   white-space: nowrap;
 }
 .tj-switch.on { color: #9a6a12; }
+.tj-switch-ico { font-size: 13px; line-height: 1; }
 .tj-switch-track {
   position: relative;
   width: 30px;
