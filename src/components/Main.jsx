@@ -480,10 +480,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
   // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
   const logoMenuItems = [
-    { key: 'tut', label: '📖 튜토리얼 다시보기', run: () => setShowTutorial(true) },
-    { key: 'home', label: '🏠 첫 화면 돌아가기', run: () => onPreviewWelcome && onPreviewWelcome() },
-    { key: 'update', label: '🔄 최신버전 업데이트', run: () => onLogoSync && onLogoSync() },
-    { key: 'share', label: '📤 어플 공유하기', run: handleShare },
+    { key: 'tut', label: '📖 튜토리얼', run: () => setShowTutorial(true) },
+    { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
+    { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
+    { key: 'share', label: '📤 공유하기', run: handleShare },
   ];
 
   return (
@@ -493,23 +493,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img
-            src="/logo2.png"
-            alt="TimeJig"
-            className="tj-logo-top"
-            onClick={() => setLogoMenuOpen(o => !o)}
-            style={{ cursor: 'pointer' }}
-          />
-          {logoMenuOpen && (
-            <>
-              <div className="tj-logo-backdrop" onClick={() => setLogoMenuOpen(false)} />
-              <div className="tj-logo-menu">
-                {logoMenuItems.map(it => (
-                  <button key={it.key} onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
-                ))}
-              </div>
-            </>
-          )}
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
@@ -600,6 +584,19 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
           {user ? '로그아웃' : '로그인'}
         </button>
+        <div className="tj-menu-wrap">
+          <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="메뉴">☰</button>
+          {logoMenuOpen && (
+            <>
+              <div className="tj-logo-backdrop" onClick={() => setLogoMenuOpen(false)} />
+              <div className="tj-logo-menu tj-logo-menu-right">
+                {logoMenuItems.map(it => (
+                  <button key={it.key} onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
         </div>
         <div className="tj-topbar-r2">
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
@@ -628,11 +625,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
-        </div>
-        {/* PC 전용: 로고 메뉴를 상단에 칩으로 나란히 (모바일은 로고 말풍선 팝업) */}
-        <div className="tj-logo-menubar">
+          {/* PC 전용: 로고 메뉴를 같은 줄에 칩으로 (모바일은 ☰ 드롭다운) */}
           {logoMenuItems.map(it => (
-            <button key={it.key} onClick={it.run}>{it.label}</button>
+            <button key={it.key} className="tj-cta tj-pc-only" onClick={it.run}>{it.label}</button>
           ))}
         </div>
         </div>

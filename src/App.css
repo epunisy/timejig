@@ -248,36 +248,31 @@ html, body {
   transform: translateY(1px);
 }
 
-/* PC 전용 인라인 로고 메뉴바 (모바일은 숨김 → 로고 말풍선 팝업 사용) */
-.tj-logo-menubar { display: none; }
-.tj-logo-menubar button {
-  height: 23px;
-  box-sizing: border-box;
+/* 모바일 ☰ 메뉴 버튼 (로그인 옆) — 누르면 오른쪽 정렬 드롭다운 */
+.tj-menu-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; }
+.tj-menu-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #555;
+  padding: 0 4px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 11px;
-  background: #f5f6f8;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
-  font-size: 11px;
-  color: #4a4a4a;
-  cursor: pointer;
   font-family: inherit;
-  white-space: nowrap;
 }
-.tj-logo-menubar button:active { box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); transform: translateY(1px); }
+/* ☰ 드롭다운은 오른쪽 정렬 (꼬리도 오른쪽) */
+.tj-logo-menu-right { left: auto; right: 0; }
+.tj-logo-menu-right::before { left: auto; right: 16px; }
+
+/* r2 안 PC 전용 로고 메뉴 칩 — 모바일에선 숨김(☰ 드롭다운으로 대체) */
+.tj-topbar-r2 .tj-pc-only { display: none; }
 
 @media (min-width: 900px) {
-  .tj-logo-menu, .tj-logo-backdrop { display: none !important; }
-  .tj-logo-menubar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: flex-end;
-    order: 2;
-  }
+  .tj-menu-btn { display: none; }                                /* PC는 ☰ 숨김 */
+  .tj-logo-menu, .tj-logo-backdrop { display: none !important; } /* PC는 드롭다운 미사용 */
+  .tj-topbar-r2 .tj-pc-only { display: inline-flex; }            /* PC는 r2에 한 줄로 노출 */
 }
 
 /* ===== 상단 바 ===== */
