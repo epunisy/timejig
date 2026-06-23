@@ -271,6 +271,44 @@ html, body {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
+/* 고정 토글 — 스위치 형태 (잠금/해제 상태가 한눈에) */
+.tj-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  color: #6a6a6a;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+.tj-switch.on { color: #9a6a12; }
+.tj-switch-track {
+  position: relative;
+  width: 30px;
+  height: 18px;
+  border-radius: 9px;
+  background: #d4d4d4;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.tj-switch.on .tj-switch-track { background: #f0b429; }
+.tj-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: left 0.15s;
+}
+.tj-switch.on .tj-switch-knob { left: 14px; }
+
 /* ===== 시간표 목록 (드롭다운) ===== */
 .tj-ttbar { position: relative; flex: 0 1 auto; min-width: 0; }
 

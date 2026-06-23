@@ -553,8 +553,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           <button className="tj-cta" onClick={onGoExport}>
             📱 모바일 잠금화면
           </button>
-          <button className={'tj-cta' + (locked ? ' on' : '')} onClick={() => setLocked(l => !l)}>
-            {locked ? '📌 고정해제' : '📌 고정하기'}
+          <button
+            className={'tj-switch' + (locked ? ' on' : '')}
+            onClick={() => setLocked(l => !l)}
+            aria-pressed={locked}
+            title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
+          >
+            <span className="tj-switch-label">{locked ? '🔒 고정' : '🔓 고정'}</span>
+            <span className="tj-switch-track"><span className="tj-switch-knob" /></span>
           </button>
         </div>
         </div>
