@@ -92,17 +92,18 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고 클릭 — 노란 반짝이가 화면 전체에 크고작게 반짝 떴다 사라짐
+  // 로고 클릭 — 노란 4점 반짝이(트윙클)가 화면 전체에 크고작게 반짝 떴다 사라짐
   function popSparkle() {
-    const sparks = ['✨', '🌟', '⭐', '💫'];
+    const colors = ['#FFD23F', '#FFC53D', '#FFE08A', '#FFB300'];
     const vw = window.innerWidth, vh = window.innerHeight;
     for (let i = 0; i < 13; i++) {
+      const size = (10 + Math.random() * 30).toFixed(0); // 크고작게(10~40px)
+      const color = colors[Math.floor(Math.random() * colors.length)];
       const s = document.createElement('div');
       s.className = 'tj-spark';
-      s.textContent = sparks[Math.floor(Math.random() * sparks.length)];
+      s.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C12.6 7 17 11.4 24 12C17 12.6 12.6 17 12 24C11.4 17 7 12.6 0 12C7 11.4 11.4 7 12 0Z" fill="${color}"/></svg>`;
       s.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
       s.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
-      s.style.fontSize = (12 + Math.random() * 32).toFixed(0) + 'px'; // 크고작게(12~44px)
       s.style.animationDelay = (Math.random() * 260).toFixed(0) + 'ms';
       document.body.appendChild(s);
       s.addEventListener('animationend', () => s.remove());

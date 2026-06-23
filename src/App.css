@@ -202,11 +202,13 @@ html, body {
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  line-height: 1;
+  line-height: 0;
   transform: translate(-50%, -50%);
   animation: tjSparkPop 0.7s ease-out forwards;
   will-change: transform, opacity;
+  filter: drop-shadow(0 0 2px rgba(255, 200, 60, 0.85));
 }
+.tj-spark svg { display: block; }
 @keyframes tjSparkPop {
   0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(-20deg); }
   35%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
