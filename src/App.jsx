@@ -32,9 +32,14 @@ export function getSubjectColor(config, subject) {
   return pal[(subject.colorIndex || 0) % pal.length];
 }
 
-// 월 교육비 분류별 띠그래프 색 — 무드 팔레트. '색 없음'이어도 포션은 색으로 구분(기본 캔디)
+// 색 없음일 때 포션 그래프용 흑백 8단계 (진한 블랙 → 그레이 → 화이트)
+export const GRAY_SCALE = ['#2b2b2b', '#525252', '#737373', '#949494', '#b0b0b0', '#cccccc', '#e0e0e0', '#efefef'];
+
+// 월 교육비 분류별 띠그래프 색 — 무드 팔레트. '색 없음'이면 흑백 단계로 구분.
 export function getCategoryColors(config) {
-  return MOODS[config && config.accent] || MOODS.candy;
+  const acc = config && config.accent;
+  if (acc === 'none') return GRAY_SCALE;
+  return MOODS[acc] || GRAY_SCALE;
 }
 
 // 색 채우기 방식: true=칸 전체, false=왼쪽 색띠
