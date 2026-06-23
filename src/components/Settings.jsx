@@ -2,11 +2,20 @@ import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
 
-// 배경 색 프리셋 — 톡 누르면 바로 적용
+// 배경 색표 — 가로(같은 계열) 밝은→진한, 세로(색 계열). 톡 누르면 바로 적용
 const PRESET_BG_COLORS = [
-  '#FFFFFF', '#1F1F1F', '#FBF3E4', '#FFF6D6', '#FFE9EC', '#FFD9E6',
-  '#E7F0FF', '#D7E8FF', '#E3F3E0', '#DDEFE4', '#EFE6FF', '#EAE0F5',
-  '#FCE0D0', '#FFE6C0', '#D9F2F0', '#CDEDEA', '#F0F0F0', '#D7DBE0',
+  // 무채색
+  '#FFFFFF', '#ECECEC', '#CFCFCF', '#9E9E9E', '#5C5C5C', '#1F1F1F',
+  // 핑크
+  '#FFEEF2', '#FFD6E0', '#F7AEC0', '#EE7F9C', '#D85476', '#A83A57',
+  // 옐로
+  '#FFF8DD', '#FFF0B8', '#FCE183', '#F5CB4E', '#E0A92A', '#B5841C',
+  // 그린
+  '#EAF6E6', '#D2EEC8', '#AEDDA0', '#84C873', '#5BA84C', '#3E7E33',
+  // 블루
+  '#E7F1FB', '#CFE3F7', '#A6CCEF', '#74AEE2', '#4A86C6', '#346099',
+  // 퍼플
+  '#F1ECFA', '#E0D3F3', '#C5AEE8', '#A684D9', '#8460C0', '#644796',
 ];
 
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -415,7 +424,8 @@ export default function Settings({
             <button className="tj-modal-x" onClick={() => setColorPickOpen(false)} aria-label="닫기">×</button>
           </div>
           {/* 색을 톡 누르면 바로 적용 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px' }}>
+          <div style={{ fontSize: '11px', color: '#999', marginBottom: '8px' }}>원하는 색을 누르면 바로 적용돼요.</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px' }}>
             {PRESET_BG_COLORS.map(c => {
               const sel = (config.bg === 'colorpick') && (config.bgColor || '').toLowerCase() === c.toLowerCase();
               return (
@@ -425,22 +435,13 @@ export default function Settings({
                   aria-label={'배경색 ' + c}
                   onClick={() => { onConfigChange({ ...config, bg: 'colorpick', bgColor: c }); setColorPickOpen(false); }}
                   style={{
-                    height: '36px', background: c, borderRadius: '8px', cursor: 'pointer',
-                    border: sel ? '2px solid #222' : '1px solid #ddd',
+                    height: '32px', background: c, borderRadius: '7px', cursor: 'pointer',
+                    border: sel ? '2px solid #222' : '1px solid #e0e0e0',
                   }}
                 />
               );
             })}
           </div>
-          <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '14px', fontSize: '12px', color: '#555', cursor: 'pointer' }}>
-            🎨 원하는 색 직접 고르기
-            <input
-              type="color"
-              value={config.bgColor || '#ffd9e6'}
-              onChange={(e) => onConfigChange({ ...config, bg: 'colorpick', bgColor: e.target.value })}
-              style={{ width: '42px', height: '30px', border: '1px solid #ddd', borderRadius: '6px', background: '#fff', cursor: 'pointer', padding: 0 }}
-            />
-          </label>
         </div>
       </div>
     )}

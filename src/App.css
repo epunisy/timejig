@@ -56,13 +56,16 @@ html, body {
 /* ===== 시작 화면 ===== */
 .tj-setup {
   max-width: 360px;
-  margin: 30px auto 0;
+  min-height: 100dvh;
+  margin: 0 auto;
   background: #fff;
   padding: 22px 18px;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* 세로 중앙 */
   gap: 12px;
   text-align: center;
+  position: relative;
 }
 
 .tj-setup img.tj-setup-logo {
@@ -145,15 +148,16 @@ html, body {
 
 /* 첫 화면 미리보기 — 돌아가기 버튼 */
 .tj-setup-back {
-  align-self: flex-start;
+  position: absolute;
+  top: 14px;
+  left: 14px;
   background: transparent;
   border: none;
   color: #888;
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
-  padding: 2px 0;
-  margin-bottom: -4px;
+  padding: 2px 4px;
 }
 .tj-setup-back:active { opacity: 0.6; }
 
