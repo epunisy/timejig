@@ -92,20 +92,20 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고 클릭 — 아주 작은 하트들이 화면 전체에 살짝 떴다 금방 사라짐
-  function popHearts() {
-    const emojis = ['❤️', '💛', '💚', '💙', '💜', '🧡', '💖', '🩵'];
+  // 로고 클릭 — 노란 반짝이가 화면 전체에 크고작게 반짝 떴다 사라짐
+  function popSparkle() {
+    const sparks = ['✨', '🌟', '⭐', '💫'];
     const vw = window.innerWidth, vh = window.innerHeight;
-    for (let i = 0; i < 10; i++) {
-      const h = document.createElement('div');
-      h.className = 'tj-heart';
-      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      h.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
-      h.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
-      h.style.fontSize = (24 + Math.random() * 14).toFixed(0) + 'px'; // 3배 크게(24~38px)
-      h.style.animationDelay = (Math.random() * 250).toFixed(0) + 'ms';
-      document.body.appendChild(h);
-      h.addEventListener('animationend', () => h.remove());
+    for (let i = 0; i < 13; i++) {
+      const s = document.createElement('div');
+      s.className = 'tj-spark';
+      s.textContent = sparks[Math.floor(Math.random() * sparks.length)];
+      s.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
+      s.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
+      s.style.fontSize = (12 + Math.random() * 32).toFixed(0) + 'px'; // 크고작게(12~44px)
+      s.style.animationDelay = (Math.random() * 260).toFixed(0) + 'ms';
+      document.body.appendChild(s);
+      s.addEventListener('animationend', () => s.remove());
     }
   }
 
@@ -511,7 +511,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={popHearts} style={{ cursor: 'pointer' }} />
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={popSparkle} style={{ cursor: 'pointer' }} />
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
