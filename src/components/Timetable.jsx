@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { getFontFamily, getFontScale, resolveBackground, getSubjectColor, isFullFill, textColorOn } from '../App';
+import { getFontFamily, getFontScale, resolveBackground, getSubjectColor, isFullFill, textColorOn, getWeekDays, getDayLabels } from '../App';
 
-const ALL_DAYS = ['월','화','수','목','금','토','일'];
-const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
 const SLOT_MIN = 10;
 const HOUR_PX = 50;
 const PX_PER_MIN = HOUR_PX / 60;
@@ -33,10 +31,8 @@ export default function Timetable({
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
   
-  const dayCount = config.weekRange === 'mon-fri' ? 5
-    : config.weekRange === 'mon-sat' ? 6 : 7;
-  const days = ALL_DAYS.slice(0, dayCount);
-  const dayLabels = (config.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, days.length);
+  const days = getWeekDays(config);
+  const dayLabels = getDayLabels(config);
   const totalMin = (config.endHour - config.startHour) * 60;
   const bodyHeight = (config.endHour - config.startHour) * HOUR_PX;
   

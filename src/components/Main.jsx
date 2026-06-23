@@ -6,7 +6,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
-import { resolveBackground, bgStyle, CATEGORIES } from '../App';
+import { resolveBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
 
 function timeToMin(t) {
   const parts = String(t).split(':');
@@ -266,7 +266,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     const old = config;
     const startChanged = newConfig.startHour !== old.startHour;
     const endChanged = newConfig.endHour !== old.endHour;
-    const weekChanged = newConfig.weekRange !== old.weekRange;
+    const oldDays = getWeekDays(old);
+    const newDays = getWeekDays(newConfig);
+    const weekChanged = oldDays.join() !== newDays.join();
 
     // 시간 범위(시작/끝) 변경 — 새 범위 밖으로 잘려나갈 블록이 하나라도 있으면 변경을 막는다.
     if (startChanged || endChanged) {
@@ -296,15 +298,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       return;
     }
 
-    // 요일 범위 축소 — 사라지는 요일(토/일)의 블록은 제거한다.
+    // 요일 조합 변경 — 빠진 요일의 블록은 제거한다.
     if (weekChanged) {
-      const dayCount = newConfig.weekRange === 'mon-fri' ? 5
-        : newConfig.weekRange === 'mon-sat' ? 6 : 7;
-      const allowedDays = ['월', '화', '수', '목', '금', '토', '일'].slice(0, dayCount);
       updateTimetable(tt => ({
         ...tt,
         config: newConfig,
-        blocks: tt.blocks.filter(b => allowedDays.includes(b.day)),
+        blocks: tt.blocks.filter(b => newDays.includes(b.day)),
       }));
       return;
     }
@@ -335,8 +334,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
     // 등장 요일
     const presentDays = days.map(d => d.day);
-    const needSun = presentDays.includes('일');
-    const needSat = presentDays.includes('토');
 
     // 과목 이름 → id (기존 재사용, 없으면 생성)
     const subjects = [...data.subjects];
@@ -377,8 +374,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     if (mode === 'new') {
       const startHour = schoolStartHour;
       const endHour = Math.max(schoolEndHour, startHour + 1);
-      const weekRange = needSun ? 'mon-sun' : needSat ? 'mon-sat' : 'mon-fri';
-      const newConfig = { ...config, startHour, endHour, weekRange };
+      const present = FULL_WEEK.filter(d => presentDays.includes(d));
+      const weekDays = present.length ? present : getWeekDays(config);
+      const newConfig = { ...config, startHour, endHour, weekDays };
       const blocks = buildBlocks(startHour);
       const newId = Math.max(0, ...data.timetables.map(t => t.id)) + 1;
       setData({
@@ -393,9 +391,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       const oldStart = config.startHour;
       const newStartHour = Math.min(oldStart, schoolStartHour);
       const newEndHour = Math.max(config.endHour, schoolEndHour);
-      let weekRange = config.weekRange;
-      if (needSun) weekRange = 'mon-sun';
-      else if (needSat && weekRange === 'mon-fri') weekRange = 'mon-sat';
+      const dset = new Set(getWeekDays(config));
+      presentDays.forEach(d => dset.add(d));
+      const weekDays = FULL_WEEK.filter(d => dset.has(d));
       const delta = (oldStart - newStartHour) * 60;
       const schoolBlocks = buildBlocks(newStartHour);
       const mergedMemo = [(activeTT.memo || '').trim(), memoLines].filter(Boolean).join('\n');
@@ -404,7 +402,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         subjects,
         timetables: data.timetables.map(tt => tt.id === data.activeTT ? {
           ...tt,
-          config: { ...tt.config, startHour: newStartHour, endHour: newEndHour, weekRange },
+          config: { ...tt.config, startHour: newStartHour, endHour: newEndHour, weekDays },
           blocks: [...tt.blocks.map(b => ({ ...b, start: b.start + delta, end: b.end + delta })), ...schoolBlocks],
           memo: mergedMemo,
         } : tt),

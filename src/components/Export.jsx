@@ -1,10 +1,7 @@
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { t } from '../i18n';
-import { getFontFamily, getFontScale, resolveBackground, bgStyle, getSubjectColor, textColorOn } from '../App';
-
-const ALL_DAYS = ['월','화','수','목','금','토','일'];
-const ALL_DAYS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+import { getFontFamily, getFontScale, resolveBackground, bgStyle, getSubjectColor, textColorOn, getWeekDays, getDayLabels } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -119,9 +116,8 @@ export default function Export({ data, onBack }) {
         {selectedTTs.map((tt, wi) => {
           // 각 시간표는 자기 서식(시간대·요일·색·색채우기)을 그대로 사용
           const cfg = tt.config || data.config;
-          const ttDayCount = cfg.weekRange === 'mon-fri' ? 5 : cfg.weekRange === 'mon-sat' ? 6 : 7;
-          const ttDays = ALL_DAYS.slice(0, ttDayCount);
-          const ttDayLabels = (cfg.dayLang === 'en' ? ALL_DAYS_EN : ALL_DAYS).slice(0, ttDayCount);
+          const ttDays = getWeekDays(cfg);
+          const ttDayLabels = getDayLabels(cfg);
           const startHour = cfg.startHour;
           const endHour = cfg.endHour;
           const hourCount = endHour - startHour;

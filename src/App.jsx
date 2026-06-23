@@ -10,14 +10,14 @@ import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, si
 // 무드 팔레트 — 8가지 분류(국·영·수·사·과·예체능·기타·FreeTime)에 1:1로 매핑되는 색 조합
 export const MOODS = {
   // 순서 = 분류: 국어·영어·수학·사회·과학·예체능·기타·FreeTime
-  sky:  ['#5BA8E0', '#46C2B6', '#9FD7F2', '#7ED9A8', '#9FB0E8', '#CBE89A', '#B8C2CC', '#6E78C4'],
-  pink: ['#F4A9BC', '#F7C6A0', '#E8A6D6', '#C9B0E8', '#F3D58C', '#ADD9C2', '#D9B89C', '#B7C4E8'],
-  cozy: ['#A78B6F', '#7E94A6', '#C7A98B', '#9CAE8E', '#D9A6A0', '#B5A6C4', '#C2C6BE', '#E0C58C'],
+  cream:  ['#F9F2E7', '#E8D7C5', '#EFCBB8', '#FFF2C6', '#CDE7D6', '#BFD3E6', '#D8D0E8', '#DADADA'],
+  candy:  ['#FFD400', '#00CFEF', '#FF4D8D', '#00BFA5', '#FF8C00', '#FF5E6C', '#8A2BE2', '#7ED321'],
+  sorbet: ['#B7D7FF', '#D9D0F8', '#FFD1D8', '#CDECB8', '#FFF0C8', '#FBE3D0', '#E2E7FF', '#F0F0F0'],
 };
 export const MOOD_LIST = [
-  { key: 'sky', label: '스카이', desc: '깨끗하고 시원한' },
-  { key: 'pink', label: '핑크', desc: '사랑스럽고 부드러운' },
-  { key: 'cozy', label: '코지', desc: '차분하고 데일리한' },
+  { key: 'cream', label: '크림', desc: '따뜻하고 포근한 크림톤' },
+  { key: 'candy', label: '캔디', desc: '발랄하고 경쾌한 비비드' },
+  { key: 'sorbet', label: '소르베', desc: '산뜻하고 달콤한 파스텔' },
 ];
 
 export function getAccents(accent) {
@@ -48,6 +48,33 @@ export function textColorOn(hex) {
   const h = hex.length === 4 ? '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3] : hex;
   const r = parseInt(h.slice(1, 3), 16), g = parseInt(h.slice(3, 5), 16), b = parseInt(h.slice(5, 7), 16);
   return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#333' : '#fff';
+}
+
+// 요일 — 월~금/토/일 세 조각을 자유롭게 조합 (예: 월~금+일 → 토요일만 빠짐)
+export const FULL_WEEK = ['월', '화', '수', '목', '금', '토', '일'];
+export const FULL_WEEK_EN = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+export const WEEK_PARTS = [
+  { key: 'wd', label: '월~금', labelEn: 'MON–FRI', days: ['월', '화', '수', '목', '금'] },
+  { key: 'sat', label: '토', labelEn: 'SAT', days: ['토'] },
+  { key: 'sun', label: '일', labelEn: 'SUN', days: ['일'] },
+];
+
+// 설정에서 켜진 요일들을 주(週) 순서대로 반환 (비연속도 지원)
+export function getWeekDays(config) {
+  if (config && Array.isArray(config.weekDays) && config.weekDays.length) {
+    return FULL_WEEK.filter(d => config.weekDays.includes(d));
+  }
+  // 구버전 weekRange 폴백
+  const r = config && config.weekRange;
+  if (r === 'mon-fri') return ['월', '화', '수', '목', '금'];
+  if (r === 'mon-sun') return ['월', '화', '수', '목', '금', '토', '일'];
+  return ['월', '화', '수', '목', '금', '토']; // mon-sat 기본
+}
+
+// 표시용 요일 라벨 (한글/영문) — getWeekDays 와 같은 순서
+export function getDayLabels(config) {
+  const en = config && config.dayLang === 'en';
+  return getWeekDays(config).map(d => (en ? FULL_WEEK_EN[FULL_WEEK.indexOf(d)] : d));
 }
 
 // 과목 분류 — 무드 8색에 1:1 매핑. 월 교육비 포션(띠그래프)도 이 분류로 묶는다.
@@ -171,8 +198,8 @@ export function bgStyle(theme) {
 
 // 기본 표시 설정 — 시간표마다 각자 보유. 전역 config 는 새 시간표용 기본값 + paletteH 보관용.
 const DEFAULT_CONFIG = {
-  accent: 'sky',
-  weekRange: 'mon-sat',
+  accent: 'cream',
+  weekDays: ['월', '화', '수', '목', '금', '토'],
   startHour: 9,
   endHour: 21,
   font: 'gowun',
@@ -196,10 +223,15 @@ const DEFAULT_STATE = {
 
 // 설정 보정 — 빠진 키는 기본값으로 채우고, 없어진 옵션(흑백)은 파스텔로 옮긴다.
 function fixConfig(c) {
-  const cfg = { ...DEFAULT_CONFIG, ...(c || {}) };
-  // 옛 색 옵션(pastel/mono/custom)은 무드로 이전 → 기본 무드 'sky'
-  if (!['sky', 'pink', 'cozy', 'none'].includes(cfg.accent)) cfg.accent = 'sky';
+  const src = c || {};
+  const cfg = { ...DEFAULT_CONFIG, ...src };
+  // 옛 색 옵션(pastel/mono/custom/sky/pink/cozy)은 새 무드로 이전 → 기본 무드 'cream'
+  if (!['cream', 'candy', 'sorbet', 'none'].includes(cfg.accent)) cfg.accent = 'cream';
   if (cfg.colorFill !== 'full') cfg.colorFill = 'band';
+  // 요일: weekDays 없으면 구버전 weekRange 에서 도출
+  if (!Array.isArray(src.weekDays) || !src.weekDays.length) {
+    cfg.weekDays = getWeekDays(src.weekRange ? { weekRange: src.weekRange } : DEFAULT_CONFIG);
+  }
   return cfg;
 }
 

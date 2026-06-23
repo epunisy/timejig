@@ -1,6 +1,6 @@
 import { useRef, Fragment } from 'react';
 import { t } from '../i18n';
-import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST } from '../App';
+import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -63,8 +63,15 @@ export default function Settings({
     reader.readAsDataURL(file);
   }
 
-  function setRange(range) {
-    onConfigChange({ ...config, weekRange: range });
+  // 월~금 / 토 / 일 조각을 켜고 끄며 조합
+  function toggleWeekPart(part) {
+    const cur = new Set(getWeekDays(config));
+    const allIn = part.days.every(d => cur.has(d));
+    if (allIn) part.days.forEach(d => cur.delete(d));
+    else part.days.forEach(d => cur.add(d));
+    const next = FULL_WEEK.filter(d => cur.has(d));
+    if (next.length === 0) return; // 최소 한 조각은 남김
+    onConfigChange({ ...config, weekDays: next });
   }
 
   function setLang(lang) {
@@ -144,17 +151,20 @@ export default function Settings({
         <label>
           <span>{t('weekRange')}</span>
           <div className="tj-mode-strip">
-            {[
-              ['mon-fri', config.dayLang === 'en' ? 'MON–FRI' : '월–금'],
-              ['mon-sat', config.dayLang === 'en' ? 'MON–SAT' : '월–토'],
-              ['mon-sun', config.dayLang === 'en' ? 'MON–SUN' : '월–일'],
-            ].map(([range, label]) => (
-              <button
-                key={range}
-                className={config.weekRange === range ? 'active' : ''}
-                onClick={() => setRange(range)}
-              >{label}</button>
-            ))}
+            {WEEK_PARTS.map(p => {
+              const cur = getWeekDays(config);
+              const active = p.days.every(d => cur.includes(d));
+              return (
+                <button
+                  key={p.key}
+                  className={active ? 'active' : ''}
+                  onClick={() => toggleWeekPart(p)}
+                >{config.dayLang === 'en' ? p.labelEn : p.label}</button>
+              );
+            })}
+          </div>
+          <div style={{ fontSize: '10px', color: '#999', margin: '4px 0 2px' }}>
+            원하는 조각을 골라 조합해요 (예: 월~금 + 일).
           </div>
           <div className="tj-mode-strip" style={{ marginTop: '4px' }}>
             <button
