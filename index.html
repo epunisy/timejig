@@ -13,6 +13,28 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // 흰 화면 자동 복구 — 옛 캐시가 새 파일(JS/CSS)을 못 찾으면 캐시·서비스워커를 비우고 1회 새로고침
+      (function () {
+        window.addEventListener('error', function (e) {
+          var t = e && e.target;
+          if (!t || (t.tagName !== 'SCRIPT' && t.tagName !== 'LINK')) return;
+          if (sessionStorage.getItem('tj-recovered')) return; // 무한 새로고침 방지
+          sessionStorage.setItem('tj-recovered', '1');
+          var done = function () { location.reload(); };
+          var clearCaches = (window.caches && caches.keys)
+            ? caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); })
+            : Promise.resolve();
+          clearCaches.then(function () {
+            if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+              return navigator.serviceWorker.getRegistrations().then(function (rs) {
+                return Promise.all(rs.map(function (r) { return r.unregister(); }));
+              });
+            }
+          }).then(done, done);
+        }, true);
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
