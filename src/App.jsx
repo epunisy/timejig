@@ -342,8 +342,7 @@ function App() {
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
-  // 첫 화면에서 로그인하면(또는 리디렉트 복귀로 로그인 확인되면) 메인으로 진입
-  useEffect(() => { if (user && mode === 'welcome') setMode('main'); }, [user, mode]);
+  // (자동 전환 없음 — 첫 화면에서 새로고침해도 머무름. 로그인 버튼을 눌러야 메인으로 감)
   // 리디렉트 로그인 결과 확인 — 로그인되어 돌아왔으면 바로 메인으로
   useEffect(() => {
     checkRedirect()
@@ -434,6 +433,7 @@ function App() {
   }
 
   async function handleSignIn() {
+    if (user) { setMode('main'); return; } // 이미 로그인돼 있으면 다시 로그인 없이 바로 메인으로
     try { await signInGoogle(); setMode('main'); } // 팝업 로그인 성공 시 바로 메인으로
     catch (e) { alert('로그인 오류: ' + (e?.code || e?.message || e)); }
   }
