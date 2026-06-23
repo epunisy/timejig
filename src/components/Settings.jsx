@@ -1,6 +1,6 @@
 import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
-import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
+import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays, textColorOn } from '../App';
 import GoogleIcon from './GoogleIcon';
 
 // 배경 색표 — 가로(같은 계열) 밝은→진한, 세로(색 계열). 톡 누르면 바로 적용
@@ -42,6 +42,8 @@ export default function Settings({
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   const fileRef = useRef(null);
+  // 색 채우기 예시용 샘플 색 (현재 무드의 한 색, 없으면 기본 민트)
+  const sampleColor = (MOODS[config.accent] && MOODS[config.accent][1]) || '#9DDACF';
   const [colorPickOpen, setColorPickOpen] = useState(false);
 
   // 사진첩에서 고른 이미지를 줄여서(최대 1280px, JPEG) 배경으로 저장
@@ -250,15 +252,25 @@ export default function Settings({
 
         <label>
           <span>색 채우기</span>
-          <div className="tj-mode-strip">
+          <div className="tj-fill-grid">
             <button
-              className={(config.colorFill || 'band') === 'band' ? 'active' : ''}
+              type="button"
+              className={'tj-fill-opt' + ((config.colorFill || 'band') === 'band' ? ' active' : '')}
               onClick={() => setColorFill('band')}
-            >색띠</button>
+            >
+              <span className="tj-fill-demo">
+                <span className="tj-fill-band" style={{ background: sampleColor }} />국어
+              </span>
+              <span className="tj-fill-label">색띠</span>
+            </button>
             <button
-              className={config.colorFill === 'full' ? 'active' : ''}
+              type="button"
+              className={'tj-fill-opt' + (config.colorFill === 'full' ? ' active' : '')}
               onClick={() => setColorFill('full')}
-            >칸 전체</button>
+            >
+              <span className="tj-fill-demo" style={{ background: sampleColor, color: textColorOn(sampleColor) }}>국어</span>
+              <span className="tj-fill-label">칸 전체</span>
+            </button>
           </div>
           {config.accent === 'none' && (
             <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>

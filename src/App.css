@@ -1218,6 +1218,40 @@ html, body {
   font-weight: 600;
 }
 
+/* 색 채우기 선택 — 예시 블록으로 보고 고르기 */
+.tj-fill-grid { display: flex; gap: 8px; }
+.tj-fill-opt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.tj-fill-opt.active { background: #f0f0f0; border-color: #f0f0f0; }
+.tj-fill-demo {
+  position: relative;
+  width: 100%;
+  height: 34px;
+  border: 1px solid #c3d4e8;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #444;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.tj-fill-band { position: absolute; left: 0; top: 0; bottom: 0; width: 6px; }
+.tj-fill-label { font-size: 11px; color: #555; }
+.tj-fill-opt.active .tj-fill-label { color: #222; font-weight: 600; }
+
 /* 색 무드 선택 — 무드별 8색 미리보기 + 이름 */
 .tj-mood-list {
   display: flex;
