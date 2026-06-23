@@ -1,6 +1,7 @@
 import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
+import GoogleIcon from './GoogleIcon';
 
 // 배경 색표 — 가로(같은 계열) 밝은→진한, 세로(색 계열). 톡 누르면 바로 적용
 const PRESET_BG_COLORS = [
@@ -381,9 +382,9 @@ export default function Settings({
             ) : (
               <button
                 onClick={onSignIn}
-                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}
+                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <span style={{ fontWeight: 700, color: '#4285F4' }}>G</span> 로그인
+                <GoogleIcon size={16} /> 로그인
               </button>
             )}
             {onPreviewWelcome && (
