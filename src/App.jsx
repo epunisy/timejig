@@ -32,9 +32,9 @@ export function getSubjectColor(config, subject) {
   return pal[(subject.colorIndex || 0) % pal.length];
 }
 
-// 월 교육비 분류별 띠그래프 색 — 무드 팔레트(없음이면 null)
+// 월 교육비 분류별 띠그래프 색 — 무드 팔레트. '색 없음'이어도 포션은 색으로 구분(기본 캔디)
 export function getCategoryColors(config) {
-  return MOODS[config.accent] || null;
+  return MOODS[config && config.accent] || MOODS.candy;
 }
 
 // 색 채우기 방식: true=칸 전체, false=왼쪽 색띠
