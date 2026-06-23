@@ -1,7 +1,7 @@
 import { useState, Fragment } from 'react';
 
 // 앱 톤의 흰 카드 + 미니 예시 화면(작은 시간표 mock)으로 보여주는 튜토리얼
-const COL = ['#B5D4F4', '#9FE1CB', '#FAC775', '#CECBF6', '#C0DD97'];
+const COL = ['#B7D7FF', '#FFD1D8', '#CDECB8', '#FFF0C8', '#D9D0F8'];
 const DAYS = ['월', '화', '수', '목'];
 const CELLS = [
   [0, -1, 2, -1],
@@ -48,7 +48,26 @@ function MiniGrid({ memo, cost, drag, plan, lock }) {
         </div>
       )}
       {plan && <div className="ttut-badge">📷 사진 → AI 자동입력</div>}
-      {lock && <div className="ttut-badge ttut-badge-lock">📌 고정됨</div>}
+      {lock && <div className="ttut-badge ttut-badge-lock">🔒 고정됨</div>}
+    </div>
+  );
+}
+
+// 색 무드 미리보기 mock
+function MoodPreview() {
+  const moods = [
+    { name: '크림', cols: ['#FBF6EE', '#DBEFD4', '#FBEFBE', '#FCF7E0', '#EDF8F3', '#DCE8F4'] },
+    { name: '캔디', cols: ['#CDB6E6', '#A6E0EC', '#F5B0C6', '#9DDACF', '#F9CDA0', '#FAE9A6'] },
+    { name: '소르베', cols: ['#B7D7FF', '#D9D0F8', '#FFD1D8', '#CDECB8', '#FFF0C8', '#FBE3D0'] },
+  ];
+  return (
+    <div className="ttut-moods">
+      {moods.map(m => (
+        <div key={m.name} className="ttut-mood-row">
+          <span className="ttut-mood-name">{m.name}</span>
+          <span className="ttut-mood-sw">{m.cols.map((c, i) => <i key={i} style={{ background: c }} />)}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -90,10 +109,11 @@ function MiniThumb({ name, cells }) {
 }
 
 const SLIDES = [
-  { title: '과목 만들고 드래그!', desc: '과목을 끌어다 시간표에 톡 놓으면 끝.', view: <MiniGrid drag /> },
+  { title: '과목 만들고 드래그!', desc: '과목을 끌어다 시간표에 톡! 실수하면 ↶ 되돌리기로 한 번에 취소돼요.', view: <MiniGrid drag /> },
   { title: '사진 한 장이면 자동완성', desc: '학교·학원 시간표 사진만 올리면 AI가 알아서 채워줘요.', view: <MiniGrid plan /> },
+  { title: '색 무드로 분위기 바꾸기', desc: '크림·캔디·소르베 무드로 색을 한 번에! 배경색도 원하는 대로 골라요.', view: <MoodPreview /> },
   { title: '메모 · 월 교육비 한눈에', desc: '준비물 메모와 한 달 학원비를 과목 아래에서 바로 확인해요.', view: <MiniGrid memo cost /> },
-  { title: '실수로 안 움직이게 📌 고정', desc: '‘고정하기’를 누르면 시간표가 잠겨 잘못 드래그되지 않아요.', view: <MiniGrid lock /> },
+  { title: '실수로 안 움직이게 🔒 고정', desc: '고정을 켜면 시간표가 잠겨 잘못 드래그되지 않아요.', view: <MiniGrid lock /> },
   {
     title: '잠금화면으로 저장 ✨',
     desc: '완성한 시간표를 폰 배경화면 이미지로! 둘이면 한 화면에 함께 담을 수도 있어요.',

@@ -1289,6 +1289,13 @@ html, body {
 .ttut-badge { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: #378ADD; color: #fff; font-size: 9px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
 .ttut-badge-lock { background: #E0922F; }
 
+/* 색 무드 미리보기 mock */
+.ttut-moods { display: flex; flex-direction: column; gap: 9px; }
+.ttut-mood-row { display: flex; align-items: center; gap: 9px; }
+.ttut-mood-name { font-size: 11px; font-weight: 700; color: #555; width: 38px; text-align: left; }
+.ttut-mood-sw { display: flex; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px #ececec; }
+.ttut-mood-sw i { width: 20px; height: 20px; display: block; }
+
 /* 로그인/동기화 mock */
 .ttut-sync { display: flex; align-items: center; justify-content: center; gap: 9px; }
 .ttut-sync-dev { font-size: 30px; line-height: 1; }
