@@ -199,6 +199,26 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     });
   }
   
+  function handleDeleteSubjects(ids, onDone) {
+    if (!ids || !ids.length) return;
+    const totalPlaced = data.timetables.reduce(
+      (n, t) => n + t.blocks.filter(b => ids.includes(b.subjectId)).length, 0
+    );
+    setConfirmDialog({
+      title: '과목 삭제',
+      message: `선택한 ${ids.length}개 과목을 삭제할까요?` +
+        (totalPlaced > 0 ? `<br><span style="color:#C77575; font-size:11px;">배치된 ${totalPlaced}개 블록도 함께 사라집니다.</span>` : ''),
+      onYes: () => {
+        setData({
+          ...data,
+          subjects: data.subjects.filter(s => !ids.includes(s.id)),
+          timetables: data.timetables.map(t => ({ ...t, blocks: t.blocks.filter(b => !ids.includes(b.subjectId)) })),
+        });
+        if (onDone) onDone();
+      },
+    });
+  }
+
   function handleSubjectSave(subjectData) {
     if (editingSubjectId !== null) {
       setData({
@@ -610,6 +630,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onToggleCollapse={() => setPalCollapsed(c => !c)}
           memo={activeTT.memo || ''}
           onMemoChange={handleMemoChange}
+          onDeleteSubjects={handleDeleteSubjects}
         />
       </div>
       

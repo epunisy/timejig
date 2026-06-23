@@ -816,6 +816,36 @@ html, body {
 
 .tj-add-btn:hover { color: #222; }
 
+/* 팔레트 편집 — 여러 과목 선택 후 한 번에 삭제 */
+.tj-pal-edit-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 3px 5px;
+}
+.tj-pal-edit-btn:hover { color: #222; }
+.tj-pal-del {
+  background: #fff;
+  border: 0.5px solid #e0a8a8;
+  color: #C0392B;
+  font-size: 11px;
+  border-radius: 8px;
+  padding: 3px 9px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.tj-pal-del:disabled { opacity: 0.4; cursor: default; }
+.tj-pal-item.sel { border-color: #378ADD; box-shadow: 0 0 0 1px #378ADD inset; }
+.tj-pal-check {
+  position: absolute;
+  top: 2px; right: 4px;
+  font-size: 12px; font-weight: 700; color: #378ADD;
+  line-height: 1;
+}
+
 .tj-pal-list {
   display: flex;
   flex-direction: row;

@@ -34,6 +34,7 @@ export default function Palette({
   onToggleCollapse,
   memo,
   onMemoChange,
+  onDeleteSubjects,
 }) {
   const catColors = getCategoryColors(config);
   const fullFill = isFullFill(config);
@@ -41,6 +42,23 @@ export default function Palette({
   const itemRefs = useRef({});
   const [costHidden, setCostHidden] = useState(false);
   const [memoHidden, setMemoHidden] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [selected, setSelected] = useState(() => new Set());
+  const editModeRef = useRef(false);
+  useEffect(() => { editModeRef.current = editMode; }, [editMode]);
+
+  function toggleSelect(id) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+  function exitEdit() { setEditMode(false); setSelected(new Set()); }
+  function handleBulkDelete() {
+    if (!selected.size || !onDeleteSubjects) return;
+    onDeleteSubjects([...selected], () => exitEdit());
+  }
   
   useEffect(() => {
     const cleanups = [];
@@ -67,6 +85,8 @@ export default function Palette({
       }
       
       function handleStart(e) {
+        // 편집 모드에선 드래그/롱프레스 없이 선택만
+        if (editModeRef.current) return;
         // 버튼(수정/숨김 등)을 누른 경우엔 드래그/롱프레스 시작하지 않음 — 버튼 클릭 중 과목이 움직이는 오작동 방지
         if (e.target.closest && e.target.closest('button')) return;
         if (!subject.active) return;
@@ -131,9 +151,23 @@ export default function Palette({
     <div className={'tj-palette' + (collapsed ? ' collapsed' : '')}>
       <div className="tj-pal-head">
         <h3>{t('subjects')}</h3>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          <button className="tj-add-btn" onClick={onAddSubject}>+</button>
-          <button className="tj-eye-btn" onClick={onToggleCollapse} aria-label="과목 숨기기"><Eye off={collapsed} /></button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          {editMode ? (
+            <>
+              <button className="tj-pal-del" disabled={!selected.size} onClick={handleBulkDelete}>
+                삭제{selected.size ? ` ${selected.size}` : ''}
+              </button>
+              <button className="tj-pal-edit-btn" onClick={exitEdit}>완료</button>
+            </>
+          ) : (
+            <>
+              <button className="tj-add-btn" onClick={onAddSubject}>+</button>
+              {subjects.length > 0 && (
+                <button className="tj-pal-edit-btn" onClick={() => setEditMode(true)}>편집</button>
+              )}
+              <button className="tj-eye-btn" onClick={onToggleCollapse} aria-label="과목 숨기기"><Eye off={collapsed} /></button>
+            </>
+          )}
         </div>
       </div>
       <div className="tj-pal-hint">
@@ -159,20 +193,26 @@ export default function Palette({
                 className += ' with-accent';
               }
             }
+            if (editMode && selected.has(s.id)) className += ' sel';
             return (
-              <div 
-                key={s.id} 
-                className={className} 
+              <div
+                key={s.id}
+                className={className}
                 style={style}
                 ref={(el) => { if (el) itemRefs.current[s.id] = el; }}
+                onClick={editMode ? () => toggleSelect(s.id) : undefined}
               >
-                <button
-                  className="tj-pal-edit"
-                  type="button"
-                  title="수정"
-                  aria-label="과목 수정"
-                  onClick={() => onEditSubject(s.id)}
-                >✎</button>
+                {editMode ? (
+                  <span className="tj-pal-check">{selected.has(s.id) ? '✓' : ''}</span>
+                ) : (
+                  <button
+                    className="tj-pal-edit"
+                    type="button"
+                    title="수정"
+                    aria-label="과목 수정"
+                    onClick={() => onEditSubject(s.id)}
+                  >✎</button>
+                )}
                 <div className="tj-pal-name">{s.name}</div>
                 <div className="tj-pal-dur">{s.duration}분</div>
               </div>
