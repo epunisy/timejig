@@ -11,7 +11,7 @@ import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, si
 export const MOODS = {
   // 순서 = 분류: 국어·영어·수학·사회·과학·예체능·기타·FreeTime
   cream:  ['#F9F2E7', '#B5DEB0', '#FBE08A', '#FFF2C6', '#CDE7D6', '#BFD3E6', '#D8D0E8', '#DADADA'],
-  candy:  ['#FFD400', '#00CFEF', '#FF4D8D', '#00BFA5', '#FF8C00', '#FF5E6C', '#8A2BE2', '#7ED321'],
+  candy:  ['#B189DD', '#74D4E8', '#F385AB', '#62C8B6', '#F7B167', '#F8DC6B', '#F58F97', '#ABD97A'],
   sorbet: ['#B7D7FF', '#D9D0F8', '#FFD1D8', '#CDECB8', '#FFF0C8', '#FBE3D0', '#E2E7FF', '#F0F0F0'],
 };
 export const MOOD_LIST = [
