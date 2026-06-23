@@ -259,17 +259,15 @@ export default function Settings({
               onClick={() => setColorFill('band')}
             >
               <span className="tj-fill-demo">
-                <span className="tj-fill-band" style={{ background: sampleColor }} />국어
+                <span className="tj-fill-band" style={{ background: sampleColor }} />A
               </span>
-              <span className="tj-fill-label">색띠</span>
             </button>
             <button
               type="button"
               className={'tj-fill-opt' + (config.colorFill === 'full' ? ' active' : '')}
               onClick={() => setColorFill('full')}
             >
-              <span className="tj-fill-demo" style={{ background: sampleColor, color: textColorOn(sampleColor) }}>국어</span>
-              <span className="tj-fill-label">칸 전체</span>
+              <span className="tj-fill-demo" style={{ background: sampleColor, color: textColorOn(sampleColor) }}>A</span>
             </button>
           </div>
           {config.accent === 'none' && (
