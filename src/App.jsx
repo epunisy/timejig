@@ -344,9 +344,11 @@ function App() {
   useEffect(() => onAuthStateChanged(auth, setUser), []);
   // 첫 화면에서 로그인하면(또는 리디렉트 복귀로 로그인 확인되면) 메인으로 진입
   useEffect(() => { if (user && mode === 'welcome') setMode('main'); }, [user, mode]);
-  // 리디렉트 로그인 결과/에러 확인 (진단용)
+  // 리디렉트 로그인 결과 확인 — 로그인되어 돌아왔으면 바로 메인으로
   useEffect(() => {
-    checkRedirect().catch((e) => alert('로그인 오류(redirect): ' + (e?.code || e?.message || e)));
+    checkRedirect()
+      .then((res) => { if (res && res.user) setMode('main'); })
+      .catch((e) => alert('로그인 오류(redirect): ' + (e?.code || e?.message || e)));
   }, []);
 
   // 로그인하면: 클라우드 데이터 실시간 구독. 없으면(서버가 '문서 없음' 확인 시) 현재 기기 데이터 업로드.
@@ -432,7 +434,7 @@ function App() {
   }
 
   async function handleSignIn() {
-    try { await signInGoogle(); }
+    try { await signInGoogle(); setMode('main'); } // 팝업 로그인 성공 시 바로 메인으로
     catch (e) { alert('로그인 오류: ' + (e?.code || e?.message || e)); }
   }
   function handleSignOut() { setConfirmLogout(true); }
