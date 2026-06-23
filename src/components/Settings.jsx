@@ -1,6 +1,12 @@
-import { useRef, Fragment } from 'react';
+import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
+
+// 배경 색 빠른 선택 프리셋
+const PRESET_BG_COLORS = [
+  '#FFFFFF', '#1F1F1F', '#FBF3E4', '#FFD9E6', '#D7E8FF', '#E3F3E0',
+  '#FFF3C4', '#EFE6FF', '#FCE0D0', '#D9F2F0', '#F0F0F0', '#FFE0E9',
+];
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -27,7 +33,8 @@ export default function Settings({
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   const fileRef = useRef(null);
-  const colorRef = useRef(null);
+  const [colorPickOpen, setColorPickOpen] = useState(false);
+  const [tempColor, setTempColor] = useState(config.bgColor || '#ffd9e6');
 
   // 사진첩에서 고른 이미지를 줄여서(최대 1280px, JPEG) 배경으로 저장
   function handleFile(e) {
@@ -126,6 +133,7 @@ export default function Settings({
 
   
   return (
+    <>
     <div className="tj-modal-bg" onClick={handleClose}>
       <div className="tj-modal lg" onClick={(e) => e.stopPropagation()}>
         <div className="tj-modal-head">
@@ -326,7 +334,7 @@ export default function Settings({
                     <button
                       type="button"
                       className={'tj-bg-item' + (config.bg === 'colorpick' ? ' active' : '')}
-                      onClick={() => colorRef.current && colorRef.current.click()}
+                      onClick={() => { setTempColor(config.bgColor || '#ffd9e6'); setColorPickOpen(true); }}
                     >
                       <span
                         className="tj-bg-swatch"
@@ -342,13 +350,6 @@ export default function Settings({
             ))}
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
-          <input
-            ref={colorRef}
-            type="color"
-            value={config.bgColor || '#ffd9e6'}
-            style={{ display: 'none' }}
-            onChange={(e) => onConfigChange({ ...config, bg: 'colorpick', bgColor: e.target.value })}
-          />
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
@@ -409,5 +410,49 @@ export default function Settings({
         </div>
       </div>
     </div>
+
+    {colorPickOpen && (
+      <div className="tj-modal-bg" style={{ zIndex: 250 }} onClick={() => setColorPickOpen(false)}>
+        <div className="tj-modal" style={{ width: '300px' }} onClick={(e) => e.stopPropagation()}>
+          <div className="tj-modal-head">
+            <h3>배경 색 선택</h3>
+            <button className="tj-modal-x" onClick={() => setColorPickOpen(false)} aria-label="닫기">×</button>
+          </div>
+          <div style={{ height: '54px', borderRadius: '8px', border: '1px solid #ddd', background: tempColor, marginBottom: '12px' }} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '12px' }}>
+            {PRESET_BG_COLORS.map(c => (
+              <button
+                key={c}
+                type="button"
+                aria-label={'색 ' + c}
+                onClick={() => setTempColor(c)}
+                style={{
+                  height: '28px', background: c, borderRadius: '6px', cursor: 'pointer',
+                  border: tempColor.toLowerCase() === c.toLowerCase() ? '2px solid #222' : '1px solid #ddd',
+                }}
+              />
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#555' }}>
+            직접 고르기
+            <input
+              type="color"
+              value={tempColor}
+              onChange={(e) => setTempColor(e.target.value)}
+              style={{ width: '46px', height: '30px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', padding: 0 }}
+            />
+            <span style={{ color: '#999' }}>{tempColor.toUpperCase()}</span>
+          </div>
+          <div className="tj-modal-actions">
+            <button onClick={() => setColorPickOpen(false)}>취소</button>
+            <button
+              className="primary"
+              onClick={() => { onConfigChange({ ...config, bg: 'colorpick', bgColor: tempColor }); setColorPickOpen(false); }}
+            >확인</button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
