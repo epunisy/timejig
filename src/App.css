@@ -202,14 +202,15 @@ html, body {
   position: fixed;
   z-index: 9999;
   pointer-events: none;
+  line-height: 1;
   transform: translate(-50%, -50%);
-  animation: tjHeartPop 0.95s ease-out forwards;
+  animation: tjHeartPop 0.7s ease-out forwards;
   will-change: transform, opacity;
 }
 @keyframes tjHeartPop {
   0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-  35%  { opacity: 1; transform: translate(calc(-50% + var(--dx) * 0.6), calc(-50% + var(--dy) * 0.6)) scale(1); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.6); }
+  35%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
 }
 
 /* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */

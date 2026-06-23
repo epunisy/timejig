@@ -92,24 +92,18 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고 클릭 — 작은 분홍 하트가 사방으로 퍼졌다 사라지는 효과
-  function popHearts(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
+  // 로고 클릭 — 아주 작은 하트들이 화면 전체에 살짝 떴다 금방 사라짐
+  function popHearts() {
     const emojis = ['💗', '💕', '💖', '🩷'];
-    for (let i = 0; i < 16; i++) {
-      const angle = Math.random() * Math.PI * 2;        // 사방(360°)
-      const dist = 26 + Math.random() * 70;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    for (let i = 0; i < 10; i++) {
       const h = document.createElement('div');
       h.className = 'tj-heart';
       h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      h.style.left = cx + 'px';
-      h.style.top = cy + 'px';
-      h.style.fontSize = (8 + Math.random() * 7).toFixed(0) + 'px'; // 작게(8~15px)
-      h.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(0) + 'px');
-      h.style.setProperty('--dy', (Math.sin(angle) * dist).toFixed(0) + 'px');
-      h.style.animationDelay = (Math.random() * 120).toFixed(0) + 'ms';
+      h.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
+      h.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
+      h.style.fontSize = (8 + Math.random() * 5).toFixed(0) + 'px'; // 아주 작게(8~13px)
+      h.style.animationDelay = (Math.random() * 250).toFixed(0) + 'ms';
       document.body.appendChild(h);
       h.addEventListener('animationend', () => h.remove());
     }
