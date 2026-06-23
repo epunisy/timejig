@@ -34,8 +34,6 @@ export default function Settings({
   timetableName,
   onConfigChange,
   onTimetableNameChange,
-  onShowTutorial,
-  onPreviewWelcome,
   user,
   onSignIn,
   onSignOut,
@@ -133,14 +131,6 @@ export default function Settings({
     }
     onClose();
   }
-  
-  function handleShowTutorial() {
-    if (ttNameRef.current) {
-      onTimetableNameChange(ttNameRef.current.value);
-    }
-    onShowTutorial();
-  }
-
   
   return (
     <>
@@ -372,7 +362,6 @@ export default function Settings({
               ☁ {user.email} · 동기화 중
             </div>
           )}
-          {/* 로그인(또는 로그아웃) + 첫 화면 보기 — 한 줄에 나란히 */}
           <div style={{ display: 'flex', gap: '8px' }}>
             {user ? (
               <button
@@ -386,13 +375,6 @@ export default function Settings({
               >
                 <GoogleIcon size={16} /> 로그인
               </button>
-            )}
-            {onPreviewWelcome && (
-              <button
-                type="button"
-                onClick={onPreviewWelcome}
-                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#444', fontSize: '12px', fontFamily: 'inherit', cursor: 'pointer' }}
-              >첫 화면 보기</button>
             )}
           </div>
           <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
@@ -409,9 +391,6 @@ export default function Settings({
         </div>
 
         <div className="tj-modal-actions">
-          <button onClick={handleShowTutorial} style={{ marginRight: 'auto' }}>
-            {t('showTutorial')}
-          </button>
           <button className="primary" onClick={handleClose}>{t('done')}</button>
         </div>
       </div>

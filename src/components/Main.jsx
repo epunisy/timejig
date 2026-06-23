@@ -28,6 +28,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [showImportPlan, setShowImportPlan] = useState(false);
+  const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
   const [locked, setLocked] = useState(false);
   const newTTInputRef = useRef(null);
@@ -86,14 +87,19 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고를 누르면 앱을 최신 버전으로 업데이트(새로고침). 기기 간 시간표 동기화는 자동이라 여기선 다루지 않음.
-  function handleLogoClick() {
-    setConfirmDialog({
-      title: '최신 버전으로 업데이트',
-      message: '앱을 최신 버전으로 업데이트할까요?<br><span style="color:#888; font-size:11px;">저장된 시간표는 그대로예요. 잠깐 새로고침돼요.</span>',
-      confirmText: '업데이트',
-      onYes: () => { if (onLogoSync) onLogoSync(); },
-    });
+  // 앱 공유 — 웹 공유 API, 안 되면 링크 복사
+  async function handleShare() {
+    const url = window.location.origin;
+    const shareData = { title: '타임지그', text: '시간표를 잠금화면으로 — 타임지그', url };
+    try {
+      if (navigator.share) { await navigator.share(shareData); return; }
+    } catch { return; /* 사용자가 공유 취소 */ }
+    try {
+      await navigator.clipboard.writeText(url);
+      setConfirmDialog({ title: '링크 복사됨', message: '앱 주소를 복사했어요.<br><span style="color:#888; font-size:11px;">' + url + '</span>', infoOnly: true });
+    } catch {
+      setConfirmDialog({ title: '앱 주소', message: url, infoOnly: true });
+    }
   }
 
   function updateTimetable(updater) {
@@ -467,13 +473,26 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       style={{ ...bgStyle(bgTheme), backgroundColor: '#fff', backgroundSize: '11px 11px', backgroundPosition: 'center' }}
     >
       <div className="tj-topbar">
-        <img
-          src="/logo2.png"
-          alt="TimeJig"
-          className="tj-logo-top"
-          onClick={handleLogoClick}
-          style={{ cursor: 'pointer' }}
-        />
+        <div className="tj-logo-wrap">
+          <img
+            src="/logo2.png"
+            alt="TimeJig"
+            className="tj-logo-top"
+            onClick={() => setLogoMenuOpen(o => !o)}
+            style={{ cursor: 'pointer' }}
+          />
+          {logoMenuOpen && (
+            <>
+              <div className="tj-logo-backdrop" onClick={() => setLogoMenuOpen(false)} />
+              <div className="tj-logo-menu">
+                <button onClick={() => { setLogoMenuOpen(false); setShowTutorial(true); }}>📖 튜토리얼 다시보기</button>
+                <button onClick={() => { setLogoMenuOpen(false); onPreviewWelcome && onPreviewWelcome(); }}>🏠 첫 화면 돌아가기</button>
+                <button onClick={() => { setLogoMenuOpen(false); onLogoSync && onLogoSync(); }}>🔄 최신버전 업데이트</button>
+                <button onClick={() => { setLogoMenuOpen(false); handleShare(); }}>📤 어플 공유하기</button>
+              </div>
+            </>
+          )}
+        </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
         <div className="tj-ttbar">
@@ -670,8 +689,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           timetableName={activeTT.name}
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
-          onShowTutorial={() => { setShowSettings(false); setShowTutorial(true); }}
-          onPreviewWelcome={() => { setShowSettings(false); onPreviewWelcome && onPreviewWelcome(); }}
           user={user}
           onSignIn={onSignIn}
           onSignOut={onSignOut}
