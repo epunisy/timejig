@@ -16,7 +16,7 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
-export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut, onLogoSync }) {
+export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut, onLogoSync, onPreviewWelcome }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -635,6 +635,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
           onShowTutorial={() => { setShowSettings(false); setShowTutorial(true); }}
+          onPreviewWelcome={() => { setShowSettings(false); onPreviewWelcome && onPreviewWelcome(); }}
           user={user}
           onSignIn={onSignIn}
           onSignOut={onSignOut}

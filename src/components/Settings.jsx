@@ -18,6 +18,7 @@ export default function Settings({
   onConfigChange,
   onTimetableNameChange,
   onShowTutorial,
+  onPreviewWelcome,
   user,
   onSignIn,
   onSignOut,
@@ -351,6 +352,23 @@ export default function Settings({
             </>
           )}
         </div>
+
+        {onPreviewWelcome && (
+          <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
+            <button
+              type="button"
+              onClick={onPreviewWelcome}
+              style={{
+                width: '100%', minHeight: '34px', boxSizing: 'border-box',
+                background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
+                fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
+              }}
+            >첫 화면 보기</button>
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
+              앱 첫 화면(로그인 / 처음 이용)을 미리 봐요. 데이터는 그대로예요.
+            </div>
+          </div>
+        )}
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>

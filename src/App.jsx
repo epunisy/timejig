@@ -268,6 +268,9 @@ function App() {
   // 로그아웃 확인 (로그아웃하면 이 기기의 로컬 데이터를 비움 — 클라우드 백업은 유지)
   const [confirmLogout, setConfirmLogout] = useState(false);
 
+  // 첫 화면 미리보기 (설정에서 열어보기 — 데이터 변경 없음)
+  const [welcomePreview, setWelcomePreview] = useState(false);
+
   // 데이터 바뀔 때마다 자동 저장 (메인/내보내기에서만)
   useEffect(() => {
     if (mode === 'main' || mode === 'export') {
@@ -393,7 +396,14 @@ function App() {
   return (
     <>
       {mode === 'welcome' && <Setup onSignIn={handleSignIn} onFirstUse={handleFirstUse} />}
-      {mode === 'main' && (
+      {mode === 'main' && welcomePreview && (
+        <Setup
+          onSignIn={handleSignIn}
+          onFirstUse={() => setWelcomePreview(false)}
+          onBack={() => setWelcomePreview(false)}
+        />
+      )}
+      {mode === 'main' && !welcomePreview && (
         <Main
           data={data}
           setData={setData}
@@ -403,6 +413,7 @@ function App() {
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onLogoSync={handleLogoSync}
+          onPreviewWelcome={() => setWelcomePreview(true)}
         />
       )}
       {mode === 'export' && (

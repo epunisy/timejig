@@ -1,9 +1,13 @@
 import { t } from '../i18n';
 
 // 첫 진입 화면 — 샤이닝 로고 + 환영 멘트 + 두 갈래(로그인 / 처음 이용)
-export default function Setup({ onSignIn, onFirstUse }) {
+// onBack 이 있으면 미리보기(설정에서 열어본 것) → 돌아가기 버튼 표시
+export default function Setup({ onSignIn, onFirstUse, onBack }) {
   return (
     <div className="tj-setup">
+      {onBack && (
+        <button className="tj-setup-back" onClick={onBack}>← 돌아가기</button>
+      )}
       <span className="tj-setup-logo-wrap">
         <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
       </span>
