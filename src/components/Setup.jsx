@@ -14,11 +14,11 @@ export default function Setup({ onSignIn, onFirstUse, onBack }) {
       </span>
       <div className="tj-setup-greeting">{t('welcome')}{'\n'}시작해볼까요?</div>
 
-      <button className="tj-setup-cta" onClick={onFirstUse}>처음 이용하기</button>
+      <button className="tj-setup-cta" onClick={onFirstUse}>로그인 없이 시작하기</button>
       <button className="tj-setup-login-btn" onClick={onSignIn}>
         <span className="tj-g">G</span> 로그인 (이미 만든 시간표 불러오기)
       </button>
-      <div className="tj-setup-hint">처음이면 ‘처음 이용하기’,{'\n'}쓰던 게 있으면 로그인하세요.</div>
+      <div className="tj-setup-hint">로그인은 나중에 해도 돼요.{'\n'}쓰던 게 있으면 로그인해서 불러오세요.</div>
     </div>
   );
 }
