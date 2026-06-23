@@ -11,7 +11,7 @@ import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, si
 export const MOODS = {
   // 순서 = 분류: 국어·영어·수학·사회·과학·예체능·기타·FreeTime
   cream:  ['#F9F2E7', '#C7E5BE', '#FBE7A2', '#FFF2C6', '#CDE7D6', '#BFD3E6', '#D8D0E8', '#DADADA'],
-  candy:  ['#B189DD', '#74D4E8', '#F385AB', '#62C8B6', '#F7B167', '#F8DC6B', '#F58F97', '#ABD97A'],
+  candy:  ['#CDB6E6', '#A6E0EC', '#F5B0C6', '#9DDACF', '#F9CDA0', '#FAE9A6', '#F7B6BB', '#C8E5A6'],
   sorbet: ['#B7D7FF', '#D9D0F8', '#FFD1D8', '#CDECB8', '#FFF0C8', '#FBE3D0', '#E2E7FF', '#F0F0F0'],
 };
 export const MOOD_LIST = [
@@ -289,6 +289,46 @@ function App() {
     }
   }, [data, mode]);
 
+  // ===== 되돌리기 / 되살리기 (실수 변경 대비) =====
+  const histRef = useRef({ past: [], future: [] });
+  const prevDataRef = useRef(data);
+  const histSkipRef = useRef(false); // 클라우드 적용·undo/redo 시엔 히스토리 기록 건너뜀
+  const [, setHistTick] = useState(0);
+
+  useEffect(() => {
+    if (histSkipRef.current) { histSkipRef.current = false; prevDataRef.current = data; return; }
+    const prev = prevDataRef.current;
+    prevDataRef.current = data;
+    if (prev && prev !== data) {
+      const h = histRef.current;
+      h.past.push(prev);
+      if (h.past.length > 60) h.past.shift();
+      h.future = [];
+      setHistTick(t => t + 1);
+    }
+  }, [data]);
+
+  function handleUndo() {
+    const h = histRef.current;
+    if (!h.past.length) return;
+    const prev = h.past.pop();
+    h.future.push(data);
+    histSkipRef.current = true;
+    setData(prev);
+    setHistTick(t => t + 1);
+  }
+  function handleRedo() {
+    const h = histRef.current;
+    if (!h.future.length) return;
+    const next = h.future.pop();
+    h.past.push(data);
+    histSkipRef.current = true;
+    setData(next);
+    setHistTick(t => t + 1);
+  }
+  const canUndo = histRef.current.past.length > 0;
+  const canRedo = histRef.current.future.length > 0;
+
   // ===== 구글 로그인 + 클라우드 동기화 =====
   const [user, setUser] = useState(null);
   const dataRef = useRef(data);
@@ -328,6 +368,7 @@ function App() {
           // 이 기기엔 따로 바꾼 게 없음 → 클라우드 최신을 그대로 반영
           syncedRef.current = remoteStr;
           skipSaveRef.current = true;
+          histSkipRef.current = true;
           setData(remote);
         } else {
           // 양쪽이 서로 다르게 바뀜 → 덮어쓰기 전에 사용자에게 물어봄
@@ -366,6 +407,7 @@ function App() {
     if (!conflict) return;
     syncedRef.current = conflict.remoteStr;
     skipSaveRef.current = true;
+    histSkipRef.current = true;
     setData(conflict.remote);
     setConflict(null);
   }
@@ -425,6 +467,10 @@ function App() {
           onSignOut={handleSignOut}
           onLogoSync={handleLogoSync}
           onPreviewWelcome={() => setWelcomePreview(true)}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          canUndo={canUndo}
+          canRedo={canRedo}
         />
       )}
       {mode === 'export' && (

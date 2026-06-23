@@ -211,10 +211,33 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: flex-end;
+  justify-content: space-between;
   order: 0;
 }
 .tj-topbar-r1 .tj-ttbar { min-width: 0; }
+.tj-r1-right { display: flex; align-items: center; gap: 6px; min-width: 0; }
+
+/* 되돌리기 / 되살리기 */
+.tj-undoredo { display: flex; gap: 4px; flex-shrink: 0; }
+.tj-undoredo button {
+  width: 30px; height: 28px; padding: 0;
+  border: none; border-radius: 8px;
+  background: #f5f6f8; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  font-size: 15px; color: #4a4a4a; cursor: pointer; font-family: inherit;
+}
+.tj-undoredo button:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+.tj-undoredo button:active:not(:disabled) { transform: translateY(1px); }
+
+/* 고정 버튼 — 시간표 이름 옆 작은 아이콘 토글 (잠금 시 앰버) */
+.tj-lockbtn {
+  flex-shrink: 0;
+  width: 30px; height: 28px; padding: 0;
+  border: none; border-radius: 8px;
+  background: #f5f6f8; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  font-size: 14px; cursor: pointer; font-family: inherit;
+}
+.tj-lockbtn.on { background: #fff4d6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); }
+.tj-lockbtn:active { transform: translateY(1px); }
 /* 아랫줄: 메뉴 묶음 */
 .tj-topbar-r2 {
   display: flex;
