@@ -94,7 +94,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
   // 로고 클릭 — 아주 작은 하트들이 화면 전체에 살짝 떴다 금방 사라짐
   function popHearts() {
-    const emojis = ['💗', '💕', '💖', '🩷'];
+    const emojis = ['❤️', '💛', '💚', '💙', '💜', '🧡', '💖', '🩵'];
     const vw = window.innerWidth, vh = window.innerHeight;
     for (let i = 0; i < 10; i++) {
       const h = document.createElement('div');
@@ -102,7 +102,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
       h.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
       h.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
-      h.style.fontSize = (8 + Math.random() * 5).toFixed(0) + 'px'; // 아주 작게(8~13px)
+      h.style.fontSize = (24 + Math.random() * 14).toFixed(0) + 'px'; // 3배 크게(24~38px)
       h.style.animationDelay = (Math.random() * 250).toFixed(0) + 'ms';
       document.body.appendChild(h);
       h.addEventListener('animationend', () => h.remove());
