@@ -136,7 +136,6 @@ export function hexLuma(hex) {
 export const BACKGROUNDS = [
   { key: 'white', label: '기본', css: '#ffffff', text: '#444444', tile: 0 },
   { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
-  { key: 'softdawn', label: '새벽호수', image: '/bg-softdawn.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'bluepetals', label: '블루꽃', image: '/bg-bluepetals.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'canvas', label: '캔버스', image: '/bg-canvas.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   {
