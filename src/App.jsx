@@ -215,29 +215,28 @@ function normalizeData(data) {
 }
 
 function App() {
-  // 스플래시 없이 시작 — 저장된 데이터가 있으면 메인, 없으면 첫 설정 화면
+  // 저장된 데이터가 있으면 그걸로, 없으면 기본 서식 시간표(DEFAULT_STATE)로 시작.
+  // 화면은 항상 스플래시부터 → 로딩이 끝나면 메인으로 넘어간다.
   const [boot] = useState(() => {
     const saved = loadData();
     const valid = saved && saved.timetables && saved.timetables.length > 0 && Array.isArray(saved.subjects);
-    return { data: valid ? normalizeData(saved) : DEFAULT_STATE, mode: valid ? 'main' : 'setup' };
+    // 저장된 데이터가 있으면 바로 메인, 없으면 첫 화면(로그인/처음이용 선택)
+    return { data: valid ? normalizeData(saved) : DEFAULT_STATE, mode: valid ? 'main' : 'welcome', fresh: !valid };
   });
 
-  // 화면 모드: setup | main | export
+  // 화면 모드: welcome | main | export
   const [mode, setMode] = useState(boot.mode);
 
   // 전체 데이터
   const [data, setData] = useState(boot.data);
 
-  // 방금 "시작하기"로 들어온 진짜 첫 진입인지 (이때만 튜토리얼 자동 표시)
-  const [justSetup, setJustSetup] = useState(false);
-
-  // 첫 화면 미리보기 (데이터 변경 없이 보기만)
-  const [setupPreview, setSetupPreview] = useState(false);
+  // 첫 진입(저장된 데이터 없음)이면 튜토리얼 자동 표시 (단, tutorialDone 이면 안 뜸)
+  const [justSetup] = useState(boot.fresh);
 
   // 로그아웃 확인 (로그아웃하면 이 기기의 로컬 데이터를 비움 — 클라우드 백업은 유지)
   const [confirmLogout, setConfirmLogout] = useState(false);
 
-  // 데이터 바뀔 때마다 자동 저장 (설정 완료 후 메인/내보내기에서만)
+  // 데이터 바뀔 때마다 자동 저장 (메인/내보내기에서만)
   useEffect(() => {
     if (mode === 'main' || mode === 'export') {
       saveData(data);
@@ -257,6 +256,8 @@ function App() {
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
+  // 첫 화면에서 로그인하면(또는 리디렉트 복귀로 로그인 확인되면) 메인으로 진입
+  useEffect(() => { if (user && mode === 'welcome') setMode('main'); }, [user, mode]);
   // 리디렉트 로그인 결과/에러 확인 (진단용)
   useEffect(() => {
     checkRedirect().catch((e) => alert('로그인 오류(redirect): ' + (e?.code || e?.message || e)));
@@ -282,7 +283,6 @@ function App() {
           syncedRef.current = remoteStr;
           skipSaveRef.current = true;
           setData(remote);
-          if (mode === 'setup') setMode('main');
         } else {
           // 양쪽이 서로 다르게 바뀜 → 덮어쓰기 전에 사용자에게 물어봄
           setConflict({ remote, remoteStr });
@@ -355,53 +355,13 @@ function App() {
     window.location.reload(); // 새로고침 → 첫 화면
   }
 
-  // 시작 화면에서 "시작하기" 눌렀을 때 (이름·시간 범위 반영)
-  function handleSetupDone(name, startHour, endHour, accent) {
-    const config = { ...DEFAULT_STATE.config };
-    if (Number.isInteger(startHour) && Number.isInteger(endHour) && endHour > startHour) {
-      config.startHour = startHour;
-      config.endHour = endHour;
-    }
-    if (['pastel', 'mono', 'none'].includes(accent)) {
-      config.accent = accent;
-    }
-    setData({
-      ...DEFAULT_STATE,
-      config,
-      timetables: [{ id: 1, name: name || '시간표1', blocks: [], config: { ...config } }],
-      subjects: [],
-    });
-    setJustSetup(true);
-    setMode('main');
-  }
-
-  // 첫 화면 미리보기에서 '시작하기' — 기존 데이터는 그대로 두고, 그 이름으로 새 시간표를 추가 생성
-  function handlePreviewCreate(name) {
-    const baseConfig = { ...DEFAULT_CONFIG };
-    const newId = Math.max(0, ...data.timetables.map(t => t.id)) + 1;
-    setData({
-      ...data,
-      timetables: [
-        ...data.timetables,
-        { id: newId, name: name || `시간표${newId}`, blocks: [], config: { ...baseConfig } },
-      ],
-      activeTT: newId,
-    });
-    setSetupPreview(false);
-  }
+  // 첫 화면에서 "처음 이용하기" — 기본 서식 시간표(DEFAULT_STATE)로 바로 메인 진입
+  function handleFirstUse() { setMode('main'); }
 
   return (
     <>
-      {mode === 'setup' && <Setup onDone={handleSetupDone} onSignIn={handleSignIn} />}
-      {mode === 'main' && setupPreview && (
-        <Setup
-          preview
-          onBack={() => setSetupPreview(false)}
-          onDone={handlePreviewCreate}
-          onSignIn={handleSignIn}
-        />
-      )}
-      {mode === 'main' && !setupPreview && (
+      {mode === 'welcome' && <Setup onSignIn={handleSignIn} onFirstUse={handleFirstUse} />}
+      {mode === 'main' && (
         <Main
           data={data}
           setData={setData}
@@ -411,7 +371,6 @@ function App() {
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onLogoSync={handleLogoSync}
-          onPreviewSetup={() => setSetupPreview(true)}
         />
       )}
       {mode === 'export' && (

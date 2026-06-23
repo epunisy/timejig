@@ -18,7 +18,6 @@ export default function Settings({
   onConfigChange,
   onTimetableNameChange,
   onShowTutorial,
-  onPreviewSetup,
   user,
   onSignIn,
   onSignOut,
@@ -116,12 +115,6 @@ export default function Settings({
     onShowTutorial();
   }
 
-  function handlePreviewSetup() {
-    if (ttNameRef.current) {
-      onTimetableNameChange(ttNameRef.current.value);
-    }
-    if (onPreviewSetup) onPreviewSetup();
-  }
   
   return (
     <div className="tj-modal-bg" onClick={handleClose}>
@@ -347,21 +340,6 @@ export default function Settings({
               </div>
             </>
           )}
-        </div>
-
-        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
-          <button
-            type="button"
-            onClick={handlePreviewSetup}
-            style={{
-              width: '100%', minHeight: '34px', boxSizing: 'border-box',
-              background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
-              fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
-            }}
-          >첫 화면에서 새 시간표 만들기</button>
-          <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-            앱 첫 화면처럼 이름을 정해 새 시간표를 만들어요. (기존 시간표는 그대로)
-          </div>
         </div>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
