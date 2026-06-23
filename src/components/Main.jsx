@@ -320,8 +320,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     updateTimetable(tt => ({ ...tt, memo }));
   }
 
-  // 주간학습계획표 파싱 결과를 시간표에 반영
-  function handlePlanImport(parsed, mode) {
+  // 주간학습계획표 파싱 결과를 시간표에 반영 (addToPalette=false면 인식 과목을 팔레트에서 숨김)
+  function handlePlanImport(parsed, mode, addToPalette = true) {
     const days = (parsed.days || []).filter(d => (d.periods || []).length || d.supplies || d.notes);
 
     // 모든 교시의 절대 분 범위
@@ -345,7 +345,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     function ensureSubject(name, durationMin) {
       if (nameToId[name]) return nameToId[name];
       const id = ++idSeed;
-      subjects.push({ id, name, duration: durationMin || 40, colorIndex: colorSeed++, active: true });
+      subjects.push({ id, name, duration: durationMin || 40, colorIndex: colorSeed++, active: true, hidden: !addToPalette });
       nameToId[name] = id;
       return id;
     }
@@ -600,7 +600,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </div>
         <Palette
           config={config}
-          subjects={data.subjects}
+          subjects={data.subjects.filter(s => !s.hidden)}
           onAddSubject={handleAddSubjectClick}
           onEditSubject={handleEditSubject}
           onDragStart={handlePaletteDragStart}

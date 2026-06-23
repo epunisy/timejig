@@ -41,6 +41,7 @@ export default function ImportPlan({ onClose, onApply }) {
   const [error, setError] = useState('');
   const [parsed, setParsed] = useState(null);
   const [mode, setMode] = useState('expand'); // expand | new
+  const [addToPalette, setAddToPalette] = useState(true); // 인식한 과목을 팔레트에도 추가할지
   const fileRef = useRef(null);
 
   async function handleFile(e) {
@@ -77,7 +78,7 @@ export default function ImportPlan({ onClose, onApply }) {
   }
 
   function handleApply() {
-    onApply(parsed, mode);
+    onApply(parsed, mode, addToPalette);
   }
 
   const orderedDays = parsed
@@ -158,6 +159,17 @@ export default function ImportPlan({ onClose, onApply }) {
               {mode === 'expand'
                 ? '지금 보는 시간표에 합쳐요. 시간 범위가 모자라면 자동으로 넓혀줘요.'
                 : '불러온 내용으로 새 시간표를 만들어요.'}
+            </div>
+
+            <div style={{ fontSize: '11px', color: '#666', marginBottom: '4px' }}>과목 팔레트에 추가</div>
+            <div className="tj-mode-strip" style={{ marginBottom: '4px' }}>
+              <button className={addToPalette ? 'active' : ''} onClick={() => setAddToPalette(true)}>추가함</button>
+              <button className={!addToPalette ? 'active' : ''} onClick={() => setAddToPalette(false)}>추가 안 함</button>
+            </div>
+            <div style={{ fontSize: '10px', color: '#999', marginBottom: '10px', lineHeight: 1.4 }}>
+              {addToPalette
+                ? '인식한 과목을 팔레트에 추가해 다시 끌어 쓰거나 학원비를 입력할 수 있어요.'
+                : '시간표만 채우고 팔레트는 깔끔하게 둬요.'}
             </div>
 
             <div className="tj-modal-actions">
