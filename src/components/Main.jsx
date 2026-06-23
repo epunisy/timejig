@@ -544,27 +544,31 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </button>
         </div>
         <div className="tj-topbar-r2">
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
-            ⚙️ 서식설정
-          </button>
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
             📷 사진 불러오기
           </button>
           <button className="tj-cta" onClick={onGoExport}>
             📱 모바일 잠금화면
           </button>
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
+            ⚙️ 서식설정
+          </button>
           <div className="tj-undoredo">
             <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" title="되돌리기">↶</button>
             <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
           </div>
           <button
-            className={'tj-switch' + (locked ? ' on' : '')}
+            className={'tj-locktoggle' + (locked ? ' on' : '')}
             onClick={() => setLocked(l => !l)}
             aria-pressed={locked}
             title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
           >
-            <span className="tj-switch-ico">{locked ? '🔒' : '🔓'}</span>
-            <span className="tj-switch-track"><span className="tj-switch-knob" /></span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="5" y="11" width="14" height="9" rx="2" />
+              {locked
+                ? <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+                : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
+            </svg>
           </button>
         </div>
         </div>
