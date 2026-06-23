@@ -231,12 +231,13 @@ html, body {
 /* 고정 토글 — 살짝 넓은 버튼 안에 평면 자물쇠(열림/닫힘) */
 .tj-locktoggle {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 46px; height: 30px; padding: 0;
+  padding: 3px 14px;
   border: none; border-radius: 10px;
   background: #f5f6f8; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
   color: #6a6a6a; cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
+.tj-locktoggle svg { display: block; }
 .tj-locktoggle.on { background: #fff4d6; color: #c8881f; }
 .tj-locktoggle:active { transform: translateY(1px); }
 /* 아랫줄: 메뉴 묶음 */

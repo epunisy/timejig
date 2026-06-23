@@ -563,7 +563,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             aria-pressed={locked}
             title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect x="5" y="11" width="14" height="9" rx="2" />
               {locked
                 ? <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
