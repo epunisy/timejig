@@ -18,7 +18,12 @@
       (function () {
         window.addEventListener('error', function (e) {
           var t = e && e.target;
-          if (!t || (t.tagName !== 'SCRIPT' && t.tagName !== 'LINK')) return;
+          if (!t) return;
+          var url = t.src || t.href || '';
+          var isScript = t.tagName === 'SCRIPT';
+          var isStyle = t.tagName === 'LINK' && t.rel === 'stylesheet';
+          if (!isScript && !isStyle) return;
+          if (url.indexOf(location.origin) !== 0) return; // 외부(구글 폰트 등) 실패는 무시
           if (sessionStorage.getItem('tj-recovered')) return; // 무한 새로고침 방지
           sessionStorage.setItem('tj-recovered', '1');
           var done = function () { location.reload(); };

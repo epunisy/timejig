@@ -219,17 +219,20 @@ export default function Export({ data, onBack }) {
                           overflow: 'hidden', padding: '0 1px',
                         };
                         let txtColor = '#444';
+                        let bandCol = null;
                         if (col) {
                           if (fullFill) {
                             blkStyle.background = col;
                             blkStyle.border = '1px solid rgba(0,0,0,0.12)';
                             txtColor = textColorOn(col);
                           } else {
-                            blkStyle.borderLeft = accentW + 'px solid ' + col;
+                            bandCol = col; // 1px 좌측 선은 유지하고 안쪽에 색띠
+                            blkStyle.paddingLeft = (accentW + 2) + 'px';
                           }
                         }
                         return (
                           <div key={b.id} style={blkStyle}>
+                            {bandCol && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: accentW + 'px', background: bandCol }} />}
                             {/* 과목명 */}
                             <span style={{
                               fontSize: blockFont + 'px', fontWeight: 400, color: txtColor,

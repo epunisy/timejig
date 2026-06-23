@@ -2,10 +2,11 @@ import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays } from '../App';
 
-// 배경 색 빠른 선택 프리셋
+// 배경 색 프리셋 — 톡 누르면 바로 적용
 const PRESET_BG_COLORS = [
-  '#FFFFFF', '#1F1F1F', '#FBF3E4', '#FFD9E6', '#D7E8FF', '#E3F3E0',
-  '#FFF3C4', '#EFE6FF', '#FCE0D0', '#D9F2F0', '#F0F0F0', '#FFE0E9',
+  '#FFFFFF', '#1F1F1F', '#FBF3E4', '#FFF6D6', '#FFE9EC', '#FFD9E6',
+  '#E7F0FF', '#D7E8FF', '#E3F3E0', '#DDEFE4', '#EFE6FF', '#EAE0F5',
+  '#FCE0D0', '#FFE6C0', '#D9F2F0', '#CDEDEA', '#F0F0F0', '#D7DBE0',
 ];
 
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -34,7 +35,6 @@ export default function Settings({
   const composingRef = useRef(false);
   const fileRef = useRef(null);
   const [colorPickOpen, setColorPickOpen] = useState(false);
-  const [tempColor, setTempColor] = useState(config.bgColor || '#ffd9e6');
 
   // 사진첩에서 고른 이미지를 줄여서(최대 1280px, JPEG) 배경으로 저장
   function handleFile(e) {
@@ -337,7 +337,7 @@ export default function Settings({
                     <button
                       type="button"
                       className={'tj-bg-item' + (config.bg === 'colorpick' ? ' active' : '')}
-                      onClick={() => { setTempColor(config.bgColor || '#ffd9e6'); setColorPickOpen(true); }}
+                      onClick={() => setColorPickOpen(true)}
                     >
                       <span
                         className="tj-bg-swatch"
@@ -411,41 +411,36 @@ export default function Settings({
       <div className="tj-modal-bg" style={{ zIndex: 250 }} onClick={() => setColorPickOpen(false)}>
         <div className="tj-modal" style={{ width: '300px' }} onClick={(e) => e.stopPropagation()}>
           <div className="tj-modal-head">
-            <h3>배경 색 선택</h3>
+            <h3>배경 색</h3>
             <button className="tj-modal-x" onClick={() => setColorPickOpen(false)} aria-label="닫기">×</button>
           </div>
-          <div style={{ height: '54px', borderRadius: '8px', border: '1px solid #ddd', background: tempColor, marginBottom: '12px' }} />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '12px' }}>
-            {PRESET_BG_COLORS.map(c => (
-              <button
-                key={c}
-                type="button"
-                aria-label={'색 ' + c}
-                onClick={() => setTempColor(c)}
-                style={{
-                  height: '28px', background: c, borderRadius: '6px', cursor: 'pointer',
-                  border: tempColor.toLowerCase() === c.toLowerCase() ? '2px solid #222' : '1px solid #ddd',
-                }}
-              />
-            ))}
+          {/* 색을 톡 누르면 바로 적용 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px' }}>
+            {PRESET_BG_COLORS.map(c => {
+              const sel = (config.bg === 'colorpick') && (config.bgColor || '').toLowerCase() === c.toLowerCase();
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  aria-label={'배경색 ' + c}
+                  onClick={() => { onConfigChange({ ...config, bg: 'colorpick', bgColor: c }); setColorPickOpen(false); }}
+                  style={{
+                    height: '36px', background: c, borderRadius: '8px', cursor: 'pointer',
+                    border: sel ? '2px solid #222' : '1px solid #ddd',
+                  }}
+                />
+              );
+            })}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#555' }}>
-            직접 고르기
+          <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '14px', fontSize: '12px', color: '#555', cursor: 'pointer' }}>
+            🎨 원하는 색 직접 고르기
             <input
               type="color"
-              value={tempColor}
-              onChange={(e) => setTempColor(e.target.value)}
-              style={{ width: '46px', height: '30px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', padding: 0 }}
+              value={config.bgColor || '#ffd9e6'}
+              onChange={(e) => onConfigChange({ ...config, bg: 'colorpick', bgColor: e.target.value })}
+              style={{ width: '42px', height: '30px', border: '1px solid #ddd', borderRadius: '6px', background: '#fff', cursor: 'pointer', padding: 0 }}
             />
-            <span style={{ color: '#999' }}>{tempColor.toUpperCase()}</span>
-          </div>
-          <div className="tj-modal-actions">
-            <button onClick={() => setColorPickOpen(false)}>취소</button>
-            <button
-              className="primary"
-              onClick={() => { onConfigChange({ ...config, bg: 'colorpick', bgColor: tempColor }); setColorPickOpen(false); }}
-            >확인</button>
-          </div>
+          </label>
         </div>
       </div>
     )}

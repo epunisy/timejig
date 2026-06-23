@@ -341,13 +341,14 @@ export default function Timetable({
               };
               let className = 'tj-block';
               const c = getSubjectColor(config, subj);
+              let bandColor = null;
               if (c) {
                 if (fullFill) {
                   style.background = c;
                   style.color = textColorOn(c);
                   className += ' with-fill';
                 } else {
-                  style.borderLeftColor = c;
+                  bandColor = c;
                   className += ' with-accent';
                 }
               }
@@ -359,6 +360,7 @@ export default function Timetable({
                   onMouseDown={(e) => handleBlockStart(e, b)}
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
+                  {bandColor && <span className="tj-block-band" style={{ background: bandColor }} />}
                   <div className="nm">{subj.name}</div>
                   <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
                 </div>
