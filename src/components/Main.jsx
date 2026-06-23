@@ -584,27 +584,15 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
           {user ? '로그아웃' : '로그인'}
         </button>
-        <div className="tj-menu-wrap">
-          <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="메뉴">☰</button>
-          {logoMenuOpen && (
-            <>
-              <div className="tj-logo-backdrop" onClick={() => setLogoMenuOpen(false)} />
-              <div className="tj-logo-menu tj-logo-menu-right">
-                {logoMenuItems.map(it => (
-                  <button key={it.key} onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
-                ))}
-              </div>
-            </>
-          )}
+        <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="메뉴" aria-expanded={logoMenuOpen}>☰</button>
         </div>
-        </div>
-        <div className="tj-topbar-r2">
-          {/* PC 전용: 로고 메뉴를 맨 앞 칩으로 (모바일은 ☰ 드롭다운) */}
+        <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
+          {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}
           {logoMenuItems.map(it => (
-            <button key={it.key} className="tj-cta tj-pc-only" onClick={it.run}>{it.label}</button>
+            <button key={it.key} className="tj-cta tj-logo-chip" onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
           ))}
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
-            📷 사진 불러오기
+            📷 시간표 옮겨오기
           </button>
           <button className="tj-cta" onClick={onGoExport}>
             📱 모바일 잠금화면
