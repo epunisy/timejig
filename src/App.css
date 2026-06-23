@@ -63,6 +63,7 @@ html, body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Crect width='30' height='30' fill='%23ffffff'/%3E%3Cpath d='M30 0H0V30' fill='none' stroke='%23b3c6dd' stroke-width='1'/%3E%3C/svg%3E");
   background-size: 11px 11px;
   background-repeat: repeat;
+  background-position: center;
   padding: 22px 18px;
   display: flex;
   flex-direction: column;
@@ -663,7 +664,7 @@ html, body {
 
 .tj-grid-header {
   display: grid;
-  background: #ececec;
+  background: #e4e9f1;
 }
 
 .tj-grid-body {
@@ -684,7 +685,7 @@ html, body {
 .tj-day-head:last-child { border-right: none; }
 
 .tj-corner {
-  background: #ececec;
+  background: #e4e9f1;
   border-right: 1px solid #fff;
 }
 
@@ -692,14 +693,14 @@ html, body {
   font-size: 9px;
   color: #444;
   text-align: center;
-  background: #ececec;
+  background: #e4e9f1;
   border-right: 1px solid #fff;
   box-sizing: border-box;
   position: relative;
 }
 
 .tj-day-col {
-  border-right: 1px solid #ececec;
+  border-right: 1px solid #d3deeb;
   box-sizing: border-box;
   position: relative;
 }
@@ -710,7 +711,7 @@ html, body {
   position: absolute;
   left: 0;
   right: 0;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #e4ebf3;
   pointer-events: none;
 }
 

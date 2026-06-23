@@ -464,7 +464,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   return (
     <div
       className="tj-app tj-app-main"
-      style={{ ...bgStyle(bgTheme), backgroundColor: '#fff', backgroundSize: '11px 11px' }}
+      style={{ ...bgStyle(bgTheme), backgroundColor: '#fff', backgroundSize: '11px 11px', backgroundPosition: 'center' }}
     >
       <div className="tj-topbar">
         <img

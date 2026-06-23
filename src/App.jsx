@@ -342,7 +342,8 @@ function App() {
   useEffect(() => { dataRef.current = data; }, [data]);
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
-  // (자동 전환 없음 — 첫 화면에서 새로고침해도 머무름. 로그인 버튼을 눌러야 메인으로 감)
+  // 이미 로그인된 상태면(또는 로그인 직후 user가 잡히면) 첫 화면을 건너뛰고 메인으로
+  useEffect(() => { if (user && mode === 'welcome') setMode('main'); }, [user, mode]);
   // 리디렉트 로그인 결과 확인 — 로그인되어 돌아왔으면 바로 메인으로
   useEffect(() => {
     checkRedirect()
