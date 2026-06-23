@@ -163,7 +163,10 @@ export default function Palette({
             <>
               <button className="tj-add-btn" onClick={onAddSubject}>+</button>
               {subjects.length > 0 && (
-                <button className="tj-pal-edit-btn" onClick={() => setEditMode(true)}>편집</button>
+                <button
+                  className="tj-pal-edit-btn"
+                  onClick={() => { setEditMode(true); if (collapsed) onToggleCollapse(); }}
+                >편집</button>
               )}
               <button className="tj-eye-btn" onClick={onToggleCollapse} aria-label="과목 숨기기"><Eye off={collapsed} /></button>
             </>
