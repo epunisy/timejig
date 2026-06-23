@@ -6,7 +6,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
-import { resolveBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
+import { getBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
 
 function timeToMin(t) {
   const parts = String(t).split(':');
@@ -458,7 +458,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     return { monthlyCost: total, categoryCosts: cats };
   })();
 
-  const bgTheme = resolveBackground(config);
+  // 편집 화면 배경은 항상 모눈으로 고정 (검은 화면/다크 반전 방지). 선택한 배경은 잠금화면 내보내기에만 적용.
+  const bgTheme = getBackground('graph');
 
   return (
     <div
