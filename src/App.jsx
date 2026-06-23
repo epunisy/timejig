@@ -10,7 +10,7 @@ import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, si
 // 무드 팔레트 — 8가지 분류(국·영·수·사·과·예체능·기타·FreeTime)에 1:1로 매핑되는 색 조합
 export const MOODS = {
   // 순서 = 분류: 국어·영어·수학·사회·과학·예체능·기타·FreeTime
-  cream:  ['#F9F2E7', '#B5DEB0', '#FBE08A', '#FFF2C6', '#CDE7D6', '#BFD3E6', '#D8D0E8', '#DADADA'],
+  cream:  ['#F9F2E7', '#C7E5BE', '#FBE7A2', '#FFF2C6', '#CDE7D6', '#BFD3E6', '#D8D0E8', '#DADADA'],
   candy:  ['#B189DD', '#74D4E8', '#F385AB', '#62C8B6', '#F7B167', '#F8DC6B', '#F58F97', '#ABD97A'],
   sorbet: ['#B7D7FF', '#D9D0F8', '#FFD1D8', '#CDECB8', '#FFF0C8', '#FBE3D0', '#E2E7FF', '#F0F0F0'],
 };
