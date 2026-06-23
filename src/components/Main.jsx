@@ -599,6 +599,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </div>
         </div>
         <div className="tj-topbar-r2">
+          {/* PC 전용: 로고 메뉴를 맨 앞 칩으로 (모바일은 ☰ 드롭다운) */}
+          {logoMenuItems.map(it => (
+            <button key={it.key} className="tj-cta tj-pc-only" onClick={it.run}>{it.label}</button>
+          ))}
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
             📷 사진 불러오기
           </button>
@@ -625,10 +629,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
-          {/* PC 전용: 로고 메뉴를 같은 줄에 칩으로 (모바일은 ☰ 드롭다운) */}
-          {logoMenuItems.map(it => (
-            <button key={it.key} className="tj-cta tj-pc-only" onClick={it.run}>{it.label}</button>
-          ))}
         </div>
         </div>
       </div>
