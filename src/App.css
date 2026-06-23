@@ -197,22 +197,35 @@ html, body {
 /* 로고 메뉴 (튜토리얼/첫화면/업데이트/공유) */
 .tj-logo-wrap { position: relative; flex-shrink: 0; display: flex; align-items: center; }
 
-/* 로고 클릭 — 다음 일정 팝업 카드 (로고 아래, 타이핑 효과) */
+/* 로고가 말하듯 — 다음 일정 말풍선 (로고 아래, 꼬리 위로) */
 .tj-sched-pop {
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: 8px;
+  margin-top: 9px;
   z-index: 200;
   background: #fff;
   border: 0.5px solid #e0e0e0;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   padding: 9px 13px;
   font-size: 12.5px;
   color: #333;
   white-space: nowrap;
   animation: tjPopIn 0.18s ease;
+}
+/* 말풍선 꼬리 — 로고 쪽(위)을 향함 */
+.tj-sched-pop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 18px;
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border-left: 0.5px solid #e0e0e0;
+  border-top: 0.5px solid #e0e0e0;
+  transform: rotate(45deg);
 }
 @keyframes tjPopIn {
   from { opacity: 0; transform: translateY(-4px); }

@@ -128,12 +128,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     });
     let msg;
     if (!best) {
-      msg = '오늘 일정이 모두 끝났어요';
+      msg = '오늘 일정이 모두 끝났어요!';
     } else {
       const rem = best.absStart - nowMin;
       const hh = Math.floor(rem / 60), mm = rem % 60;
       const remText = hh > 0 ? (mm > 0 ? `${hh}시간 ${mm}분` : `${hh}시간`) : `${mm}분`;
-      msg = `${best.name} 시작까지 ${remText} 남았어요`;
+      msg = `${best.name} 시작까지 ${remText} 남았어요!`;
     }
     setSchedPop({ msg, id: ++popIdRef.current });
   }
