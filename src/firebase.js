@@ -23,17 +23,15 @@ const provider = new GoogleAuthProvider();
 // 로그인할 때 항상 계정 선택 창을 띄움 — 브라우저에 로그인된 계정으로 자동 로그인되는 것 방지
 provider.setCustomParameters({ prompt: 'select_account' });
 
-// 데스크톱은 팝업, 막히면(모바일/웹뷰) 리디렉트로 폴백
+// 데스크톱은 팝업, 막히거나 안 되면(모바일/웹뷰 등) 무조건 리디렉트로 폴백
 export async function signInGoogle() {
   try {
     await signInWithPopup(auth, provider);
   } catch (e) {
     const code = e?.code || '';
-    if (code.includes('popup') || code.includes('cancelled') || code.includes('operation-not-supported')) {
-      await signInWithRedirect(auth, provider);
-    } else {
-      throw e;
-    }
+    // 사용자가 팝업을 직접 닫은 경우만 멈춤. 그 외 모든 실패(팝업 차단·미지원·웹뷰 등)는 리디렉트로 재시도
+    if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+    await signInWithRedirect(auth, provider);
   }
 }
 

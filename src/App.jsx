@@ -454,7 +454,7 @@ function App() {
       {mode === 'welcome' && <Setup onSignIn={handleSignIn} onFirstUse={handleFirstUse} />}
       {mode === 'main' && welcomePreview && (
         <Setup
-          onSignIn={handleSignIn}
+          onSignIn={() => { setWelcomePreview(false); handleSignIn(); }}
           onFirstUse={() => setWelcomePreview(false)}
           onBack={() => setWelcomePreview(false)}
         />
