@@ -584,7 +584,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
           {user ? '로그아웃' : '로그인'}
         </button>
-        <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="메뉴" aria-expanded={logoMenuOpen}>☰</button>
+        <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="더보기" aria-expanded={logoMenuOpen}>⋯</button>
         </div>
         <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
           {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}

@@ -197,14 +197,15 @@ html, body {
 /* 로고 메뉴 (튜토리얼/첫화면/업데이트/공유) */
 .tj-logo-wrap { flex-shrink: 0; display: flex; align-items: center; }
 
-/* ☰ 메뉴 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
+/* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
 .tj-menu-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 19px;
+  line-height: 1;
   color: #555;
-  padding: 0 4px;
+  padding: 0 6px;
   height: 24px;
   display: inline-flex;
   align-items: center;
