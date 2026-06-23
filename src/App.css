@@ -963,6 +963,19 @@ html, body {
   border-color: #378ADD;
 }
 
+/* 네모칸 대신 밑줄 입력 (시간표 이름·시간 범위 등) */
+.tj-modal input.tj-underline, .tj-modal select.tj-underline {
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  border-radius: 0;
+  background: transparent;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.tj-modal input.tj-underline:focus, .tj-modal select.tj-underline:focus {
+  border-bottom-color: #378ADD;
+}
+
 .tj-modal-actions {
   display: flex;
   gap: 5px;

@@ -145,6 +145,7 @@ export default function Settings({
           <span>{t('timetableName')}</span>
           <input
             ref={ttNameRef}
+            className="tj-underline"
             type="text"
             defaultValue={timetableName}
             placeholder="예: 민준"
@@ -191,7 +192,8 @@ export default function Settings({
         <label>
           <span>{t('timeRange')}</span>
           <div className="tj-time-row">
-            <select 
+            <select
+              className="tj-underline"
               value={config.startHour}
               onChange={(e) => setStartHour(parseInt(e.target.value, 10))}
             >
@@ -200,7 +202,8 @@ export default function Settings({
               ))}
             </select>
             <div className="dash">–</div>
-            <select 
+            <select
+              className="tj-underline"
               value={config.endHour}
               onChange={(e) => setEndHour(parseInt(e.target.value, 10))}
             >
@@ -354,47 +357,40 @@ export default function Settings({
         </label>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-                ☁ {user.email} · 동기화 중
-              </span>
+          {user && (
+            <div style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '8px' }}>
+              ☁ {user.email} · 동기화 중
+            </div>
+          )}
+          {/* 로그인(또는 로그아웃) + 첫 화면 보기 — 한 줄에 나란히 */}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {user ? (
               <button
                 onClick={onSignOut}
-                style={{ flexShrink: 0, minHeight: '32px', padding: '0 12px', background: 'transparent', border: '0.5px solid #ccc', color: '#666', fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer' }}
+                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#444', fontSize: '12px', fontFamily: 'inherit', cursor: 'pointer' }}
               >로그아웃</button>
-            </div>
-          ) : (
-            <>
+            ) : (
               <button
                 onClick={onSignIn}
-                style={{ width: '100%', minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}
               >
-                <span style={{ fontWeight: 700, color: '#4285F4' }}>G</span> Google로 로그인 (백업·동기화)
+                <span style={{ fontWeight: 700, color: '#4285F4' }}>G</span> 로그인
               </button>
-              <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-                로그인하면 시간표가 내 계정에 저장돼, 기기를 바꾸거나 앱을 지워도 그대로 불러올 수 있어요.
-              </div>
-            </>
-          )}
-        </div>
-
-        {onPreviewWelcome && (
-          <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
-            <button
-              type="button"
-              onClick={onPreviewWelcome}
-              style={{
-                width: '100%', minHeight: '34px', boxSizing: 'border-box',
-                background: 'transparent', border: '0.5px solid #d8d8d8', color: '#555',
-                fontSize: '11px', fontFamily: 'inherit', cursor: 'pointer',
-              }}
-            >첫 화면 보기</button>
-            <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-              앱 첫 화면(로그인 / 처음 이용)을 미리 봐요. 데이터는 그대로예요.
-            </div>
+            )}
+            {onPreviewWelcome && (
+              <button
+                type="button"
+                onClick={onPreviewWelcome}
+                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#444', fontSize: '12px', fontFamily: 'inherit', cursor: 'pointer' }}
+              >첫 화면 보기</button>
+            )}
           </div>
-        )}
+          <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
+            {user
+              ? '로그아웃하면 이 기기에서 시간표가 사라져요(클라우드 백업은 유지).'
+              : '로그인하면 시간표가 내 계정에 저장돼, 기기를 바꿔도 그대로 불러올 수 있어요.'}
+          </div>
+        </div>
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>
