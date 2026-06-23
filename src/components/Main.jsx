@@ -6,7 +6,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
-import { getBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
+import { resolveBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
 
 function timeToMin(t) {
   const parts = String(t).split(':');
@@ -469,13 +469,27 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     return { monthlyCost: total, categoryCosts: cats };
   })();
 
-  // 편집 화면 배경은 항상 모눈으로 고정 (검은 화면/다크 반전 방지). 선택한 배경은 잠금화면 내보내기에만 적용.
-  const bgTheme = getBackground('graph');
+  // 메인 편집 화면 배경 — 선택한 배경 그대로(기본은 모눈). 모눈일 때만 11px 격자로 고정.
+  const bgTheme = resolveBackground(config);
+  const appStyle = { ...bgStyle(bgTheme) };
+  if (bgTheme.key === 'graph') {
+    appStyle.backgroundColor = '#fff';
+    appStyle.backgroundSize = '11px 11px';
+    appStyle.backgroundPosition = 'center';
+  }
+
+  // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
+  const logoMenuItems = [
+    { key: 'tut', label: '📖 튜토리얼 다시보기', run: () => setShowTutorial(true) },
+    { key: 'home', label: '🏠 첫 화면 돌아가기', run: () => onPreviewWelcome && onPreviewWelcome() },
+    { key: 'update', label: '🔄 최신버전 업데이트', run: () => onLogoSync && onLogoSync() },
+    { key: 'share', label: '📤 어플 공유하기', run: handleShare },
+  ];
 
   return (
     <div
-      className="tj-app tj-app-main"
-      style={{ ...bgStyle(bgTheme), backgroundColor: '#fff', backgroundSize: '11px 11px', backgroundPosition: 'center' }}
+      className={'tj-app tj-app-main' + (bgTheme.dark ? ' tj-app-dark' : '')}
+      style={appStyle}
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
@@ -490,10 +504,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <>
               <div className="tj-logo-backdrop" onClick={() => setLogoMenuOpen(false)} />
               <div className="tj-logo-menu">
-                <button onClick={() => { setLogoMenuOpen(false); setShowTutorial(true); }}>📖 튜토리얼 다시보기</button>
-                <button onClick={() => { setLogoMenuOpen(false); onPreviewWelcome && onPreviewWelcome(); }}>🏠 첫 화면 돌아가기</button>
-                <button onClick={() => { setLogoMenuOpen(false); onLogoSync && onLogoSync(); }}>🔄 최신버전 업데이트</button>
-                <button onClick={() => { setLogoMenuOpen(false); handleShare(); }}>📤 어플 공유하기</button>
+                {logoMenuItems.map(it => (
+                  <button key={it.key} onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
+                ))}
               </div>
             </>
           )}
@@ -615,6 +628,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
+        </div>
+        {/* PC 전용: 로고 메뉴를 상단에 칩으로 나란히 (모바일은 로고 말풍선 팝업) */}
+        <div className="tj-logo-menubar">
+          {logoMenuItems.map(it => (
+            <button key={it.key} onClick={it.run}>{it.label}</button>
+          ))}
         </div>
         </div>
       </div>

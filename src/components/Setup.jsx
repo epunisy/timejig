@@ -16,7 +16,7 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
 
       {user ? (
         <>
-          <button className="tj-setup-cta" onClick={onFirstUse}>시작하기</button>
+          <button className="tj-setup-cta" onClick={onFirstUse}>계속하기</button>
           <div className="tj-setup-hint">{user.email}{'\n'}(으)로 로그인되어 있어요.</div>
         </>
       ) : (

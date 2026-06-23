@@ -248,6 +248,38 @@ html, body {
   transform: translateY(1px);
 }
 
+/* PC 전용 인라인 로고 메뉴바 (모바일은 숨김 → 로고 말풍선 팝업 사용) */
+.tj-logo-menubar { display: none; }
+.tj-logo-menubar button {
+  height: 23px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 11px;
+  background: #f5f6f8;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  font-size: 11px;
+  color: #4a4a4a;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.tj-logo-menubar button:active { box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); transform: translateY(1px); }
+
+@media (min-width: 900px) {
+  .tj-logo-menu, .tj-logo-backdrop { display: none !important; }
+  .tj-logo-menubar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: flex-end;
+    order: 2;
+  }
+}
+
 /* ===== 상단 바 ===== */
 .tj-topbar {
   display: flex;
