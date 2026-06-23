@@ -250,32 +250,29 @@ export default function Settings({
           </div>
         </label>
 
-        <label>
-          <span>색 채우기</span>
-          <div className="tj-fill-grid">
-            <button
-              type="button"
-              className={'tj-fill-opt' + ((config.colorFill || 'band') === 'band' ? ' active' : '')}
-              onClick={() => setColorFill('band')}
-            >
-              <span className="tj-fill-demo">
-                <span className="tj-fill-band" style={{ background: sampleColor }} />A
-              </span>
-            </button>
-            <button
-              type="button"
-              className={'tj-fill-opt' + (config.colorFill === 'full' ? ' active' : '')}
-              onClick={() => setColorFill('full')}
-            >
-              <span className="tj-fill-demo" style={{ background: sampleColor, color: textColorOn(sampleColor) }}>A</span>
-            </button>
-          </div>
-          {config.accent === 'none' && (
-            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
-              ‘색: 없음’ 이라 색은 표시되지 않아요.
+        {config.accent !== 'none' && (
+          <label>
+            <span>색 채우기</span>
+            <div className="tj-fill-grid">
+              <button
+                type="button"
+                className={'tj-fill-opt' + ((config.colorFill || 'band') === 'band' ? ' active' : '')}
+                onClick={() => setColorFill('band')}
+              >
+                <span className="tj-fill-demo">
+                  <span className="tj-fill-band" style={{ background: sampleColor }} />A
+                </span>
+              </button>
+              <button
+                type="button"
+                className={'tj-fill-opt' + (config.colorFill === 'full' ? ' active' : '')}
+                onClick={() => setColorFill('full')}
+              >
+                <span className="tj-fill-demo" style={{ background: sampleColor, color: textColorOn(sampleColor) }}>A</span>
+              </button>
             </div>
-          )}
-        </label>
+          </label>
+        )}
 
         <label>
           <span>글씨 크기</span>
