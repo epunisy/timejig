@@ -140,7 +140,7 @@ export const BACKGROUNDS = [
   { key: 'canvas', label: '캔버스', image: '/bg-canvas.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
-    css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
+    css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#b3c6dd' stroke-width='1'/></svg>`),
   },
   {
     key: 'check', label: '체크', text: '#8a5566', tile: 48,
