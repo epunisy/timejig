@@ -135,21 +135,10 @@ export function hexLuma(hex) {
 // tile = 무늬 한 칸 크기(1080px 배경 기준). 미리보기/스와치는 비율로 축소해서 그림.
 export const BACKGROUNDS = [
   { key: 'white', label: '기본', css: '#ffffff', text: '#444444', tile: 0 },
-  { key: 'black', label: '블랙', css: '#1f1f1f', text: '#ededed', tile: 0, dark: true },
-  { key: 'cream', label: '크림', css: '#fbf3e4', text: '#7a6a4f', tile: 0 },
-  { key: 'pink', label: '핑크', css: '#ffd9e6', text: '#8a5566', tile: 0 },
-  { key: 'blue', label: '파랑', css: '#d7e8ff', text: '#3a5a86', tile: 0 },
   { key: 'sky', label: '하늘', image: '/bg-sky.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'softdawn', label: '새벽호수', image: '/bg-softdawn.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'bluepetals', label: '블루꽃', image: '/bg-bluepetals.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
   { key: 'canvas', label: '캔버스', image: '/bg-canvas.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 0, dark: false },
-  // 대학교 로고 배경 — 한 장 확대(cover) 대신 타일(repeat)로 깔아 PC에서도 로고가 작게 반복
-  { key: 'ku', label: '고려대', image: '/bg-ku.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false, border: '#7c2939' },
-  { key: 'ku2', label: '고려대2', image: '/bg-ku2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false },
-  { key: 'snu', label: '서울대', image: '/bg-snu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false, border: '#273a73' },
-  { key: 'snu2', label: '서울대2', image: '/bg-snu2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false },
-  { key: 'yu', label: '연세대', image: '/bg-yu.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false, border: '#192f6d' },
-  { key: 'yu2', label: '연세대2', image: '/bg-yu2.jpg', text: '#1f1f1f', shadow: WHITE_GLOW, tile: 216, repeat: true, dark: false },
   {
     key: 'graph', label: '모눈', text: '#5a5a5a', tile: 30,
     css: svgBg(`<svg ${NS} width='30' height='30'><rect width='30' height='30' fill='#ffffff'/><path d='M30 0H0V30' fill='none' stroke='#dae4f0' stroke-width='1'/></svg>`),
