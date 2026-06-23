@@ -469,12 +469,13 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     return { monthlyCost: total, categoryCosts: cats };
   })();
 
-  // 메인 편집 화면 배경 — 선택한 배경 그대로(기본은 모눈). 모눈일 때만 11px 격자로 고정.
+  // 메인 편집 화면 배경 — 선택한 배경 그대로(기본은 모눈).
+  // 무늬(모눈/체크/깅엄)는 화면 폭과 무관하게 일정한 px로 고정 — PC·탭·모바일 동일하게.
   const bgTheme = resolveBackground(config);
   const appStyle = { ...bgStyle(bgTheme) };
-  if (bgTheme.key === 'graph') {
+  if (bgTheme.tile) {
     appStyle.backgroundColor = '#fff';
-    appStyle.backgroundSize = '11px 11px';
+    appStyle.backgroundSize = Math.round(bgTheme.tile * 0.37) + 'px';
     appStyle.backgroundPosition = 'center';
   }
 
@@ -589,7 +590,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
           {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}
           {logoMenuItems.map(it => (
-            <button key={it.key} className="tj-cta tj-logo-chip" onClick={() => { setLogoMenuOpen(false); it.run(); }}>{it.label}</button>
+            <button key={it.key} className="tj-cta tj-logo-chip" onClick={it.run}>{it.label}</button>
           ))}
           <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
             📷 시간표 옮겨오기
