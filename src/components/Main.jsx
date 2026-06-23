@@ -30,7 +30,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
-  const [locked, setLocked] = useState(false);
+  const [locked, setLocked] = useState(() => {
+    try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('tj_locked', locked ? '1' : '0'); } catch { /* 무시 */ }
+  }, [locked]);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
