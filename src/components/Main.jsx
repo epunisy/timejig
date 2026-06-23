@@ -30,12 +30,31 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
+  // 로고 클릭 — 다음 일정까지 남은 시간 팝업 ({ msg, id }) + 타이핑 효과
+  const [schedPop, setSchedPop] = useState(null);
+  const [typedMsg, setTypedMsg] = useState('');
+  const popIdRef = useRef(0);
   const [locked, setLocked] = useState(() => {
     try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
   });
   useEffect(() => {
     try { localStorage.setItem('tj_locked', locked ? '1' : '0'); } catch { /* 무시 */ }
   }, [locked]);
+
+  // 일정 팝업 — 한 글자씩 타이핑 + 3초 후 자동 사라짐
+  useEffect(() => {
+    if (!schedPop) { setTypedMsg(''); return; }
+    setTypedMsg('');
+    const full = schedPop.msg;
+    let i = 0;
+    const typer = setInterval(() => {
+      i++;
+      setTypedMsg(full.slice(0, i));
+      if (i >= full.length) clearInterval(typer);
+    }, 45);
+    const hide = setTimeout(() => setSchedPop(null), 3000);
+    return () => { clearInterval(typer); clearTimeout(hide); };
+  }, [schedPop]);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -92,22 +111,31 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
-  // 로고 클릭 — 노란 4점 반짝이(트윙클)가 화면 전체에 크고작게 반짝 떴다 사라짐
-  function popSparkle() {
-    const colors = ['#FFD23F', '#FFC53D', '#FFE08A', '#FFB300'];
-    const vw = window.innerWidth, vh = window.innerHeight;
-    for (let i = 0; i < 6; i++) {
-      const size = (12 + Math.random() * 26).toFixed(0); // 크고작게(12~38px)
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const s = document.createElement('div');
-      s.className = 'tj-spark';
-      s.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1L21 12L12 23L3 12Z" fill="${color}"/></svg>`;
-      s.style.left = (8 + Math.random() * (vw - 16)).toFixed(0) + 'px';
-      s.style.top = (60 + Math.random() * (vh - 120)).toFixed(0) + 'px';
-      s.style.animationDelay = (Math.random() * 260).toFixed(0) + 'ms';
-      document.body.appendChild(s);
-      s.addEventListener('animationend', () => s.remove());
+  // 로고 클릭 — 오늘 남은 일정 중 가장 가까운 일정까지 남은 시간을 팝업으로
+  function showNextSchedule() {
+    const now = new Date();
+    const todayKor = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    let best = null;
+    activeTT.blocks.forEach(b => {
+      if (b.day !== todayKor) return;
+      const absStart = config.startHour * 60 + b.start;
+      if (absStart <= nowMin) return; // 이미 시작/지난 일정 제외
+      if (!best || absStart < best.absStart) {
+        const subj = data.subjects.find(s => s.id === b.subjectId);
+        best = { absStart, name: subj ? subj.name : '수업' };
+      }
+    });
+    let msg;
+    if (!best) {
+      msg = '오늘 일정이 모두 끝났어요';
+    } else {
+      const rem = best.absStart - nowMin;
+      const hh = Math.floor(rem / 60), mm = rem % 60;
+      const remText = hh > 0 ? (mm > 0 ? `${hh}시간 ${mm}분` : `${hh}시간`) : `${mm}분`;
+      msg = `${best.name} 시작까지 ${remText} 남았어요`;
     }
+    setSchedPop({ msg, id: ++popIdRef.current });
   }
 
   // 앱 공유 — 웹 공유 API, 안 되면 링크 복사
@@ -512,7 +540,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={popSparkle} style={{ cursor: 'pointer' }} />
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={showNextSchedule} style={{ cursor: 'pointer' }} />
+          {schedPop && (
+            <div className="tj-sched-pop" key={schedPop.id}>
+              {typedMsg}<span className="tj-sched-caret">|</span>
+            </div>
+          )}
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">

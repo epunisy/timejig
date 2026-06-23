@@ -195,25 +195,31 @@ html, body {
 .tj-setup-login-btn .tj-g { font-weight: 700; color: #4285F4; }
 
 /* 로고 메뉴 (튜토리얼/첫화면/업데이트/공유) */
-.tj-logo-wrap { flex-shrink: 0; display: flex; align-items: center; }
+.tj-logo-wrap { position: relative; flex-shrink: 0; display: flex; align-items: center; }
 
-/* 로고 클릭 반짝이 효과 */
-.tj-spark {
-  position: fixed;
-  z-index: 9999;
-  pointer-events: none;
-  line-height: 0;
-  transform: translate(-50%, -50%);
-  animation: tjSparkPop 0.7s ease-out forwards;
-  will-change: transform, opacity;
-  filter: drop-shadow(0 0 2px rgba(255, 200, 60, 0.85));
+/* 로고 클릭 — 다음 일정 팝업 카드 (로고 아래, 타이핑 효과) */
+.tj-sched-pop {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  z-index: 200;
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 9px 13px;
+  font-size: 12.5px;
+  color: #333;
+  white-space: nowrap;
+  animation: tjPopIn 0.18s ease;
 }
-.tj-spark svg { display: block; }
-@keyframes tjSparkPop {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(-20deg); }
-  35%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(15deg); }
+@keyframes tjPopIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
 }
+.tj-sched-caret { color: #aaa; animation: tjCaretBlink 0.7s steps(1) infinite; }
+@keyframes tjCaretBlink { 50% { opacity: 0; } }
 
 /* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
 .tj-menu-btn {
