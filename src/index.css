@@ -21,7 +21,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-  background: #fafafa;
+  background: #ffffff;
   color: #222;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,4 +47,10 @@ input, select, textarea {
 /* 모바일에서 탭 하이라이트 제거 */
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* 기기가 다크모드여도 타임지그는 항상 흰 배경 + 검정 글씨로 고정 */
+@media (prefers-color-scheme: dark) {
+  html, body { background: #ffffff; color: #222; }
+  .tj-setup { background: #ffffff; color: #222; }
 }
