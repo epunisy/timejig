@@ -27,6 +27,7 @@ export default function Settings({
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   const fileRef = useRef(null);
+  const colorRef = useRef(null);
 
   // 사진첩에서 고른 이미지를 줄여서(최대 1280px, JPEG) 배경으로 저장
   function handleFile(e) {
@@ -296,34 +297,58 @@ export default function Settings({
                   <span
                     className="tj-bg-swatch"
                     style={b.image
-                      ? { backgroundImage: `url(${b.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                      ? (b.repeat
+                          ? { backgroundImage: `url(${b.image})`, backgroundSize: '42%', backgroundRepeat: 'repeat', backgroundColor: '#fff' }
+                          : { backgroundImage: `url(${b.image})`, backgroundSize: 'cover', backgroundPosition: 'center' })
                       : { background: b.css, backgroundSize: b.tile ? Math.round(b.tile * 0.28) + 'px' : undefined }}
                   />
                   <span className="tj-bg-label">{b.label}</span>
                 </button>
-                {/* '사진(직접 업로드)' 을 기본(첫 배경) 바로 다음에 배치 */}
+                {/* 기본(첫 배경) 다음: 사진 → 컬러 선택 */}
                 {idx === 0 && (
-                  <button
-                    type="button"
-                    className={'tj-bg-item' + (config.bg === 'custom' ? ' active' : '')}
-                    onClick={() => {
-                      if (config.bgImage && config.bg !== 'custom') setBg('custom');
-                      else fileRef.current && fileRef.current.click();
-                    }}
-                  >
-                    <span
-                      className="tj-bg-swatch"
-                      style={config.bgImage
-                        ? { backgroundImage: `url(${config.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                        : { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#bbb' }}
-                    >{config.bgImage ? '' : '＋'}</span>
-                    <span className="tj-bg-label">{config.bgImage ? '내 사진' : '사진'}</span>
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className={'tj-bg-item' + (config.bg === 'custom' ? ' active' : '')}
+                      onClick={() => {
+                        if (config.bgImage && config.bg !== 'custom') setBg('custom');
+                        else fileRef.current && fileRef.current.click();
+                      }}
+                    >
+                      <span
+                        className="tj-bg-swatch"
+                        style={config.bgImage
+                          ? { backgroundImage: `url(${config.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                          : { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#bbb' }}
+                      >{config.bgImage ? '' : '＋'}</span>
+                      <span className="tj-bg-label">{config.bgImage ? '내 사진' : '사진'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={'tj-bg-item' + (config.bg === 'colorpick' ? ' active' : '')}
+                      onClick={() => colorRef.current && colorRef.current.click()}
+                    >
+                      <span
+                        className="tj-bg-swatch"
+                        style={config.bgColor
+                          ? { background: config.bgColor }
+                          : { background: 'conic-gradient(from 0deg, #ff8a8a, #ffd28a, #f3f08a, #8af0a0, #8ad9ef, #8a9cef, #d98aef, #ff8a8a)' }}
+                      />
+                      <span className="tj-bg-label">컬러</span>
+                    </button>
+                  </>
                 )}
               </Fragment>
             ))}
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
+          <input
+            ref={colorRef}
+            type="color"
+            value={config.bgColor || '#ffd9e6'}
+            style={{ display: 'none' }}
+            onChange={(e) => onConfigChange({ ...config, bg: 'colorpick', bgColor: e.target.value })}
+          />
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
