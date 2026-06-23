@@ -197,6 +197,21 @@ html, body {
 /* 로고 메뉴 (튜토리얼/첫화면/업데이트/공유) */
 .tj-logo-wrap { flex-shrink: 0; display: flex; align-items: center; }
 
+/* 로고 클릭 하트 효과 */
+.tj-heart {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: tjHeartPop 0.95s ease-out forwards;
+  will-change: transform, opacity;
+}
+@keyframes tjHeartPop {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.9) rotate(var(--rot)); }
+}
+
 /* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
 .tj-menu-btn {
   background: transparent;

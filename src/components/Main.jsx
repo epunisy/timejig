@@ -92,6 +92,28 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
 
+  // 로고 클릭 — 분홍 하트가 뿅뿅 떠올랐다 사라지는 효과
+  function popHearts(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const emojis = ['💗', '💕', '💖', '🩷'];
+    for (let i = 0; i < 10; i++) {
+      const h = document.createElement('div');
+      h.className = 'tj-heart';
+      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      h.style.left = cx + 'px';
+      h.style.top = cy + 'px';
+      h.style.fontSize = (14 + Math.random() * 18).toFixed(0) + 'px';
+      h.style.setProperty('--dx', ((Math.random() - 0.5) * 140).toFixed(0) + 'px');
+      h.style.setProperty('--dy', (-70 - Math.random() * 90).toFixed(0) + 'px');
+      h.style.setProperty('--rot', ((Math.random() - 0.5) * 50).toFixed(0) + 'deg');
+      h.style.animationDelay = (i * 35) + 'ms';
+      document.body.appendChild(h);
+      h.addEventListener('animationend', () => h.remove());
+    }
+  }
+
   // 앱 공유 — 웹 공유 API, 안 되면 링크 복사
   async function handleShare() {
     const url = window.location.origin;
@@ -494,7 +516,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={popHearts} style={{ cursor: 'pointer' }} />
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
