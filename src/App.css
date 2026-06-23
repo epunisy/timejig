@@ -249,11 +249,11 @@ html, body {
   justify-content: flex-end;
   order: 1;
 }
-/* 메뉴줄 버튼 높이 통일 */
+/* 메뉴줄 버튼 높이 통일 — 얇고 낮게 */
 .tj-topbar-r2 .tj-cta,
 .tj-topbar-r2 .tj-undoredo button,
 .tj-topbar-r2 .tj-locktoggle {
-  height: 28px;
+  height: 23px;
   box-sizing: border-box;
   padding-top: 0;
   padding-bottom: 0;
@@ -261,6 +261,8 @@ html, body {
   align-items: center;
   justify-content: center;
 }
+.tj-topbar-r2 .tj-undoredo button { font-size: 13px; }
+.tj-topbar-r2 .tj-locktoggle svg { width: 15px; height: 15px; }
 /* 시간표 이름 — 타이틀 */
 .tj-app-main .tj-tt-current {
   max-width: 100%;
