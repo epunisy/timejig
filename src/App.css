@@ -776,14 +776,16 @@ html, body {
   position: relative;
 }
 
-/* 로고 스포트라이트 — 오늘 외 요일엔 짙은 썬팅, 오늘 칸만 그대로(썬팅 벗긴 듯) */
+/* 로고 스포트라이트 — 오늘 외 요일엔 썬팅, 오늘 칸만 그대로(썬팅 벗긴 듯) */
 .tj-day-head.tj-dim { position: relative; }
+/* 썬팅 칸은 요일 사이 하얀/구분선도 안 보이게 */
+.tj-day-col.tj-dim, .tj-day-head.tj-dim { border-right-color: transparent; }
 .tj-day-col.tj-dim::after,
 .tj-day-head.tj-dim::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 38;
   pointer-events: none;
   animation: tjTintIn 0.25s ease;
