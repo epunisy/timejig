@@ -1175,6 +1175,17 @@ html, body {
 /* 설정 항목 제목을 또렷하게(12px·진하게) — 무엇을 설정하는지 한눈에 스캔되도록 */
 .tj-set-modal label > span:first-child { font-size: 12px; font-weight: 600; color: #333; }
 .tj-set-modal .tj-set-section-t { font-size: 13px; color: #1f2937; }
+/* 설정 그룹을 카드 박스로 묶어 한눈에 구분 */
+.tj-set-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #e7e8ec;
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  background: #fafafb;
+}
+.tj-set-group .tj-set-section { border-top: none; padding-top: 0; margin: 0; }
 .tj-modal-x {
   background: transparent;
   border: none;
