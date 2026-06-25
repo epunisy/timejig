@@ -362,6 +362,12 @@ export default function Timetable({
                 zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
+              // 오늘 칸: 지난 일정은 흐리게, 진행 중 일정은 강조
+              const isToday = d === todayKor;
+              const isPast = isToday && b.end <= nowFromStart;
+              const isNow = isToday && b.start <= nowFromStart && nowFromStart < b.end;
+              if (isPast) className += ' tj-past';
+              if (isNow) className += ' tj-now-block';
               const c = getSubjectColor(config, subj);
               let bandColor = null;
               if (c) {
@@ -383,6 +389,7 @@ export default function Timetable({
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
                   {bandColor && <span className="tj-block-band" style={{ background: bandColor }} />}
+                  {isNow && <span className="tj-block-elapsed" style={{ height: Math.max(0, (nowFromStart - b.start) * PX_PER_MIN) + 'px' }} />}
                   <div className="nm">{subj.name}</div>
                   <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
                 </div>
