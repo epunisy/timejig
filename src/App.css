@@ -158,19 +158,18 @@ html, body {
   line-height: 1;
   white-space: nowrap;
 }
-/* 첫 화면 기능 목록 */
+/* 첫 화면 기능 목록 — 길면 줄바꿈되며 이모지 뒤로 들여쓰기 정렬 */
 .tj-setup-feats {
   list-style: none;
-  width: fit-content;
-  max-width: 100%;
+  max-width: 300px;
   margin: 6px auto 0;
   padding: 0;
   text-align: left;
   font-size: 11px;
   color: #777;
-  line-height: 1.85;
+  line-height: 1.65;
 }
-.tj-setup-feats li { white-space: nowrap; }
+.tj-setup-feats li { padding-left: 17px; text-indent: -17px; margin-bottom: 2px; }
 
 .tj-name-input {
   padding: 0 11px;

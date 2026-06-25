@@ -29,11 +29,12 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
         <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
       <ul className="tj-setup-feats">
-        <li>📋 시간표를 복사해 과목 블록으로 이리저리 배치</li>
-        <li>📷 쓰던 시간표를 불러와 타임지그 시간표로 변환</li>
-        <li>📤 이미지로 저장해 메시지로 공유</li>
-        <li>📱 폰 잠금화면에 딱 맞는 이미지로 저장</li>
-        <li>👨‍👩‍👧 첫째·둘째 시간표를 한 화면에 담기</li>
+        <li>📋 시간표를 복사해 여러 버전으로 비교하기</li>
+        <li>📷 기존 시간표 사진을 불러와 자동으로 변환하기</li>
+        <li>🧩 한 번 만든 과목 블록을 드래그로 간편하게 배치하기</li>
+        <li>📤 이미지로 저장해 친구·가족에게 공유하기</li>
+        <li>📱 잠금화면에 딱 맞는 배경으로 저장하기</li>
+        <li>👨‍👩‍👧‍👦 형제·자매 시간표를 잠금화면에 함께 담기</li>
       </ul>
 
       {user ? (
