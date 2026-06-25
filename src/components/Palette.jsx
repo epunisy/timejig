@@ -156,7 +156,7 @@ export default function Palette({
   return (
     <div className={'tj-palette' + (collapsed ? ' collapsed' : '')}>
       <div className="tj-pal-head">
-        <h3>{t('subjects')}</h3>
+        <h3 style={{ cursor: 'pointer' }} onClick={onToggleCollapse} title={collapsed ? '펼치기' : '접기'}>{t('subjects')}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {editMode ? (
             <>
@@ -238,7 +238,7 @@ export default function Palette({
       </div>
       <div className="tj-edu">
           <div className="tj-edu-head">
-            <span>월 교육비</span>
+            <span style={{ cursor: 'pointer' }} onClick={() => setCostHidden(h => !h)} title={costHidden ? '펼치기' : '접기'}>월 교육비</span>
             <button className="tj-eye-btn" onClick={() => setCostHidden(h => !h)} aria-label="교육비 숨기기"><Eye off={costHidden} /></button>
           </div>
           {!costHidden && catColors && monthlyCost > 0 && (
@@ -274,7 +274,7 @@ export default function Palette({
       </div>
       <div className="tj-memo-box">
         <div className="tj-memo-box-head">
-          <span>메모</span>
+          <span style={{ cursor: 'pointer' }} onClick={() => setMemoHidden(h => !h)} title={memoHidden ? '펼치기' : '접기'}>메모</span>
           <button className="tj-eye-btn" onClick={() => setMemoHidden(h => !h)} aria-label="메모 숨기기"><Eye off={memoHidden} /></button>
         </div>
         {!memoHidden && (
