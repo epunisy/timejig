@@ -1,0 +1,4 @@
+# 비공개 기간 — 검색엔진/크롤러 차단
+# 나중에 공개할 때: 아래 Disallow: / 를 지우거나 Allow: / 로 바꾸세요.
+User-agent: *
+Disallow: /

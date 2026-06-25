@@ -6,6 +6,7 @@ import Main from './components/Main';
 import Export from './components/Export';
 import ConfirmDialog from './components/ConfirmDialog';
 import { auth, db, doc, setDoc, onSnapshot, onAuthStateChanged, signInGoogle, signOutGoogle, checkRedirect } from './firebase';
+import { Analytics } from '@vercel/analytics/react';
 
 // 무드 팔레트 — 8가지 분류(국·영·수·사·과·예체능·기타·FreeTime)에 1:1로 매핑되는 색 조합
 export const MOODS = {
@@ -520,6 +521,7 @@ function App() {
           </div>
         </div>
       )}
+      <Analytics />
     </>
   );
 }
