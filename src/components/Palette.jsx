@@ -35,6 +35,7 @@ export default function Palette({
   memo,
   onMemoChange,
   onDeleteSubjects,
+  onSetSubjectsActive,
 }) {
   const catColors = getCategoryColors(config);
   const fullFill = isFullFill(config);
@@ -64,6 +65,15 @@ export default function Palette({
   function handleBulkDelete() {
     if (!selected.size || !onDeleteSubjects) return;
     onDeleteSubjects([...selected], () => exitEdit());
+  }
+  // 선택 중 하나라도 숨겨진 게 있으면 '보이기', 아니면 '숨기기'
+  const anyHiddenSel = [...selected].some(id => {
+    const s = subjects.find(x => x.id === id);
+    return s && s.active === false;
+  });
+  function handleBulkToggleActive() {
+    if (!selected.size || !onSetSubjectsActive) return;
+    onSetSubjectsActive([...selected], anyHiddenSel, () => exitEdit());
   }
   
   useEffect(() => {
@@ -160,6 +170,9 @@ export default function Palette({
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {editMode ? (
             <>
+              <button className="tj-pal-edit-btn" disabled={!selected.size} onClick={handleBulkToggleActive}>
+                {anyHiddenSel ? '보이기' : '숨기기'}{selected.size ? ` ${selected.size}` : ''}
+              </button>
               <button className="tj-pal-del" disabled={!selected.size} onClick={handleBulkDelete}>
                 삭제{selected.size ? ` ${selected.size}` : ''}
               </button>
