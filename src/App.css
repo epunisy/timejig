@@ -1172,6 +1172,9 @@ html, body {
 .tj-set-modal .tj-modal-head { position: relative; justify-content: center; }
 .tj-set-modal .tj-modal-head h3 { text-align: center; }
 .tj-set-modal .tj-modal-head .tj-modal-x { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+/* 설정 항목 제목을 또렷하게(12px·진하게) — 무엇을 설정하는지 한눈에 스캔되도록 */
+.tj-set-modal label > span:first-child { font-size: 12px; font-weight: 600; color: #333; }
+.tj-set-modal .tj-set-section-t { font-size: 13px; color: #1f2937; }
 .tj-modal-x {
   background: transparent;
   border: none;
