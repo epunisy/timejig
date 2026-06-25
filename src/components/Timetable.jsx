@@ -27,6 +27,8 @@ export default function Timetable({
   onDragEnd,
   onInternalDraggingChange,
   locked,
+  spotlightDay,
+  spotlightBlockId,
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -296,7 +298,9 @@ export default function Timetable({
     <div className="tj-grid" style={gridStyle}>
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
-        {days.map((d, i) => <div key={d} className="tj-day-head">{dayLabels[i]}</div>)}
+        {days.map((d, i) => (
+          <div key={d} className={'tj-day-head' + (spotlightDay && d !== spotlightDay ? ' tj-dim' : '')}>{dayLabels[i]}</div>
+        ))}
       </div>
       <div
         className="tj-grid-body"
@@ -319,7 +323,7 @@ export default function Timetable({
           ))}
         </div>
         {days.map(d => (
-          <div key={d} className="tj-day-col" data-day={d}>
+          <div key={d} className={'tj-day-col' + (spotlightDay && d !== spotlightDay ? ' tj-dim' : '')} data-day={d}>
             {hours.map((h, i) => i === 0 ? null : (
               <div 
                 key={h}
@@ -340,6 +344,7 @@ export default function Timetable({
                 zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
+              if (spotlightBlockId === b.id) className += ' tj-spot';
               const c = getSubjectColor(config, subj);
               let bandColor = null;
               if (c) {

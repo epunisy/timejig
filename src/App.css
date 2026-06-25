@@ -774,6 +774,14 @@ html, body {
   border-right: 1px solid #d3deeb;
   box-sizing: border-box;
   position: relative;
+  transition: opacity 0.25s;
+}
+
+/* 로고 스포트라이트 — 오늘 외 요일 어둡게, 현재/다음 수업 강조 */
+.tj-day-col.tj-dim, .tj-day-head.tj-dim { opacity: 0.2; transition: opacity 0.25s; }
+.tj-block.tj-spot {
+  box-shadow: 0 0 0 2px #378ADD, 0 0 12px rgba(55, 138, 221, 0.5);
+  z-index: 40;
 }
 
 .tj-day-col:last-child { border-right: none; }
@@ -1009,20 +1017,17 @@ html, body {
 .tj-ghost {
   position: fixed;
   pointer-events: none;
-  background: #fff;
-  color: #333;
-  padding: 6px 10px 6px 8px;
-  font-size: 11px;
+  background: rgba(38, 38, 38, 0.85);
+  color: #fff;
+  padding: 3px 9px;
+  font-size: 10.5px;
   font-weight: 500;
   z-index: 1000;
-  /* 커서/손가락 바로 위에 살짝 띄우고 집어든 느낌으로 기울임 */
-  transform: translate(-50%, -135%) rotate(-3deg);
+  /* 손가락/커서보다 한참 위에 작은 라벨로 띄워 이동 경로를 가리지 않게 */
+  transform: translate(-50%, -260%);
   white-space: nowrap;
-  opacity: 0.96;
-  border: 1px solid #ccc;
-  border-left: 4px solid #888;
-  border-radius: 3px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  border-radius: 11px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .tj-drop-preview {
