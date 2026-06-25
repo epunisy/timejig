@@ -776,24 +776,9 @@ html, body {
   position: relative;
 }
 
-/* 로고 스포트라이트 — 오늘 외 요일엔 썬팅, 오늘 칸만 그대로(썬팅 벗긴 듯) */
-.tj-day-head.tj-dim { position: relative; }
-/* 썬팅 칸은 요일 사이 하얀/구분선도 안 보이게 — 테두리 자리(1px)까지 덮음 */
-.tj-day-col.tj-dim, .tj-day-head.tj-dim { border-right-width: 0; }
-.tj-day-col.tj-dim::after,
-.tj-day-head.tj-dim::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: -1px;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 38;
-  pointer-events: none;
-  animation: tjTintIn 0.25s ease;
-}
-@keyframes tjTintIn { from { opacity: 0; } to { opacity: 1; } }
+/* 오늘 요일 — 항상 은은하게 강조 (현재 요일을 한눈에) */
+.tj-day-col.tj-today { background: rgba(255, 213, 110, 0.16); }
+.tj-day-head.tj-today { background: #ffe7b8; color: #9a6a12; font-weight: 700; }
 
 .tj-day-col:last-child { border-right: none; }
 

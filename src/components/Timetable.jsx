@@ -27,9 +27,10 @@ export default function Timetable({
   onDragEnd,
   onInternalDraggingChange,
   locked,
-  spotlightDay,
-  spotlightBlockId,
+  scrollNowKey,
 }) {
+  // 오늘 요일 — 항상 강조해서 현재 요일을 한눈에
+  const todayKor = ['일', '월', '화', '수', '목', '금', '토'][new Date().getDay()];
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
   // 현재 시각(분) — 타임라인 표시용, 30초마다 갱신
@@ -54,12 +55,12 @@ export default function Timetable({
     return pad(h) + ':' + pad(m);
   }
 
-  // 실시간 일과(스포트라이트) — 해당 수업이 안 보이지 않게 가운데로 자동 스크롤
+  // 로고 클릭 시 — 현재 시각(타임라인)이 가운데 오도록 자동 스크롤
   useEffect(() => {
-    if (!spotlightBlockId) return;
-    const el = gridBodyRef.current && gridBodyRef.current.querySelector('[data-spot="1"]');
+    if (!scrollNowKey) return;
+    const el = gridBodyRef.current && gridBodyRef.current.querySelector('.tj-nowline');
     if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, [spotlightBlockId]);
+  }, [scrollNowKey]);
 
   useEffect(() => {
     if (!dragSubject) return;
@@ -316,7 +317,7 @@ export default function Timetable({
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map((d, i) => (
-          <div key={d} className={'tj-day-head' + (spotlightDay && d !== spotlightDay ? ' tj-dim' : '')}>{dayLabels[i]}</div>
+          <div key={d} className={'tj-day-head' + (d === todayKor ? ' tj-today' : '')}>{dayLabels[i]}</div>
         ))}
       </div>
       <div
@@ -340,7 +341,7 @@ export default function Timetable({
           ))}
         </div>
         {days.map(d => (
-          <div key={d} className={'tj-day-col' + (spotlightDay && d !== spotlightDay ? ' tj-dim' : '')} data-day={d}>
+          <div key={d} className={'tj-day-col' + (d === todayKor ? ' tj-today' : '')} data-day={d}>
             {hours.map((h, i) => i === 0 ? null : (
               <div 
                 key={h}
@@ -378,7 +379,6 @@ export default function Timetable({
                   key={b.id}
                   className={className}
                   style={style}
-                  data-spot={spotlightBlockId === b.id ? '1' : undefined}
                   onMouseDown={(e) => handleBlockStart(e, b)}
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >

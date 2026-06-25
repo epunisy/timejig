@@ -34,8 +34,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [schedPop, setSchedPop] = useState(null);
   const [typedMsg, setTypedMsg] = useState('');
   const popIdRef = useRef(0);
-  // 로고 클릭 시 오늘 요일만 밝게(나머지 어둡게) + 현재/다음 수업 강조
-  const [spotlight, setSpotlight] = useState(null); // { day, blockId }
+  // 로고 클릭 시 현재 위치로 스크롤시키는 트리거(증가할 때마다 스크롤)
+  const [scrollNowKey, setScrollNowKey] = useState(0);
   const [locked, setLocked] = useState(() => {
     try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
   });
@@ -54,7 +54,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       setTypedMsg(full.slice(0, i));
       if (i >= full.length) clearInterval(typer);
     }, 45);
-    const hide = setTimeout(() => { setSchedPop(null); setSpotlight(null); }, 3000);
+    const hide = setTimeout(() => setSchedPop(null), 3000);
     return () => { clearInterval(typer); clearTimeout(hide); };
   }, [schedPop]);
   const newTTInputRef = useRef(null);
@@ -131,21 +131,19 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         if (!next || s < next.s) next = { id: b.id, s, name };
       }
     });
-    let msg, spotId = null;
+    let msg;
     if (current) {
       msg = `지금 ${current.name} 수업 중이에요!`;
-      spotId = current.id;
     } else if (next) {
       const rem = next.s - nowMin;
       const hh = Math.floor(rem / 60), mm = rem % 60;
       const remText = hh > 0 ? (mm > 0 ? `${hh}시간 ${mm}분` : `${hh}시간`) : `${mm}분`;
       msg = `${next.name} 시작까지 ${remText} 남았어요!`;
-      spotId = next.id;
     } else {
       msg = '오늘 일정이 모두 끝났어요!';
     }
     setSchedPop({ msg, id: ++popIdRef.current });
-    setSpotlight({ day: todayKor, blockId: spotId });
+    setScrollNowKey(k => k + 1); // 현재 시각 위치로 스크롤
   }
 
   // 서식 통일 — 현재 시간표 기준으로 글씨체·크기·무드·색채우기·배경을 모든 시간표에 적용
@@ -720,8 +718,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
           locked={locked}
-          spotlightDay={spotlight?.day}
-          spotlightBlockId={spotlight?.blockId}
+          scrollNowKey={scrollNowKey}
         />
         <div
           className="tj-divider"
