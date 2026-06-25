@@ -774,15 +774,21 @@ html, body {
   border-right: 1px solid #d3deeb;
   box-sizing: border-box;
   position: relative;
-  transition: opacity 0.25s;
 }
 
-/* 로고 스포트라이트 — 오늘 외 요일 어둡게, 현재/다음 수업 강조 */
-.tj-day-col.tj-dim, .tj-day-head.tj-dim { opacity: 0.2; transition: opacity 0.25s; }
-.tj-block.tj-spot {
-  box-shadow: 0 0 0 2px #378ADD, 0 0 12px rgba(55, 138, 221, 0.5);
-  z-index: 40;
+/* 로고 스포트라이트 — 오늘 외 요일엔 짙은 썬팅, 오늘 칸만 그대로(썬팅 벗긴 듯) */
+.tj-day-head.tj-dim { position: relative; }
+.tj-day-col.tj-dim::after,
+.tj-day-head.tj-dim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 38;
+  pointer-events: none;
+  animation: tjTintIn 0.25s ease;
 }
+@keyframes tjTintIn { from { opacity: 0; } to { opacity: 1; } }
 
 .tj-day-col:last-child { border-right: none; }
 

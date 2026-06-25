@@ -43,7 +43,14 @@ export default function Timetable({
     const m = min % 60;
     return pad(h) + ':' + pad(m);
   }
-  
+
+  // 실시간 일과(스포트라이트) — 해당 수업이 안 보이지 않게 가운데로 자동 스크롤
+  useEffect(() => {
+    if (!spotlightBlockId) return;
+    const el = gridBodyRef.current && gridBodyRef.current.querySelector('[data-spot="1"]');
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [spotlightBlockId]);
+
   useEffect(() => {
     if (!dragSubject) return;
     
@@ -344,7 +351,6 @@ export default function Timetable({
                 zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
-              if (spotlightBlockId === b.id) className += ' tj-spot';
               const c = getSubjectColor(config, subj);
               let bandColor = null;
               if (c) {
@@ -362,6 +368,7 @@ export default function Timetable({
                   key={b.id}
                   className={className}
                   style={style}
+                  data-spot={spotlightBlockId === b.id ? '1' : undefined}
                   onMouseDown={(e) => handleBlockStart(e, b)}
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >

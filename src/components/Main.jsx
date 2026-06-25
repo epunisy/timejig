@@ -565,6 +565,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const logoMenuItems = [
     { key: 'tut', label: '📖 튜토리얼', run: () => setShowTutorial(true) },
     { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
+    { key: 'import', label: '📷 시간표 옮겨오기', run: () => setShowImportPlan(true) },
+    { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
     { key: 'unify', label: '🎨 서식 맞추기', run: handleUnifyFormat },
     { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
     { key: 'share', label: '📤 공유하기', run: handleShare },
@@ -680,14 +682,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           {logoMenuItems.map(it => (
             <button key={it.key} className="tj-cta tj-logo-chip" onClick={it.run}>{it.label}</button>
           ))}
-          <button className="tj-cta" onClick={() => setShowImportPlan(true)}>
-            📷 시간표 옮겨오기
-          </button>
-          <button className="tj-cta" onClick={onGoExport}>
-            📱 모바일 잠금화면
-          </button>
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식설정">
-            ⚙️ 서식설정
+          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식 및 모든설정">
+            ⚙️ 서식 및 모든설정
           </button>
           <div className="tj-undoredo">
             <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" title="되돌리기">↶</button>
