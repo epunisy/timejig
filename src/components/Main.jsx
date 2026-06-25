@@ -151,9 +151,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 서식 통일 — 현재 시간표 기준으로 글씨체·크기·무드·색채우기·배경을 모든 시간표에 적용
   function handleUnifyFormat() {
     setConfirmDialog({
-      title: '서식 통일',
-      message: '현재 시간표를 기준으로<br>글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경을<br>모든 시간표에 통일할까요?',
-      confirmText: '통일하기',
+      title: '서식 맞추기',
+      message: '현재 시간표를 기준으로<br>글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경을<br>모든 시간표에 적용할까요?',
+      confirmText: '적용하기',
       onYes: () => {
         const fmt = {
           font: config.font,
@@ -565,7 +565,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const logoMenuItems = [
     { key: 'tut', label: '📖 튜토리얼', run: () => setShowTutorial(true) },
     { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
-    { key: 'unify', label: '🎨 서식 통일', run: handleUnifyFormat },
+    { key: 'unify', label: '🎨 서식 맞추기', run: handleUnifyFormat },
     { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
     { key: 'share', label: '📤 공유하기', run: handleShare },
   ];
