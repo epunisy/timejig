@@ -43,7 +43,12 @@ export default function Palette({
   const [costHidden, setCostHidden] = useState(false);
   const [memoHidden, setMemoHidden] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [sortMode, setSortMode] = useState('added'); // 'added' = 추가한 순서, 'name' = 과목명 가나다순
   const [selected, setSelected] = useState(() => new Set());
+
+  const displaySubjects = sortMode === 'name'
+    ? [...subjects].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ko'))
+    : subjects;
   const editModeRef = useRef(false);
   useEffect(() => { editModeRef.current = editMode; }, [editMode]);
 
@@ -162,11 +167,18 @@ export default function Palette({
           ) : (
             <>
               <button className="tj-add-btn" onClick={onAddSubject}>+</button>
-              {subjects.length > 0 && (
-                <button
-                  className="tj-pal-edit-btn"
-                  onClick={() => { setEditMode(true); if (collapsed) onToggleCollapse(); }}
-                >편집</button>
+              {subjects.length > 0 && !collapsed && (
+                <>
+                  <button
+                    className="tj-pal-edit-btn"
+                    onClick={() => setSortMode(m => (m === 'added' ? 'name' : 'added'))}
+                    title="정렬 방식 변경"
+                  >{sortMode === 'name' ? '과목순' : '추가순'}</button>
+                  <button
+                    className="tj-pal-edit-btn"
+                    onClick={() => setEditMode(true)}
+                  >편집</button>
+                </>
               )}
               <button className="tj-eye-btn" onClick={onToggleCollapse} aria-label="과목 숨기기"><Eye off={collapsed} /></button>
             </>
@@ -181,7 +193,7 @@ export default function Palette({
         {subjects.length === 0 ? (
           <div className="tj-empty">{t('emptySubjects')}</div>
         ) : (
-          subjects.map(s => {
+          displaySubjects.map(s => {
             const style = {};
             let className = 'tj-pal-item';
             if (!s.active) className += ' inactive';
