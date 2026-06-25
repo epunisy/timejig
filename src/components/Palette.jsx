@@ -252,26 +252,33 @@ export default function Palette({
             onClick={() => setShowHidden(v => !v)}
             title="숨긴 과목 보기"
           >
-            <div className="tj-pal-name">🙈 숨긴 과목</div>
+            <div className="tj-pal-name">숨긴 과목</div>
             <div className="tj-pal-dur">{hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}</div>
           </button>
         )}
-      </div>
-      {!collapsed && showHidden && (
-        <div className="tj-pal-hidden-list">
-          {hiddenSubjects.length === 0 ? (
-            <div className="tj-pal-hidden-empty">숨긴 과목이 없어요</div>
-          ) : hiddenSubjects.map(s => (
-            <div key={s.id} className="tj-pal-hidden-item">
-              <span className="tj-pal-hidden-name">{s.name}</span>
-              <button
-                className="tj-pal-edit-btn"
-                onClick={() => onSetSubjectsHidden && onSetSubjectsHidden([s.id], false)}
-              >보이기</button>
+        {/* 숨긴 과목을 흐릿한 블록으로 촤르륵 펼침 — 한 번 누르면 숨기기 취소(되살리기) */}
+        {!editMode && showHidden && hiddenSubjects.map((s, i) => {
+          const style = { animationDelay: (i * 45) + 'ms' };
+          let className = 'tj-pal-item tj-pal-hidden-block';
+          const c = getSubjectColor(config, s);
+          if (c) {
+            if (fullFill) { style.background = c; style.color = textColorOn(c); className += ' with-fill'; }
+            else { style.borderLeftColor = c; className += ' with-accent'; }
+          }
+          return (
+            <div
+              key={s.id}
+              className={className}
+              style={style}
+              onClick={() => onSetSubjectsHidden && onSetSubjectsHidden([s.id], false)}
+              title="눌러서 다시 보이기"
+            >
+              <div className="tj-pal-name">{s.name}</div>
+              <div className="tj-pal-dur">{s.duration}분</div>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
       <div className="tj-edu">
           <div className="tj-edu-head">
             <span style={{ cursor: 'pointer' }} onClick={() => setCostHidden(h => !h)} title={costHidden ? '펼치기' : '접기'}>월 교육비</span>
