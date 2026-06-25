@@ -43,11 +43,12 @@ export default function Palette({
   const [costHidden, setCostHidden] = useState(true);
   const [memoHidden, setMemoHidden] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [sortMode, setSortMode] = useState('time'); // 'time' = 수업 길이순, 'name' = 과목명 가나다순
+  const [sortMode, setSortMode] = useState('time'); // 'time' = 수업 길이순, 'category' = 분류 순서(국영수사과예체능기타)
   const [selected, setSelected] = useState(() => new Set());
 
-  const displaySubjects = sortMode === 'name'
-    ? [...subjects].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ko'))
+  const displaySubjects = sortMode === 'category'
+    ? [...subjects].sort((a, b) =>
+        (a.colorIndex || 0) - (b.colorIndex || 0) || (a.name || '').localeCompare(b.name || '', 'ko'))
     : [...subjects].sort((a, b) => (a.duration || 0) - (b.duration || 0));
   const editModeRef = useRef(false);
   useEffect(() => { editModeRef.current = editMode; }, [editMode]);
@@ -171,9 +172,9 @@ export default function Palette({
                 <>
                   <button
                     className="tj-pal-edit-btn"
-                    onClick={() => setSortMode(m => (m === 'time' ? 'name' : 'time'))}
-                    title="정렬 방식 변경"
-                  >{sortMode === 'name' ? '과목순' : '시간순'}</button>
+                    onClick={() => setSortMode(m => (m === 'time' ? 'category' : 'time'))}
+                    title="정렬 방식 변경 (시간순 ↔ 과목순: 국·영·수·사·과·예체능·기타)"
+                  >{sortMode === 'category' ? '과목순' : '시간순'}</button>
                   <button
                     className="tj-pal-edit-btn"
                     onClick={() => setEditMode(true)}
