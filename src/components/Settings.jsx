@@ -141,11 +141,11 @@ export default function Settings({
           <button className="tj-modal-x" onClick={handleClose} aria-label="닫기">×</button>
         </div>
 
-        <div className="tj-set-group">
         <div className="tj-set-section tj-set-section--first">
           <span className="tj-set-section-t">시간표 설정</span>
           <span className="tj-set-section-h">이름 · 요일 · 시간은 지금 보고 있는 시간표에만 적용돼요.</span>
         </div>
+        <div className="tj-set-group">
 
         <label>
           <span>{t('timetableName')}</span>
@@ -221,11 +221,11 @@ export default function Settings({
         </label>
         </div>
 
-        <div className="tj-set-group">
         <div className="tj-set-section">
           <span className="tj-set-section-t">꾸밈 (서식)</span>
           <span className="tj-set-section-h">색 · 글씨 · 배경. 아래 ‘모든 시간표에 적용’으로 한 번에 맞출 수 있어요.</span>
         </div>
+        <div className="tj-set-group">
 
         <label>
           <span>색 (무드)</span>
@@ -371,7 +371,6 @@ export default function Settings({
             ))}
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
-          <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
         </div>
 
@@ -386,6 +385,9 @@ export default function Settings({
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>
             글꼴 제공: Google Fonts (SIL Open Font License)
+          </div>
+          <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>
+            ✨ 배경은 수시로 업데이트됩니다.
           </div>
         </div>
 

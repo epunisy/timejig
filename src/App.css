@@ -1185,7 +1185,6 @@ html, body {
   padding: 14px 14px 16px;
   background: #fafafb;
 }
-.tj-set-group .tj-set-section { border-top: none; padding-top: 0; margin: 0; }
 .tj-modal-x {
   background: transparent;
   border: none;
@@ -1248,19 +1247,16 @@ html, body {
 }
 
 /* 설정 그룹 구분 헤더 — '이 시간표 설정' / '꾸밈(서식)' */
+/* 그룹 헤더 — 박스(.tj-set-group) 바로 위에 캡션처럼. 위쪽에 더 띄워 박스에 붙게 */
 .tj-set-section {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin: 14px 0 2px;
-  padding-top: 12px;
-  border-top: 0.5px solid #e5e5e5;
-}
-.tj-set-section--first {
-  margin-top: 4px;
-  padding-top: 0;
+  margin: 7px 0 0;
+  padding: 0 2px;
   border-top: none;
 }
+.tj-set-section--first { margin-top: 0; }
 .tj-set-section-t { font-size: 12px; font-weight: 700; color: #333; letter-spacing: 0.3px; }
 .tj-set-section-h { font-size: 10px; color: #999; line-height: 1.4; }
 
