@@ -46,12 +46,12 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
   const timeLabelH = Math.round(timeFont * 1.2);
   const accentW = Math.max(4, Math.round(colW * 0.06));
 
-  // 앱 홍보 푸터
-  const footGap = Math.round(PAD * 0.55);
-  const footH = Math.round(labelFont * 2.2);
-  const brandFont = Math.round(labelFont * 1.05);
-  const promoFont = Math.round(font * 0.82);
-  const host = (typeof window !== 'undefined' && window.location.host) || 'timejig';
+  // 앱 홍보 푸터 (브랜드 / 태그라인 / Google Play 검색 안내 — 3줄)
+  const footGap = Math.round(PAD * 0.5);
+  const footH = Math.round(labelFont * 3.6);
+  const brandFont = Math.round(labelFont * 1.15);
+  const taglineFont = Math.round(font * 0.92);
+  const storeFont = Math.round(font * 0.78);
 
   const CAP_H = PAD * 2 + labelH + schedH + footGap + footH;
 
@@ -162,12 +162,13 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
         {/* 앱 홍보 푸터 */}
         <div style={{
           marginTop: footGap + 'px', height: footH + 'px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: Math.round(font * 0.55) + 'px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: Math.round(font * 0.25) + 'px',
           borderTop: '1px solid #e5e5e5',
         }}>
-          <span style={{ fontSize: brandFont + 'px', fontWeight: 800, color: '#378ADD', letterSpacing: '0.5px' }}>타임지그</span>
-          <span style={{ fontSize: promoFont + 'px', color: '#999' }}>나만의 시간표를 잠금화면에 · {host}</span>
+          <span style={{ fontSize: brandFont + 'px', fontWeight: 800, color: '#378ADD', letterSpacing: '0.5px', lineHeight: 1.2 }}>타임지그</span>
+          <span style={{ fontSize: taglineFont + 'px', color: '#555', lineHeight: 1.2 }}>드래그로 뚝딱, 예쁘게 만드는 시간표</span>
+          <span style={{ fontSize: storeFont + 'px', color: '#999', lineHeight: 1.2 }}>Google Play <b style={{ color: '#777' }}>'타임지그'</b> 검색 · timejig.vercel.app</span>
         </div>
       </div>
     </div>
