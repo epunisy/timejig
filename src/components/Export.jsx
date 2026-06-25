@@ -153,13 +153,13 @@ export default function Export({ data, onBack }) {
 
               <div style={{
                 height: schedH + 'px', boxSizing: 'border-box',
-                border: '1.5px solid #9a9a9a', background: '#fff', overflow: 'hidden',
+                border: '2px solid #a8a8a8', background: '#fff', overflow: 'hidden',
               }}>
                 {/* 헤더 — 시간축 코너 + 요일 (찐그레이 글자 + 연그레이 바탕) */}
                 <div style={{ display: 'flex', height: headH + 'px' }}>
                   <div style={{
                     width: timeColW + 'px', boxSizing: 'border-box',
-                    background: '#ececec', borderRight: '1px solid #a8a8a8',
+                    background: '#ececec', borderRight: '2px solid #a8a8a8',
                   }}></div>
                   {ttDays.map((d, i) => (
                     <div key={d} style={{
@@ -167,8 +167,8 @@ export default function Export({ data, onBack }) {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: headFont + 'px', fontWeight: 600, color: '#444',
                       background: '#ececec',
-                      borderRight: i < ttDays.length - 1 ? '1px solid #a8a8a8' : 'none',
-                      borderBottom: '1.5px solid #a8a8a8',
+                      borderRight: i < ttDays.length - 1 ? '2px solid #a8a8a8' : 'none',
+                      borderBottom: '2px solid #a8a8a8',
                     }}>{ttDayLabels[i]}</div>
                   ))}
                 </div>
@@ -177,7 +177,7 @@ export default function Export({ data, onBack }) {
                   {/* 왼쪽 시간축 (요일과 동일한 연그레이 바탕) */}
                   <div style={{
                     width: timeColW + 'px', boxSizing: 'border-box', position: 'relative',
-                    background: '#ececec', borderRight: '1px solid #a8a8a8',
+                    background: '#ececec', borderRight: '2px solid #a8a8a8',
                   }}>
                     {hours.map((h, i) => {
                       let topPx = (i / hourCount) * bodyH;
@@ -194,14 +194,14 @@ export default function Export({ data, onBack }) {
                   {ttDays.map((d, i) => (
                     <div key={d} style={{
                       width: colW + 'px', boxSizing: 'border-box', position: 'relative',
-                      borderRight: i < ttDays.length - 1 ? '1px solid #a8a8a8' : 'none',
+                      borderRight: i < ttDays.length - 1 ? '2px solid #a8a8a8' : 'none',
                     }}>
                       {/* 시간 눈금선 */}
                       {hours.slice(1, hourCount).map((h, j) => (
                         <div key={'l' + h} style={{
                           position: 'absolute', left: 0, right: 0,
                           top: (((j + 1) / hourCount) * bodyH) + 'px',
-                          height: '2px', background: '#c4c4c4',
+                          height: '2px', background: '#a8a8a8',
                         }}></div>
                       ))}
                       {tt.blocks.filter(b => b.day === d).map(b => {
@@ -214,7 +214,7 @@ export default function Export({ data, onBack }) {
                           position: 'absolute', left: 0, right: 0,
                           top: top + 'px', height: h + 'px',
                           boxSizing: 'border-box',
-                          background: '#fff', border: '1px solid #999',
+                          background: '#fff', border: '2px solid #a8a8a8',
                           display: 'flex', flexDirection: 'column',
                           alignItems: 'center', justifyContent: 'center',
                           overflow: 'hidden', padding: '0 1px',
@@ -224,7 +224,7 @@ export default function Export({ data, onBack }) {
                         if (col) {
                           if (fullFill) {
                             blkStyle.background = col;
-                            blkStyle.border = '1px solid rgba(0,0,0,0.18)';
+                            blkStyle.border = '2px solid rgba(0,0,0,0.18)';
                             txtColor = textColorOn(col);
                           } else {
                             bandCol = col; // 1px 좌측 선은 유지하고 안쪽에 색띠

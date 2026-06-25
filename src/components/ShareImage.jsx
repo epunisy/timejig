@@ -18,11 +18,10 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
   const fullFill = (cfg.colorFill || 'band') === 'full';
   const fontFamily = getFontFamily(cfg.font);
 
-  // 격자선 — 이미지화하면 얇은 선이 안 보여서 진하고 두껍게
-  const GRID = '#c4c4c4';        // 시간(가로) 보조선
-  const GRID_STRONG = '#a8a8a8'; // 요일(세로) 구분선
-  const OUTER = '#9a9a9a';       // 바깥 테두리
-  const HOUR_LINE_H = 2;         // 가로 보조선 두께(px)
+  // 격자선 — 이미지화하면 얇은 선이 안 보여서 진하고 두껍게.
+  // 가로·세로·외곽선·블록 테두리 모두 같은 두께(LINE_W)/색(LINE)으로 통일한다.
+  const LINE = '#a8a8a8';
+  const LINE_W = 2;
 
   const hours = [];
   for (let h = startHour; h <= endHour; h++) hours.push(h);
@@ -79,24 +78,24 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
 
         <div style={{
           height: schedH + 'px', boxSizing: 'border-box',
-          border: '1.5px solid ' + OUTER, background: '#fff', overflow: 'hidden',
+          border: LINE_W + 'px solid ' + LINE, background: '#fff', overflow: 'hidden',
         }}>
           {/* 헤더 — 시간축 코너 + 요일 */}
           <div style={{ display: 'flex', height: headH + 'px' }}>
-            <div style={{ width: timeColW + 'px', boxSizing: 'border-box', background: '#ececec', borderRight: '1px solid ' + GRID_STRONG }} />
+            <div style={{ width: timeColW + 'px', boxSizing: 'border-box', background: '#ececec', borderRight: LINE_W + 'px solid ' + LINE }} />
             {days.map((d, i) => (
               <div key={d} style={{
                 width: colW + 'px', boxSizing: 'border-box',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: headFont + 'px', fontWeight: 600, color: '#444', background: '#ececec',
-                borderRight: i < days.length - 1 ? '1px solid ' + GRID_STRONG : 'none',
-                borderBottom: '1.5px solid ' + GRID_STRONG,
+                borderRight: i < days.length - 1 ? LINE_W + 'px solid ' + LINE : 'none',
+                borderBottom: LINE_W + 'px solid ' + LINE,
               }}>{dayLabels[i]}</div>
             ))}
           </div>
           {/* 본문 */}
           <div style={{ display: 'flex', height: bodyH + 'px' }}>
-            <div style={{ width: timeColW + 'px', boxSizing: 'border-box', position: 'relative', background: '#ececec', borderRight: '1px solid ' + GRID_STRONG }}>
+            <div style={{ width: timeColW + 'px', boxSizing: 'border-box', position: 'relative', background: '#ececec', borderRight: LINE_W + 'px solid ' + LINE }}>
               {hours.map((h, i) => {
                 let topPx = (i / hourCount) * bodyH;
                 if (i === hourCount) topPx = bodyH - timeLabelH;
@@ -112,12 +111,12 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
             {days.map((d, i) => (
               <div key={d} style={{
                 width: colW + 'px', boxSizing: 'border-box', position: 'relative',
-                borderRight: i < days.length - 1 ? '1px solid ' + GRID_STRONG : 'none',
+                borderRight: i < days.length - 1 ? LINE_W + 'px solid ' + LINE : 'none',
               }}>
                 {hours.slice(1, hourCount).map((h, j) => (
                   <div key={'l' + h} style={{
                     position: 'absolute', left: 0, right: 0,
-                    top: (((j + 1) / hourCount) * bodyH) + 'px', height: HOUR_LINE_H + 'px', background: GRID,
+                    top: (((j + 1) / hourCount) * bodyH) + 'px', height: LINE_W + 'px', background: LINE,
                   }} />
                 ))}
                 {tt.blocks.filter(b => b.day === d).map(b => {
@@ -128,7 +127,7 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
                   const col = getSubjectColor(cfg, subj);
                   const blkStyle = {
                     position: 'absolute', left: 0, right: 0, top: top + 'px', height: hgt + 'px',
-                    boxSizing: 'border-box', background: '#fff', border: '1px solid #999',
+                    boxSizing: 'border-box', background: '#fff', border: LINE_W + 'px solid ' + LINE,
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     overflow: 'hidden', padding: '0 2px',
                   };
@@ -137,7 +136,7 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
                   if (col) {
                     if (fullFill) {
                       blkStyle.background = col;
-                      blkStyle.border = '1px solid rgba(0,0,0,0.18)';
+                      blkStyle.border = LINE_W + 'px solid rgba(0,0,0,0.18)';
                       txtColor = textColorOn(col);
                     } else {
                       bandCol = col;
