@@ -27,9 +27,9 @@ export default function Timetable({
   onDragEnd,
   onInternalDraggingChange,
   locked,
-  scrollNowKey,
+  nowView,
 }) {
-  // 오늘 요일 — 항상 강조해서 현재 요일을 한눈에
+  // 오늘 요일 (현재 보기 ON일 때만 강조)
   const todayKor = ['일', '월', '화', '수', '목', '금', '토'][new Date().getDay()];
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -55,12 +55,12 @@ export default function Timetable({
     return pad(h) + ':' + pad(m);
   }
 
-  // 로고 클릭 시 — 현재 시각(타임라인)이 가운데 오도록 자동 스크롤
+  // 현재 보기 ON일 때 — 현재 시각(타임라인)이 가운데 오도록 자동 스크롤
   useEffect(() => {
-    if (!scrollNowKey) return;
+    if (!nowView) return;
     const el = gridBodyRef.current && gridBodyRef.current.querySelector('.tj-nowline');
     if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, [scrollNowKey]);
+  }, [nowView]);
 
   useEffect(() => {
     if (!dragSubject) return;
@@ -317,7 +317,7 @@ export default function Timetable({
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map((d, i) => (
-          <div key={d} className={'tj-day-head' + (d === todayKor ? ' tj-today' : '')}>{dayLabels[i]}</div>
+          <div key={d} className={'tj-day-head' + (nowView && d === todayKor ? ' tj-today' : '')}>{dayLabels[i]}</div>
         ))}
       </div>
       <div
@@ -341,7 +341,7 @@ export default function Timetable({
           ))}
         </div>
         {days.map(d => (
-          <div key={d} className={'tj-day-col' + (d === todayKor ? ' tj-today' : '')} data-day={d}>
+          <div key={d} className={'tj-day-col' + (nowView && d === todayKor ? ' tj-today' : '')} data-day={d}>
             {hours.map((h, i) => i === 0 ? null : (
               <div 
                 key={h}
@@ -362,8 +362,8 @@ export default function Timetable({
                 zIndex: 2 + Math.floor(b.start / 60),
               };
               let className = 'tj-block';
-              // 오늘 칸: 지난 일정은 흐리게, 진행 중 일정은 강조
-              const isToday = d === todayKor;
+              // 오늘 칸: 지난 일정은 흐리게, 진행 중 일정은 강조 (현재 보기 ON일 때만)
+              const isToday = nowView && d === todayKor;
               const isPast = isToday && b.end <= nowFromStart;
               const isNow = isToday && b.start <= nowFromStart && nowFromStart < b.end;
               if (isPast) className += ' tj-past';
@@ -396,7 +396,7 @@ export default function Timetable({
             })}
           </div>
         ))}
-        {showNowLine && (
+        {nowView && showNowLine && (
           <div className="tj-nowline" style={{ top: nowTop + 'px' }} aria-hidden="true">
             <span className="tj-nowline-dot" />
             <span className="tj-nowline-time">{nowLabel}</span>

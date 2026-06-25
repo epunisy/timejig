@@ -195,44 +195,27 @@ html, body {
 .tj-setup-login-btn .tj-g { font-weight: 700; color: #4285F4; }
 
 /* 로고 메뉴 (튜토리얼/첫화면/업데이트/공유) */
-.tj-logo-wrap { position: relative; flex-shrink: 0; display: flex; align-items: center; }
+.tj-logo-wrap { flex-shrink: 0; display: flex; align-items: center; }
 
-/* 로고가 말하듯 — 다음 일정 말풍선 (로고 아래, 꼬리 위로) */
-.tj-sched-pop {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 9px;
-  z-index: 200;
-  background: #fff;
-  border: 0.5px solid #e0e0e0;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  padding: 9px 13px;
-  font-size: 12.5px;
-  color: #333;
-  white-space: nowrap;
-  animation: tjPopIn 0.18s ease;
+/* 🔴 현재 보기 토글 버튼 (아이콘만) */
+.tj-nowbtn {
+  height: 23px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: none;
+  border-radius: 10px;
+  background: #f5f6f8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  opacity: 0.4;
 }
-/* 말풍선 꼬리 — 로고 쪽(위)을 향함 */
-.tj-sched-pop::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 18px;
-  width: 11px;
-  height: 11px;
-  background: #fff;
-  border-left: 0.5px solid #e0e0e0;
-  border-top: 0.5px solid #e0e0e0;
-  transform: rotate(45deg);
-}
-@keyframes tjPopIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: none; }
-}
-.tj-sched-caret { color: #aaa; animation: tjCaretBlink 0.7s steps(1) infinite; }
-@keyframes tjCaretBlink { 50% { opacity: 0; } }
+.tj-nowbtn.on { opacity: 1; background: #ffe3e3; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12); }
+.tj-nowbtn:active { transform: translateY(1px); }
 
 /* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
 .tj-menu-btn {
@@ -797,14 +780,14 @@ html, body {
   pointer-events: none;
 }
 
-/* 현재 시각 타임라인 */
+/* 현재 시각 타임라인 — 과목 글씨/블록을 가리지 않게 블록 뒤(아래)에 깔림 */
 .tj-nowline {
   position: absolute;
   left: 0;
   right: 0;
   height: 0;
   border-top: 1.5px solid #ff5a5f;
-  z-index: 26;
+  z-index: 1;
   pointer-events: none;
 }
 .tj-nowline-dot {

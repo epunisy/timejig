@@ -30,12 +30,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   const [palCollapsed, setPalCollapsed] = useState(false);
-  // 로고 클릭 — 다음 일정까지 남은 시간 팝업 ({ msg, id }) + 타이핑 효과
-  const [schedPop, setSchedPop] = useState(null);
-  const [typedMsg, setTypedMsg] = useState('');
-  const popIdRef = useRef(0);
-  // 로고 클릭 시 현재 위치로 스크롤시키는 트리거(증가할 때마다 스크롤)
-  const [scrollNowKey, setScrollNowKey] = useState(0);
+  // 실시간(현재) 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
+  const [nowView, setNowView] = useState(true);
   const [locked, setLocked] = useState(() => {
     try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
   });
@@ -43,20 +39,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     try { localStorage.setItem('tj_locked', locked ? '1' : '0'); } catch { /* 무시 */ }
   }, [locked]);
 
-  // 일정 팝업 — 한 글자씩 타이핑 + 3초 후 자동 사라짐
-  useEffect(() => {
-    if (!schedPop) { setTypedMsg(''); return; }
-    setTypedMsg('');
-    const full = schedPop.msg;
-    let i = 0;
-    const typer = setInterval(() => {
-      i++;
-      setTypedMsg(full.slice(0, i));
-      if (i >= full.length) clearInterval(typer);
-    }, 45);
-    const hide = setTimeout(() => setSchedPop(null), 3000);
-    return () => { clearInterval(typer); clearTimeout(hide); };
-  }, [schedPop]);
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
@@ -112,39 +94,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
   // 현재 보고 있는 시간표의 표시 설정(시간표마다 각자 보유). 예전 데이터 대비 전역 config 로 폴백.
   const config = activeTT.config || data.config;
-
-  // 로고 클릭 — 오늘 요일 스포트라이트 + 현재 수업(또는 다음 수업) 강조 + 안내 팝업
-  function showNextSchedule() {
-    const now = new Date();
-    const todayKor = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
-    const nowMin = now.getHours() * 60 + now.getMinutes();
-    let current = null, next = null;
-    activeTT.blocks.forEach(b => {
-      if (b.day !== todayKor) return;
-      const s = config.startHour * 60 + b.start;
-      const e = config.startHour * 60 + b.end;
-      const subj = data.subjects.find(x => x.id === b.subjectId);
-      const name = subj ? subj.name : '수업';
-      if (s <= nowMin && nowMin < e) {
-        if (!current || s < current.s) current = { id: b.id, s, name };
-      } else if (s > nowMin) {
-        if (!next || s < next.s) next = { id: b.id, s, name };
-      }
-    });
-    let msg;
-    if (current) {
-      msg = `지금 ${current.name} 수업 중이에요!`;
-    } else if (next) {
-      const rem = next.s - nowMin;
-      const hh = Math.floor(rem / 60), mm = rem % 60;
-      const remText = hh > 0 ? (mm > 0 ? `${hh}시간 ${mm}분` : `${hh}시간`) : `${mm}분`;
-      msg = `${next.name} 시작까지 ${remText} 남았어요!`;
-    } else {
-      msg = '오늘 일정이 모두 끝났어요!';
-    }
-    setSchedPop({ msg, id: ++popIdRef.current });
-    setScrollNowKey(k => k + 1); // 현재 시각 위치로 스크롤
-  }
 
   // 서식 통일 — 현재 시간표 기준으로 글씨체·크기·무드·색채우기·배경을 모든 시간표에 적용
   function handleUnifyFormat() {
@@ -577,12 +526,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     >
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" onClick={showNextSchedule} style={{ cursor: 'pointer' }} />
-          {schedPop && (
-            <div className="tj-sched-pop" key={schedPop.id}>
-              {typedMsg}<span className="tj-sched-caret">|</span>
-            </div>
-          )}
+          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
@@ -688,6 +632,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
           </div>
           <button
+            className={'tj-nowbtn' + (nowView ? ' on' : '')}
+            onClick={() => setNowView(v => !v)}
+            aria-pressed={nowView}
+            title={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
+          >🔴</button>
+          <button
             className={'tj-locktoggle' + (locked ? ' on' : '')}
             onClick={() => setLocked(l => !l)}
             aria-pressed={locked}
@@ -718,7 +668,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
           locked={locked}
-          scrollNowKey={scrollNowKey}
+          nowView={nowView}
         />
         <div
           className="tj-divider"
