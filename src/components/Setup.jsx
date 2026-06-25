@@ -25,7 +25,10 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
         </div>
         <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
-      <div className="tj-setup-hero-cap">드래그로 뚝딱 — 과목·교육비까지 한눈에 ✨</div>
+      <div className="tj-setup-hero-cap">
+        <b>드래그로 뚝딱뚝딱!</b>
+        엄마들이 상상했던 모든 기능을<br />가장 깔끔하게 담았어요.
+      </div>
 
       {user ? (
         <>

@@ -157,7 +157,8 @@ html, body {
   line-height: 1;
   white-space: nowrap;
 }
-.tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.4; margin-top: 2px; }
+.tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.5; margin-top: 4px; }
+.tj-setup-hero-cap b { display: block; font-size: 13px; color: #444; margin-bottom: 2px; }
 
 .tj-name-input {
   padding: 0 11px;
