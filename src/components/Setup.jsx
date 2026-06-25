@@ -14,16 +14,15 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
       </span>
       <div className="tj-setup-greeting">{t('welcome')}{'\n'}시작해볼까요?</div>
 
-      {/* 한눈에 보는 사용 흐름 — 실제 캡처: 완성 시간표 → 그대로 폰 잠금화면 */}
+      {/* 실제 캡처 두 장(위아래). 밤이라 빨간 현재선이 안 찍혀서, 시간표 위에 NOW선을 임의로 얹음 */}
       <div className="tj-setup-hero">
-        <div className="tj-hero-shot" role="img" aria-label="완성된 시간표 예시" />
-        <span className="tj-hero-arrow">→</span>
-        <div className="tj-hero-phone">
-          <span className="tj-hero-phone-time">9:41</span>
-          <div className="tj-hero-phone-shot" role="img" aria-label="폰 잠금화면 예시" />
+        <div className="tj-hero-shotwrap">
+          <img className="tj-hero-img" src="/preview-shot.jpg" alt="타임지그로 만든 시간표 예시" />
+          <span className="tj-hero-nowline"><span className="tj-hero-nowdot" /></span>
         </div>
+        <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
-      <div className="tj-setup-hero-cap">끌어다 놓으면 완성 — 그대로 폰 잠금화면까지 ✨</div>
+      <div className="tj-setup-hero-cap">드래그로 뚝딱 — 과목·교육비까지 한눈에 ✨</div>
 
       {user ? (
         <>

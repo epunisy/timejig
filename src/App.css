@@ -104,47 +104,42 @@ html, body {
   white-space: pre-line;
 }
 
-/* 첫 화면 미리보기 — 실제 캡처(편집 시간표 → 폰 잠금화면) */
+/* 첫 화면 미리보기 — 실제 캡처 두 장(시간표 → 과목/교육비) 세로 스택 */
 .tj-setup-hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: 8px;
   margin: 2px 0 0;
 }
-/* 완성 시간표 캡처 — 위쪽(상단바+그리드)만 보이게 잘라서 */
-.tj-hero-shot {
-  width: 124px;
-  height: 152px;
-  border: 1px solid #d2d2d2;
-  border-radius: 6px;
-  background: #fff url(/preview-tt.png) no-repeat 0 0;
-  background-size: 124px auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
+.tj-hero-img {
+  display: block;
+  width: 190px;
+  max-width: 72vw;
+  height: auto;
+  border-radius: 9px;
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.13);
 }
-.tj-hero-arrow { font-size: 18px; color: #c2c2c2; flex-shrink: 0; }
-.tj-hero-phone {
-  width: 88px;
-  height: 162px;
-  box-sizing: border-box;
-  border: 3px solid #2b2b30;
-  border-radius: 17px;
-  background: linear-gradient(160deg, #dfe8f6, #f3e4ee);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-  padding: 28px 7px 9px;
-  position: relative;
-  flex-shrink: 0;
+.tj-hero-shotwrap { position: relative; display: inline-block; line-height: 0; }
+/* 밤 캡처라 실제 현재선이 없어 임의로 얹은 NOW 빨간선 (시간표 그리드 위) */
+.tj-hero-nowline {
+  position: absolute;
+  left: 13%;
+  right: 4%;
+  top: 45%;
+  height: 0;
+  border-top: 2px solid #ff3b30;
+  z-index: 2;
 }
-.tj-hero-phone-time { position: absolute; top: 8px; left: 0; right: 0; text-align: center; font-size: 13px; font-weight: 700; color: #333; letter-spacing: 0.5px; }
-/* 폰 안 잠금화면 — 같은 캡처에서 상단바를 살짝 건너뛴 그리드 영역 */
-.tj-hero-phone-shot {
-  width: 100%;
-  height: 116px;
-  border-radius: 5px;
-  background: #fff url(/preview-tt.png) no-repeat 0 -7px;
-  background-size: 100% auto;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.14);
+.tj-hero-nowdot {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff3b30;
 }
 .tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.4; margin-top: 2px; }
 
