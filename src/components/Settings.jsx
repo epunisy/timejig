@@ -410,7 +410,7 @@ export default function Settings({
 
         <div className="tj-modal-actions">
           {onApplyToAll && (
-            <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요 (요일·시간은 안 바뀜)">🎨 모든 시간표에 꾸밈 적용</button>
+            <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요 (요일·시간은 안 바뀜)">🎨 모든 시간표를 이와 같이 꾸밈</button>
           )}
           <button className="primary" onClick={handleClose}>{t('done')}</button>
         </div>
