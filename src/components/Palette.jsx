@@ -35,7 +35,8 @@ export default function Palette({
   memo,
   onMemoChange,
   onDeleteSubjects,
-  onSetSubjectsActive,
+  hiddenSubjects = [],
+  onSetSubjectsHidden,
 }) {
   const catColors = getCategoryColors(config);
   const fullFill = isFullFill(config);
@@ -44,6 +45,7 @@ export default function Palette({
   const [costHidden, setCostHidden] = useState(true);
   const [memoHidden, setMemoHidden] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [showHidden, setShowHidden] = useState(false);
   const [sortMode, setSortMode] = useState('time'); // 'time' = 수업 길이순, 'category' = 분류 순서(국영수사과예체능기타)
   const [selected, setSelected] = useState(() => new Set());
 
@@ -66,14 +68,9 @@ export default function Palette({
     if (!selected.size || !onDeleteSubjects) return;
     onDeleteSubjects([...selected], () => exitEdit());
   }
-  // 선택 중 하나라도 숨겨진 게 있으면 '보이기', 아니면 '숨기기'
-  const anyHiddenSel = [...selected].some(id => {
-    const s = subjects.find(x => x.id === id);
-    return s && s.active === false;
-  });
-  function handleBulkToggleActive() {
-    if (!selected.size || !onSetSubjectsActive) return;
-    onSetSubjectsActive([...selected], anyHiddenSel, () => exitEdit());
+  function handleBulkHide() {
+    if (!selected.size || !onSetSubjectsHidden) return;
+    onSetSubjectsHidden([...selected], true, () => exitEdit());
   }
   
   useEffect(() => {
@@ -170,8 +167,8 @@ export default function Palette({
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {editMode ? (
             <>
-              <button className="tj-pal-edit-btn" disabled={!selected.size} onClick={handleBulkToggleActive}>
-                {anyHiddenSel ? '보이기' : '숨기기'}{selected.size ? ` ${selected.size}` : ''}
+              <button className="tj-pal-edit-btn" disabled={!selected.size} onClick={handleBulkHide}>
+                숨기기{selected.size ? ` ${selected.size}` : ''}
               </button>
               <button className="tj-pal-del" disabled={!selected.size} onClick={handleBulkDelete}>
                 삭제{selected.size ? ` ${selected.size}` : ''}
@@ -249,6 +246,26 @@ export default function Palette({
           })
         )}
       </div>
+      {!collapsed && hiddenSubjects.length > 0 && (
+        <div className="tj-pal-hidden">
+          <button className="tj-pal-hidden-toggle" onClick={() => setShowHidden(v => !v)}>
+            🙈 숨긴 과목 {hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}
+          </button>
+          {showHidden && (
+            <div className="tj-pal-hidden-list">
+              {hiddenSubjects.map(s => (
+                <div key={s.id} className="tj-pal-hidden-item">
+                  <span className="tj-pal-hidden-name">{s.name}</span>
+                  <button
+                    className="tj-pal-edit-btn"
+                    onClick={() => onSetSubjectsHidden && onSetSubjectsHidden([s.id], false)}
+                  >보이기</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <div className="tj-edu">
           <div className="tj-edu-head">
             <span style={{ cursor: 'pointer' }} onClick={() => setCostHidden(h => !h)} title={costHidden ? '펼치기' : '접기'}>월 교육비</span>

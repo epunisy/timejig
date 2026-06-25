@@ -299,12 +299,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     });
   }
 
-  // 선택한 과목을 일괄 숨김/보임 (삭제 대신 — 데이터·배치는 유지, 팔레트에서 회색 처리)
-  function handleSetSubjectsActive(ids, active, onDone) {
+  // 선택한 과목을 일괄 숨김/보임 (삭제 대신 — 데이터·배치는 유지, 팔레트 목록에서 빼냄)
+  function handleSetSubjectsHidden(ids, hidden, onDone) {
     if (!ids || !ids.length) return;
     setData({
       ...data,
-      subjects: data.subjects.map(s => ids.includes(s.id) ? { ...s, active } : s),
+      subjects: data.subjects.map(s => ids.includes(s.id) ? { ...s, hidden } : s),
     });
     if (onDone) onDone();
   }
@@ -753,7 +753,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           memo={activeTT.memo || ''}
           onMemoChange={handleMemoChange}
           onDeleteSubjects={handleDeleteSubjects}
-          onSetSubjectsActive={handleSetSubjectsActive}
+          hiddenSubjects={data.subjects.filter(s => s.hidden)}
+          onSetSubjectsHidden={handleSetSubjectsHidden}
         />
       </div>
       
