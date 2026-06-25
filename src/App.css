@@ -737,7 +737,7 @@ html, body {
 /* ===== 시간표 ===== */
 .tj-grid {
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1.5px solid #b9c2cf;
   overflow: hidden;
   position: relative;
   user-select: none;
@@ -789,7 +789,7 @@ html, body {
 }
 
 .tj-day-col {
-  border-right: 1px solid #d3deeb;
+  border-right: 1.5px solid #c2cedd;
   box-sizing: border-box;
   position: relative;
 }
@@ -811,7 +811,7 @@ html, body {
   position: absolute;
   left: 0;
   right: 0;
-  border-top: 1px solid #e4ebf3;
+  border-top: 1.5px solid #d4dceb;
   pointer-events: none;
 }
 
