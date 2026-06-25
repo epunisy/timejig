@@ -306,7 +306,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     if (!ids || !ids.length) return;
     setData({
       ...data,
-      subjects: data.subjects.map(s => ids.includes(s.id) ? { ...s, hidden } : s),
+      // 되살릴 때(hidden=false)는 흐림(active:false) 잔재도 함께 풀어 또렷하게 복구
+      subjects: data.subjects.map(s => ids.includes(s.id) ? { ...s, hidden, active: hidden ? s.active : true } : s),
     });
     if (onDone) onDone();
   }
