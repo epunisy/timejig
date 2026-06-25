@@ -12,7 +12,10 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
       <span className="tj-setup-logo-wrap">
         <img src="/logo.png" alt={t('appName')} className="tj-setup-logo" />
       </span>
-      <div className="tj-setup-greeting">{t('welcome')}{'\n'}시작해볼까요?</div>
+      <div className="tj-setup-greeting">
+        <b>드래그로 뚝딱뚝딱!</b>
+        엄마들이 상상했던 모든 기능을{'\n'}가장 깔끔하게 담았어요.
+      </div>
 
       {/* 실제 캡처 두 장(위아래). 밤이라 빨간 현재선이 안 찍혀서, 시간표 위에 NOW선을 임의로 얹음 */}
       <div className="tj-setup-hero">
@@ -25,10 +28,13 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
         </div>
         <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
-      <div className="tj-setup-hero-cap">
-        <b>드래그로 뚝딱뚝딱!</b>
-        엄마들이 상상했던 모든 기능을<br />가장 깔끔하게 담았어요.
-      </div>
+      <ul className="tj-setup-feats">
+        <li>📋 시간표를 복사해 과목 블록으로 이리저리 배치</li>
+        <li>📷 쓰던 시간표를 불러와 타임지그 시간표로 변환</li>
+        <li>📤 이미지로 저장해 메시지로 공유</li>
+        <li>📱 폰 잠금화면에 딱 맞는 이미지로 저장</li>
+        <li>👨‍👩‍👧 첫째·둘째 시간표를 한 화면에 담기</li>
+      </ul>
 
       {user ? (
         <>

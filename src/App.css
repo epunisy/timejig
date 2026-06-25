@@ -103,6 +103,7 @@ html, body {
   margin-top: -4px;
   white-space: pre-line;
 }
+.tj-setup-greeting b { display: block; font-size: 16px; color: #333; margin-bottom: 4px; letter-spacing: -0.2px; }
 
 /* 첫 화면 미리보기 — 실제 캡처 두 장(시간표 → 과목/교육비) 세로 스택 */
 .tj-setup-hero {
@@ -157,8 +158,19 @@ html, body {
   line-height: 1;
   white-space: nowrap;
 }
-.tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.5; margin-top: 4px; }
-.tj-setup-hero-cap b { display: block; font-size: 13px; color: #444; margin-bottom: 2px; }
+/* 첫 화면 기능 목록 */
+.tj-setup-feats {
+  list-style: none;
+  width: fit-content;
+  max-width: 100%;
+  margin: 6px auto 0;
+  padding: 0;
+  text-align: left;
+  font-size: 11px;
+  color: #777;
+  line-height: 1.85;
+}
+.tj-setup-feats li { white-space: nowrap; }
 
 .tj-name-input {
   padding: 0 11px;
