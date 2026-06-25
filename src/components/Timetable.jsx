@@ -27,10 +27,9 @@ export default function Timetable({
   onDragEnd,
   onInternalDraggingChange,
   locked,
-  todayView,
   nowView,
 }) {
-  // 오늘 요일 — TODAY 토글 ON일 때 칸 강조, NOW 토글 ON일 때 현재선·진행중·지난일정 표시
+  // 오늘 요일 (현재 보기 ON일 때만 강조)
   const todayKor = ['일', '월', '화', '수', '목', '금', '토'][new Date().getDay()];
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
@@ -318,7 +317,7 @@ export default function Timetable({
       <div className="tj-grid-header" style={{ gridTemplateColumns: colTpl }}>
         <div className="tj-corner"></div>
         {days.map((d, i) => (
-          <div key={d} className={'tj-day-head' + (todayView && d === todayKor ? ' tj-today' : '')}>{dayLabels[i]}</div>
+          <div key={d} className={'tj-day-head' + (nowView && d === todayKor ? ' tj-today' : '')}>{dayLabels[i]}</div>
         ))}
       </div>
       <div
@@ -342,7 +341,7 @@ export default function Timetable({
           ))}
         </div>
         {days.map(d => (
-          <div key={d} className={'tj-day-col' + (todayView && d === todayKor ? ' tj-today' : '')} data-day={d}>
+          <div key={d} className={'tj-day-col' + (nowView && d === todayKor ? ' tj-today' : '')} data-day={d}>
             {hours.map((h, i) => i === 0 ? null : (
               <div 
                 key={h}
