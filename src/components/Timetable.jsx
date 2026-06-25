@@ -380,6 +380,10 @@ export default function Timetable({
                   className += ' with-accent';
                 }
               }
+              // 진행 중 블록: 스택 컨텍스트 해제 → 현재선이 블록은 가로지르되
+              // 글씨(+주변 halo)는 라인 위로 올려 가리지 않게 한다
+              if (isNow) style.zIndex = 'auto';
+              const haloBg = isNow ? (fullFill && c ? c : '#fff') : null;
               return (
                 <div
                   key={b.id}
@@ -389,8 +393,17 @@ export default function Timetable({
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
                   {bandColor && <span className="tj-block-band" style={{ background: bandColor }} />}
-                  <div className="nm">{subj.name}</div>
-                  <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
+                  {isNow ? (
+                    <div className="tj-now-text" style={{ background: haloBg }}>
+                      <div className="nm">{subj.name}</div>
+                      <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="nm">{subj.name}</div>
+                      <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
+                    </>
+                  )}
                 </div>
               );
             })}

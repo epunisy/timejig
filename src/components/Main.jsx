@@ -636,7 +636,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             onClick={() => setNowView(v => !v)}
             aria-pressed={nowView}
             title={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
-          >🔴</button>
+          >
+            <span className="tj-nowbtn-dot" />TIMELINE
+          </button>
           <button
             className={'tj-locktoggle' + (locked ? ' on' : '')}
             onClick={() => setLocked(l => !l)}
