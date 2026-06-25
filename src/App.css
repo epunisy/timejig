@@ -850,8 +850,10 @@ html, body {
 /* 블록 — 사방 테두리 */
 .tj-block {
   position: absolute;
-  left: 0;
-  right: 0;
+  /* 좌우 격자선(day-col border 1.5px) 두께만큼 바깥으로 늘려, 블록 테두리가 격자선과
+     포개지게 한다. 안 그러면 블록선+격자선이 두 줄로 나란히 보여 두꺼워 보임. */
+  left: -1.5px;
+  right: -1.5px;
   padding: 2px;
   font-size: 9px;
   cursor: grab;
