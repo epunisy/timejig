@@ -43,12 +43,12 @@ export default function Palette({
   const [costHidden, setCostHidden] = useState(false);
   const [memoHidden, setMemoHidden] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [sortMode, setSortMode] = useState('added'); // 'added' = 추가한 순서, 'name' = 과목명 가나다순
+  const [sortMode, setSortMode] = useState('time'); // 'time' = 수업 길이순, 'name' = 과목명 가나다순
   const [selected, setSelected] = useState(() => new Set());
 
   const displaySubjects = sortMode === 'name'
     ? [...subjects].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ko'))
-    : subjects;
+    : [...subjects].sort((a, b) => (a.duration || 0) - (b.duration || 0));
   const editModeRef = useRef(false);
   useEffect(() => { editModeRef.current = editMode; }, [editMode]);
 
@@ -171,9 +171,9 @@ export default function Palette({
                 <>
                   <button
                     className="tj-pal-edit-btn"
-                    onClick={() => setSortMode(m => (m === 'added' ? 'name' : 'added'))}
+                    onClick={() => setSortMode(m => (m === 'time' ? 'name' : 'time'))}
                     title="정렬 방식 변경"
-                  >{sortMode === 'name' ? '과목순' : '추가순'}</button>
+                  >{sortMode === 'name' ? '과목순' : '시간순'}</button>
                   <button
                     className="tj-pal-edit-btn"
                     onClick={() => setEditMode(true)}
