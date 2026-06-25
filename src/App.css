@@ -104,7 +104,7 @@ html, body {
   white-space: pre-line;
 }
 
-/* 첫 화면 미리보기 — 편집한 시간표 → 폰 잠금화면 흐름 */
+/* 첫 화면 미리보기 — 실제 캡처(편집 시간표 → 폰 잠금화면) */
 .tj-setup-hero {
   display: flex;
   align-items: center;
@@ -112,33 +112,40 @@ html, body {
   gap: 12px;
   margin: 2px 0 0;
 }
-.tj-hero-tt {
-  width: 116px;
-  background: #fff;
-  border: 1px solid #cfcfcf;
+/* 완성 시간표 캡처 — 위쪽(상단바+그리드)만 보이게 잘라서 */
+.tj-hero-shot {
+  width: 124px;
+  height: 152px;
+  border: 1px solid #d2d2d2;
   border-radius: 6px;
-  padding: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  background: #fff url(/preview-tt.png) no-repeat 0 0;
+  background-size: 124px auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
 }
-.tj-hero-days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-bottom: 3px; }
-.tj-hero-days span { font-size: 7px; font-weight: 600; color: #999; text-align: center; }
-.tj-hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 12px; gap: 2px; }
-.tj-hero-grid i { border-radius: 2px; background: #f1f1f4; display: block; }
-.tj-hero-grid.is-phone { grid-auto-rows: 9px; gap: 1.5px; }
 .tj-hero-arrow { font-size: 18px; color: #c2c2c2; flex-shrink: 0; }
 .tj-hero-phone {
-  width: 86px;
-  height: 160px;
+  width: 88px;
+  height: 162px;
   box-sizing: border-box;
   border: 3px solid #2b2b30;
-  border-radius: 16px;
+  border-radius: 17px;
   background: linear-gradient(160deg, #dfe8f6, #f3e4ee);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-  padding: 17px 8px 10px;
+  padding: 28px 7px 9px;
   position: relative;
+  flex-shrink: 0;
 }
-.tj-hero-phone-time { position: absolute; top: 7px; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 700; color: #333; }
-.tj-hero-phone-tt { background: #fff; border-radius: 5px; padding: 4px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12); }
+.tj-hero-phone-time { position: absolute; top: 8px; left: 0; right: 0; text-align: center; font-size: 13px; font-weight: 700; color: #333; letter-spacing: 0.5px; }
+/* 폰 안 잠금화면 — 같은 캡처에서 상단바를 살짝 건너뛴 그리드 영역 */
+.tj-hero-phone-shot {
+  width: 100%;
+  height: 116px;
+  border-radius: 5px;
+  background: #fff url(/preview-tt.png) no-repeat 0 -7px;
+  background-size: 100% auto;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.14);
+}
 .tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.4; margin-top: 2px; }
 
 .tj-name-input {

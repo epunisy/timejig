@@ -1,26 +1,6 @@
 import { t } from '../i18n';
 import GoogleIcon from './GoogleIcon';
 
-// 첫 화면 미리보기용 미니 시간표 (4일 x 4행, -1 = 빈칸)
-const HERO_COLS = ['#B7D7FF', '#FFD1D8', '#CDECB8', '#FFF0C8', '#D9D0F8'];
-const HERO_DAYS = ['월', '화', '수', '목'];
-const HERO_CELLS = [
-  0, -1, 2, 3,
-  0, 1, 2, -1,
-  -1, 1, 4, 3,
-  0, -1, 4, -1,
-];
-
-function HeroGrid({ phone }) {
-  return (
-    <div className={'tj-hero-grid' + (phone ? ' is-phone' : '')}>
-      {HERO_CELLS.map((c, i) => (
-        <i key={i} style={c >= 0 ? { background: HERO_COLS[c] } : undefined} />
-      ))}
-    </div>
-  );
-}
-
 // 첫 진입 화면 — 샤이닝 로고 + 환영 멘트 + 두 갈래(로그인 / 처음 이용)
 // onBack 이 있으면 미리보기(설정에서 열어본 것) → 돌아가기 버튼 표시
 export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
@@ -34,16 +14,13 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
       </span>
       <div className="tj-setup-greeting">{t('welcome')}{'\n'}시작해볼까요?</div>
 
-      {/* 한눈에 보는 사용 흐름 — 드래그로 만든 시간표가 그대로 폰 잠금화면으로 */}
+      {/* 한눈에 보는 사용 흐름 — 실제 캡처: 완성 시간표 → 그대로 폰 잠금화면 */}
       <div className="tj-setup-hero">
-        <div className="tj-hero-tt">
-          <div className="tj-hero-days">{HERO_DAYS.map(d => <span key={d}>{d}</span>)}</div>
-          <HeroGrid />
-        </div>
+        <div className="tj-hero-shot" role="img" aria-label="완성된 시간표 예시" />
         <span className="tj-hero-arrow">→</span>
         <div className="tj-hero-phone">
           <span className="tj-hero-phone-time">9:41</span>
-          <div className="tj-hero-phone-tt"><HeroGrid phone /></div>
+          <div className="tj-hero-phone-shot" role="img" aria-label="폰 잠금화면 예시" />
         </div>
       </div>
       <div className="tj-setup-hero-cap">끌어다 놓으면 완성 — 그대로 폰 잠금화면까지 ✨</div>
