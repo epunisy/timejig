@@ -135,14 +135,14 @@ export default function Settings({
   return (
     <>
     <div className="tj-modal-bg" onClick={handleClose}>
-      <div className="tj-modal lg" onClick={(e) => e.stopPropagation()}>
+      <div className="tj-modal lg tj-set-modal" onClick={(e) => e.stopPropagation()}>
         <div className="tj-modal-head">
           <h3>{t('settings')}</h3>
           <button className="tj-modal-x" onClick={handleClose} aria-label="닫기">×</button>
         </div>
 
         <div className="tj-set-section tj-set-section--first">
-          <span className="tj-set-section-t">이 시간표 설정</span>
+          <span className="tj-set-section-t">시간표 설정</span>
           <span className="tj-set-section-h">이름 · 요일 · 시간은 지금 보고 있는 시간표에만 적용돼요.</span>
         </div>
 

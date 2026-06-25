@@ -1168,6 +1168,10 @@ html, body {
   justify-content: space-between;
   gap: 8px;
 }
+/* 설정 모달 제목은 가운데 정렬, 닫기(×)는 오른쪽 고정 */
+.tj-set-modal .tj-modal-head { position: relative; justify-content: center; }
+.tj-set-modal .tj-modal-head h3 { text-align: center; }
+.tj-set-modal .tj-modal-head .tj-modal-x { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
 .tj-modal-x {
   background: transparent;
   border: none;
