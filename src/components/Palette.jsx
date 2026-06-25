@@ -40,8 +40,8 @@ export default function Palette({
   const fullFill = isFullFill(config);
   const fontFamily = getFontFamily(config.font);
   const itemRefs = useRef({});
-  const [costHidden, setCostHidden] = useState(false);
-  const [memoHidden, setMemoHidden] = useState(false);
+  const [costHidden, setCostHidden] = useState(true);
+  const [memoHidden, setMemoHidden] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [sortMode, setSortMode] = useState('time'); // 'time' = 수업 길이순, 'name' = 과목명 가나다순
   const [selected, setSelected] = useState(() => new Set());
