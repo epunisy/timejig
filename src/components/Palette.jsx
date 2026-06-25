@@ -245,17 +245,26 @@ export default function Palette({
             );
           })
         )}
-        {!editMode && (
-          <button
-            type="button"
-            className={'tj-pal-item tj-pal-hidden-card' + (showHidden ? ' open' : '')}
-            onClick={() => setShowHidden(v => !v)}
-            title="숨긴 과목 보기"
-          >
-            <div className="tj-pal-name">숨긴 과목</div>
-            <div className="tj-pal-dur">{hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}</div>
-          </button>
-        )}
+        {!editMode && (() => {
+          // 현재 서식(색띠/색 전체)에 맞춰 회색으로 표시
+          const GRAY = '#c4c4c4';
+          const cardStyle = {};
+          let cardClass = 'tj-pal-item tj-pal-hidden-card' + (showHidden ? ' open' : '');
+          if (fullFill) { cardStyle.background = GRAY; cardStyle.color = textColorOn(GRAY); cardClass += ' with-fill'; }
+          else { cardStyle.borderLeftColor = GRAY; cardClass += ' with-accent'; }
+          return (
+            <button
+              type="button"
+              className={cardClass}
+              style={cardStyle}
+              onClick={() => setShowHidden(v => !v)}
+              title="숨긴 과목 보기"
+            >
+              <div className="tj-pal-name">숨긴 과목</div>
+              <div className="tj-pal-dur">{hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}</div>
+            </button>
+          );
+        })()}
         {/* 숨긴 과목을 흐릿한 블록으로 촤르륵 펼침 — 한 번 누르면 숨기기 취소(되살리기) */}
         {!editMode && showHidden && hiddenSubjects.map((s, i) => {
           const style = { animationDelay: (i * 45) + 'ms' };

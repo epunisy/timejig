@@ -995,25 +995,16 @@ html, body {
 .tj-pal-hidden-card { cursor: pointer; font-family: inherit; }
 .tj-pal-hidden-card.open { border-color: #378ADD; }
 .tj-pal-hidden-card .tj-pal-dur { color: #888; }
-/* 펼쳐진 숨긴 블록 — 흐릿하게 촤르륵 등장, 누르면 다시 보이기.
-   서식(색띠/색 전체) 색은 그대로 두고, 점선 테두리로 '숨김' 상태만 표시 */
+/* 펼쳐진 숨긴 블록 — 흐릿하게 촤르륵 등장, 누르면 다시 보이기 */
 .tj-pal-hidden-block {
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.4;
   animation: tjHiddenIn 0.22s ease both;
 }
-.tj-pal-hidden-block:hover { opacity: 0.8; }
-/* 색 없음/색 전체: 네 변 모두 점선 */
-.tj-pal-hidden-block:not(.with-accent) { border-style: dashed; }
-/* 색띠: 좌측 색 띠는 그대로(실선), 나머지 세 변만 점선 */
-.tj-pal-hidden-block.with-accent {
-  border-top-style: dashed;
-  border-right-style: dashed;
-  border-bottom-style: dashed;
-}
+.tj-pal-hidden-block:hover { opacity: 0.72; }
 @keyframes tjHiddenIn {
   from { opacity: 0; transform: translateY(-5px) scale(0.94); }
-  to { opacity: 0.5; transform: none; }
+  to { opacity: 0.4; transform: none; }
 }
 .tj-pal-hidden-item {
   display: flex; align-items: center; justify-content: space-between; gap: 6px;
