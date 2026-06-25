@@ -1229,6 +1229,23 @@ html, body {
   border-bottom-color: #378ADD;
 }
 
+/* 설정 그룹 구분 헤더 — '이 시간표 설정' / '꾸밈(서식)' */
+.tj-set-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 14px 0 2px;
+  padding-top: 12px;
+  border-top: 0.5px solid #e5e5e5;
+}
+.tj-set-section--first {
+  margin-top: 4px;
+  padding-top: 0;
+  border-top: none;
+}
+.tj-set-section-t { font-size: 12px; font-weight: 700; color: #333; letter-spacing: 0.3px; }
+.tj-set-section-h { font-size: 10px; color: #999; line-height: 1.4; }
+
 .tj-modal-actions {
   display: flex;
   gap: 5px;

@@ -143,7 +143,12 @@ export default function Settings({
           <h3>{t('settings')}</h3>
           <button className="tj-modal-x" onClick={handleClose} aria-label="닫기">×</button>
         </div>
-        
+
+        <div className="tj-set-section tj-set-section--first">
+          <span className="tj-set-section-t">이 시간표 설정</span>
+          <span className="tj-set-section-h">이름 · 요일 · 시간은 지금 보고 있는 시간표에만 적용돼요.</span>
+        </div>
+
         <label>
           <span>{t('timetableName')}</span>
           <input
@@ -217,6 +222,11 @@ export default function Settings({
           </div>
         </label>
         
+        <div className="tj-set-section">
+          <span className="tj-set-section-t">꾸밈 (서식)</span>
+          <span className="tj-set-section-h">색 · 글씨 · 배경. 아래 ‘모든 시간표에 적용’으로 한 번에 맞출 수 있어요.</span>
+        </div>
+
         <label>
           <span>색 (무드)</span>
           <div className="tj-mood-list">
@@ -400,7 +410,7 @@ export default function Settings({
 
         <div className="tj-modal-actions">
           {onApplyToAll && (
-            <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요">🎨 모든 시간표에 적용</button>
+            <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요 (요일·시간은 안 바뀜)">🎨 꾸밈 모두 적용</button>
           )}
           <button className="primary" onClick={handleClose}>{t('done')}</button>
         </div>

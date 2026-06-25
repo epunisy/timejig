@@ -102,8 +102,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 서식 통일 — 현재 시간표 기준으로 글씨체·크기·무드·색채우기·배경을 모든 시간표에 적용
   function handleUnifyFormat() {
     setConfirmDialog({
-      title: '서식 맞추기',
-      message: '현재 시간표를 기준으로<br>글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경을<br>모든 시간표에 적용할까요?',
+      title: '꾸밈 모두 적용',
+      message: '현재 시간표의 <b>꾸밈(서식)</b>을<br>글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경<br>모든 시간표에 똑같이 적용할까요?<br><span style="color:#999; font-size:11px;">요일·시간 범위, 시간표 이름은 바뀌지 않아요.</span>',
       confirmText: '적용하기',
       onYes: () => {
         const fmt = {
