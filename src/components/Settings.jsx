@@ -1,7 +1,6 @@
 import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays, textColorOn } from '../App';
-import GoogleIcon from './GoogleIcon';
 
 // 배경 색표 — 가로(같은 계열) 밝은→진한, 세로(색 계열). 톡 누르면 바로 적용
 const PRESET_BG_COLORS = [
@@ -36,8 +35,6 @@ export default function Settings({
   onTimetableNameChange,
   onApplyToAll,
   user,
-  onSignIn,
-  onSignOut,
   onClose,
 }) {
   const ttNameRef = useRef(null);
@@ -374,33 +371,13 @@ export default function Settings({
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
-        <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
-          {user && (
-            <div style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '8px' }}>
+        {user && (
+          <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               ☁ {user.email} · 동기화 중
             </div>
-          )}
-          <div style={{ display: 'flex', gap: '8px' }}>
-            {user ? (
-              <button
-                onClick={onSignOut}
-                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#444', fontSize: '12px', fontFamily: 'inherit', cursor: 'pointer' }}
-              >로그아웃</button>
-            ) : (
-              <button
-                onClick={onSignIn}
-                style={{ flex: 1, minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#333', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-              >
-                <GoogleIcon size={16} /> 로그인
-              </button>
-            )}
           </div>
-          <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-            {user
-              ? '로그아웃하면 이 기기에서 시간표가 사라져요(클라우드 백업은 유지).'
-              : '로그인하면 시간표가 내 계정에 저장돼, 기기를 바꿔도 그대로 불러올 수 있어요.'}
-          </div>
-        </div>
+        )}
 
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           <div style={{ fontSize: '10px', color: '#bbb', textAlign: 'center', lineHeight: 1.5 }}>

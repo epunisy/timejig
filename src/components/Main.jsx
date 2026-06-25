@@ -776,8 +776,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onTimetableNameChange={handleTimetableNameChange}
           onApplyToAll={handleUnifyFormat}
           user={user}
-          onSignIn={onSignIn}
-          onSignOut={onSignOut}
           onClose={() => setShowSettings(false)}
         />
       )}
