@@ -13,7 +13,11 @@ export default function Export({ data, onBack }) {
   const [fillTop, setFillTop] = useState(false); // 상단 시계 공간을 시간표로 채울지
   const [downloading, setDownloading] = useState(false);
   const [formatBasis, setFormatBasis] = useState(data.activeTT);
+  const [savedGuide, setSavedGuide] = useState(null); // null | 'ios' | 'other'
   const captureRef = useRef(null);
+
+  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && typeof document !== 'undefined' && 'ontouchend' in document);
 
   // 서식 기준 — 콜라주에서 '글꼴·배경'만 이 시간표 기준으로 통일 (시간대·요일·색은 각 시간표 그대로).
   const formatTTId = selection.includes(formatBasis) ? formatBasis : (selection[0] ?? data.activeTT);
@@ -64,6 +68,7 @@ export default function Export({ data, onBack }) {
       link.download = `${name}_${yymmdd}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
+      setSavedGuide(isIOS ? 'ios' : 'other');
     } catch (err) {
       alert('이미지 저장 중 문제가 생겼어요. 다시 시도해 주세요.');
     } finally {
@@ -484,6 +489,36 @@ export default function Export({ data, onBack }) {
           </div>
         </div>
       </div>
+
+      {savedGuide && (
+        <div className="tj-modal-bg" onClick={() => setSavedGuide(null)}>
+          <div className="tj-modal" onClick={(e) => e.stopPropagation()} style={{ width: '320px' }}>
+            <div className="tj-modal-head">
+              <h3>저장 완료 · 잠금화면으로 설정하기</h3>
+              <button className="tj-modal-x" onClick={() => setSavedGuide(null)} aria-label="닫기">×</button>
+            </div>
+            <div className="tj-confirm-msg" style={{ lineHeight: 1.7 }}>
+              {savedGuide === 'ios' ? (
+                <ol style={{ paddingLeft: '18px', margin: 0 }}>
+                  <li>뜬 이미지를 <b>길게 눌러 ‘사진에 저장’</b></li>
+                  <li><b>사진</b> 앱에서 저장한 이미지 열기</li>
+                  <li>공유 <b>→ ‘배경화면으로 사용’</b></li>
+                  <li><b>잠금 화면</b>으로 설정 완료!</li>
+                </ol>
+              ) : (
+                <ol style={{ paddingLeft: '18px', margin: 0 }}>
+                  <li><b>사진·갤러리</b>에서 방금 저장한 이미지 열기</li>
+                  <li>메뉴(⋮) <b>→ ‘배경화면으로 설정’</b></li>
+                  <li><b>잠금 화면</b> 선택 완료!</li>
+                </ol>
+              )}
+            </div>
+            <div className="tj-modal-actions">
+              <button className="primary" onClick={() => setSavedGuide(null)}>확인</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
