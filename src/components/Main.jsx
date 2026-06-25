@@ -555,7 +555,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     { key: 'import', label: '📷 시간표 옮겨오기', run: () => setShowImportPlan(true) },
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
     { key: 'unify', label: '🎨 서식 맞추기', run: handleUnifyFormat },
-    { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
     { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
   ];
 
