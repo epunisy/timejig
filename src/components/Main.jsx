@@ -286,8 +286,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     );
     setConfirmDialog({
       title: '과목 삭제',
-      message: `선택한 ${ids.length}개 과목을 삭제할까요?` +
+      message: `선택한 ${ids.length}개 과목을 <b>정말 삭제</b>할까요?` +
+        `<br><span style="color:#999; font-size:11px;">삭제하면 되돌릴 수 없어요. (지우지 않고 정리만 하려면 ‘숨기기’를 쓰세요)</span>` +
         (totalPlaced > 0 ? `<br><span style="color:#C77575; font-size:11px;">배치된 ${totalPlaced}개 블록도 함께 사라집니다.</span>` : ''),
+      confirmText: '삭제',
       onYes: () => {
         setData({
           ...data,

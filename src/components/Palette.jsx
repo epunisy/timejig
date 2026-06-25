@@ -245,25 +245,31 @@ export default function Palette({
             );
           })
         )}
-      </div>
-      {!collapsed && hiddenSubjects.length > 0 && (
-        <div className="tj-pal-hidden">
-          <button className="tj-pal-hidden-toggle" onClick={() => setShowHidden(v => !v)}>
-            🙈 숨긴 과목 {hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}
+        {!editMode && (
+          <button
+            type="button"
+            className={'tj-pal-item tj-pal-hidden-card' + (showHidden ? ' open' : '')}
+            onClick={() => setShowHidden(v => !v)}
+            title="숨긴 과목 보기"
+          >
+            <div className="tj-pal-name">🙈 숨긴 과목</div>
+            <div className="tj-pal-dur">{hiddenSubjects.length}개 {showHidden ? '▲' : '▼'}</div>
           </button>
-          {showHidden && (
-            <div className="tj-pal-hidden-list">
-              {hiddenSubjects.map(s => (
-                <div key={s.id} className="tj-pal-hidden-item">
-                  <span className="tj-pal-hidden-name">{s.name}</span>
-                  <button
-                    className="tj-pal-edit-btn"
-                    onClick={() => onSetSubjectsHidden && onSetSubjectsHidden([s.id], false)}
-                  >보이기</button>
-                </div>
-              ))}
+        )}
+      </div>
+      {!collapsed && showHidden && (
+        <div className="tj-pal-hidden-list">
+          {hiddenSubjects.length === 0 ? (
+            <div className="tj-pal-hidden-empty">숨긴 과목이 없어요</div>
+          ) : hiddenSubjects.map(s => (
+            <div key={s.id} className="tj-pal-hidden-item">
+              <span className="tj-pal-hidden-name">{s.name}</span>
+              <button
+                className="tj-pal-edit-btn"
+                onClick={() => onSetSubjectsHidden && onSetSubjectsHidden([s.id], false)}
+              >보이기</button>
             </div>
-          )}
+          ))}
         </div>
       )}
       <div className="tj-edu">
