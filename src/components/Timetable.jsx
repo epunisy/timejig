@@ -32,11 +32,21 @@ export default function Timetable({
 }) {
   const gridBodyRef = useRef(null);
   const [internalDrag, setInternalDrag] = useState(null);
-  
+  // 현재 시각(분) — 타임라인 표시용, 30초마다 갱신
+  const [nowMin, setNowMin] = useState(() => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); });
+  useEffect(() => {
+    const id = setInterval(() => { const d = new Date(); setNowMin(d.getHours() * 60 + d.getMinutes()); }, 30000);
+    return () => clearInterval(id);
+  }, []);
+
   const days = getWeekDays(config);
   const dayLabels = getDayLabels(config);
   const totalMin = (config.endHour - config.startHour) * 60;
   const bodyHeight = (config.endHour - config.startHour) * HOUR_PX;
+  const nowFromStart = nowMin - config.startHour * 60;
+  const showNowLine = nowFromStart >= 0 && nowFromStart <= totalMin;
+  const nowTop = Math.round(nowFromStart * PX_PER_MIN);
+  const nowLabel = pad(Math.floor(nowMin / 60)) + ':' + pad(nowMin % 60);
   
   function fmtTime(min) {
     const h = config.startHour + Math.floor(min / 60);
@@ -380,6 +390,12 @@ export default function Timetable({
             })}
           </div>
         ))}
+        {showNowLine && (
+          <div className="tj-nowline" style={{ top: nowTop + 'px' }} aria-hidden="true">
+            <span className="tj-nowline-dot" />
+            <span className="tj-nowline-time">{nowLabel}</span>
+          </div>
+        )}
       </div>
     </div>
   );
