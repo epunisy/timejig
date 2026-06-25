@@ -33,7 +33,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   // 새로고침 시 과목팔레트는 기본 접힘. 단, 맨 처음(과목이 하나도 없는 상태)일 땐 펼쳐서 추가를 유도
   const [palCollapsed, setPalCollapsed] = useState(() => data.subjects.length > 0);
-  // 실시간(현재) 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
+  // 보기 토글 — 앱을 켜면 둘 다 기본 ON.
+  // TODAY: 오늘 요일 칸 강조 / NOW: 현재선·진행중 빨간글씨·지난일정 흐리게
+  const [todayView, setTodayView] = useState(true);
   const [nowView, setNowView] = useState(true);
   const [locked, setLocked] = useState(() => {
     try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
@@ -676,12 +678,20 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
           </div>
           <button
+            className={'tj-nowbtn tj-todaybtn' + (todayView ? ' on' : '')}
+            onClick={() => setTodayView(v => !v)}
+            aria-pressed={todayView}
+            title={todayView ? '오늘 강조 끄기' : '오늘 강조 켜기'}
+          >
+            <span className="tj-nowbtn-dot" />TODAY
+          </button>
+          <button
             className={'tj-nowbtn' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
             aria-pressed={nowView}
-            title={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
+            title={nowView ? '현재 시각 표시 끄기' : '현재 시각 표시 켜기'}
           >
-            <span className="tj-nowbtn-dot" />TIMELINE
+            <span className="tj-nowbtn-dot" />NOW
           </button>
           <button
             className={'tj-locktoggle' + (locked ? ' on' : '')}
@@ -714,6 +724,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
           locked={locked}
+          todayView={todayView}
           nowView={nowView}
         />
         <div

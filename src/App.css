@@ -240,6 +240,18 @@ html, body {
 }
 .tj-nowbtn:active { transform: translateY(1px); }
 
+/* TODAY 강조 토글 — 오늘 요일 칸 하이라이트(앰버). NOW(빨강)와 색으로 구분 */
+.tj-todaybtn.on {
+  background: linear-gradient(135deg, #ffc24d, #ffa92e);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(255, 168, 46, 0.4);
+}
+.tj-todaybtn.on .tj-nowbtn-dot {
+  background: #fff;
+  box-shadow: none;
+  animation: none;
+}
+
 /* 진행 중 블록의 글씨 halo — 현재선이 글씨/주변을 가리지 않게 라인 위로 올림 */
 .tj-now-text {
   position: relative;
