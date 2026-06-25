@@ -180,9 +180,6 @@ export default function Settings({
               );
             })}
           </div>
-          <div style={{ fontSize: '10px', color: '#999', margin: '4px 0 2px' }}>
-            원하는 조각을 골라 조합해요 (예: 월~금 + 일).
-          </div>
           <div className="tj-mode-strip" style={{ marginTop: '4px' }}>
             <button
               className={(config.dayLang || 'ko') === 'ko' ? 'active' : ''}
