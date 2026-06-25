@@ -554,7 +554,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
     { key: 'import', label: '📷 시간표 옮겨오기', run: () => setShowImportPlan(true) },
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
-    { key: 'unify', label: '🎨 서식 맞추기', run: handleUnifyFormat },
     { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
   ];
 
@@ -775,6 +774,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           timetableName={activeTT.name}
           onConfigChange={handleConfigChange}
           onTimetableNameChange={handleTimetableNameChange}
+          onApplyToAll={handleUnifyFormat}
           user={user}
           onSignIn={onSignIn}
           onSignOut={onSignOut}
