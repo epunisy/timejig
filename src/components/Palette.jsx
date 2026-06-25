@@ -246,12 +246,11 @@ export default function Palette({
           })
         )}
         {!editMode && (() => {
-          // 현재 서식(색띠/색 전체)에 맞춰 회색으로 표시
-          const GRAY = '#c4c4c4';
+          // 현재 서식(색띠/색 전체)에 맞춰 블루그레이로 표시 (앱 UI 톤과 어울리게)
           const cardStyle = {};
           let cardClass = 'tj-pal-item tj-pal-hidden-card' + (showHidden ? ' open' : '');
-          if (fullFill) { cardStyle.background = GRAY; cardStyle.color = textColorOn(GRAY); cardClass += ' with-fill'; }
-          else { cardStyle.borderLeftColor = GRAY; cardClass += ' with-accent'; }
+          if (fullFill) { const fill = '#dfe4ec'; cardStyle.background = fill; cardStyle.color = textColorOn(fill); cardClass += ' with-fill'; }
+          else { cardStyle.borderLeftColor = '#aeb8c6'; cardClass += ' with-accent'; }
           return (
             <button
               type="button"
