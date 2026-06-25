@@ -129,17 +129,33 @@ html, body {
   right: 4%;
   top: 45%;
   height: 0;
-  border-top: 2px solid #ff3b30;
+  border-top: 1px solid #ff3b30;
   z-index: 2;
 }
 .tj-hero-nowdot {
   position: absolute;
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
+  left: -2px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #ff3b30;
+}
+/* 선 왼쪽(시간축 자리)에 현재 시각 — 실제 앱과 동일 */
+.tj-hero-nowtime {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 2px;
+  font-size: 7px;
+  font-weight: 700;
+  color: #fff;
+  background: #ff3b30;
+  border-radius: 3px;
+  padding: 1px 3px;
+  line-height: 1;
+  white-space: nowrap;
 }
 .tj-setup-hero-cap { font-size: 11px; color: #888; text-align: center; line-height: 1.4; margin-top: 2px; }
 

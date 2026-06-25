@@ -18,7 +18,10 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
       <div className="tj-setup-hero">
         <div className="tj-hero-shotwrap">
           <img className="tj-hero-img" src="/preview-shot.jpg" alt="타임지그로 만든 시간표 예시" />
-          <span className="tj-hero-nowline"><span className="tj-hero-nowdot" /></span>
+          <span className="tj-hero-nowline">
+            <span className="tj-hero-nowtime">16:10</span>
+            <span className="tj-hero-nowdot" />
+          </span>
         </div>
         <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
