@@ -568,7 +568,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       </div>
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
-          <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
+          <img
+            src="/logo2.png"
+            alt="TimeJig"
+            className="tj-logo-top"
+            style={{ cursor: 'pointer' }}
+            title="새로고침"
+            onClick={() => window.location.reload()}
+          />
         </div>
         <div className="tj-topbar-main">
         <div className="tj-topbar-r1">
