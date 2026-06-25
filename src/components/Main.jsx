@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import html2canvas from 'html2canvas';
 import Timetable from './Timetable';
 import Palette from './Palette';
 import Settings from './Settings';
@@ -6,6 +7,7 @@ import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
 import ImportPlan from './ImportPlan';
+import ShareImage from './ShareImage';
 import { resolveBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
 
 function timeToMin(t) {
@@ -47,6 +49,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 모바일에서 시간표/팔레트 경계선을 드래그해 팔레트 높이를 조절 (기기마다 화면이 달라서)
   const layoutRef = useRef(null);
   const paletteHRef = useRef(data.config.paletteH || null);
+  const shareRef = useRef(null);
   const [paletteH, setPaletteH] = useState(data.config.paletteH || null);
 
   function handleDividerDown(e) {
@@ -121,13 +124,49 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     });
   }
 
-  // 앱 공유 — 웹 공유 API, 안 되면 링크 복사
+  // 시간표 공유 — 현재 시간표를 이미지로 만들어 공유하면서 앱 링크도 함께 전달
   async function handleShare() {
     const url = window.location.origin;
-    const shareData = { title: '타임지그', text: '시간표를 잠금화면으로 — 타임지그', url };
+    const appText = '타임지그로 만든 시간표 — ' + url;
+    const tt = data.timetables.find(t => t.id === data.activeTT);
+
+    // 1) 시간표 이미지 캡쳐
+    let blob = null;
     try {
-      if (navigator.share) { await navigator.share(shareData); return; }
-    } catch { return; /* 사용자가 공유 취소 */ }
+      const canvas = await html2canvas(shareRef.current, { scale: 2, backgroundColor: null, logging: false, useCORS: true });
+      blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    } catch { blob = null; }
+
+    const fileName = (tt?.name || '시간표') + '.png';
+    const file = blob ? new File([blob], fileName, { type: 'image/png' }) : null;
+
+    // 2) 이미지+앱링크 함께 공유 (지원 시)
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: '타임지그', text: appText }); }
+      catch { /* 사용자가 취소 */ }
+      return;
+    }
+
+    // 3) 파일 공유 불가 → 이미지 저장 + 앱 링크 복사
+    if (blob) {
+      const a = document.createElement('a');
+      a.download = fileName;
+      a.href = URL.createObjectURL(blob);
+      a.click();
+      let copied = false;
+      try { await navigator.clipboard.writeText(url); copied = true; } catch {}
+      setConfirmDialog({
+        title: '시간표 이미지 저장됨',
+        message: '시간표를 이미지로 저장했어요.' + (copied ? '<br>앱 주소도 복사했어요.' : '') + '<br><span style="color:#888; font-size:11px;">' + url + '</span>',
+        infoOnly: true,
+      });
+      return;
+    }
+
+    // 4) 캡쳐 실패 → 링크만 공유
+    try {
+      if (navigator.share) { await navigator.share({ title: '타임지그', text: '시간표를 잠금화면으로 — 타임지그', url }); return; }
+    } catch { return; }
     try {
       await navigator.clipboard.writeText(url);
       setConfirmDialog({ title: '링크 복사됨', message: '앱 주소를 복사했어요.<br><span style="color:#888; font-size:11px;">' + url + '</span>', infoOnly: true });
@@ -516,7 +555,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
     { key: 'unify', label: '🎨 서식 맞추기', run: handleUnifyFormat },
     { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
-    { key: 'share', label: '📤 공유하기', run: handleShare },
+    { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
   ];
 
   return (
@@ -524,6 +563,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       className={'tj-app tj-app-main' + (bgTheme.dark ? ' tj-app-dark' : '')}
       style={appStyle}
     >
+      {/* 공유용 시간표 이미지 캡쳐 노드 (화면 밖) */}
+      <div style={{ position: 'fixed', left: '-99999px', top: 0, pointerEvents: 'none' }} aria-hidden="true">
+        <ShareImage ref={shareRef} data={data} tt={data.timetables.find(t => t.id === data.activeTT)} />
+      </div>
       <div className="tj-topbar">
         <div className="tj-logo-wrap">
           <img src="/logo2.png" alt="TimeJig" className="tj-logo-top" />
