@@ -406,6 +406,20 @@ html, body {
 .tj-locktoggle svg { display: block; }
 .tj-locktoggle.on { background: #fff4d6; color: #c8881f; }
 .tj-locktoggle:active { transform: translateY(1px); }
+
+/* 계정 아이콘 — 로그인(회색)/로그아웃(블루, 동기화 중) */
+.tj-login-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 24px; box-sizing: border-box;
+  border: none; border-radius: 10px;
+  background: #f5f6f8; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  color: #9aa0a8; cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.tj-login-icon svg { display: block; }
+.tj-login-icon:hover { color: #555; }
+.tj-login-icon.on { background: #eaf3fd; color: #378ADD; }
+.tj-login-icon:active { transform: translateY(1px); }
 /* 아랫줄: 메뉴 묶음 */
 .tj-topbar-r2 {
   display: flex;

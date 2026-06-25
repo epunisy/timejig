@@ -676,8 +676,16 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
-        <button className="tj-cta tj-login" onClick={user ? onSignOut : onSignIn}>
-          {user ? '로그아웃' : '로그인'}
+        <button
+          className={'tj-login-icon' + (user ? ' on' : '')}
+          onClick={user ? onSignOut : onSignIn}
+          title={user ? `${user.email} · 눌러서 로그아웃` : '로그인'}
+          aria-label={user ? '로그아웃' : '로그인'}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </button>
         <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="더보기" aria-expanded={logoMenuOpen}>⋯</button>
         </div>
