@@ -782,15 +782,10 @@ html, body {
 
 /* 오늘 칸 — 지난 일정은 흐리게 */
 .tj-block.tj-past { opacity: 0.4; }
-/* 진행 중 일정 — 빨간 펄스 강조 + 경과분 음영(진행률) */
-.tj-block.tj-now-block {
-  z-index: 22;
-  animation: tjNowPulse 1.7s ease-in-out infinite;
-}
-@keyframes tjNowPulse {
-  0%, 100% { box-shadow: 0 0 0 2px #ff5a5f, 0 0 7px rgba(255, 90, 95, 0.35); }
-  50% { box-shadow: 0 0 0 2px #ff5a5f, 0 0 14px rgba(255, 90, 95, 0.6); }
-}
+/* 진행 중 일정 — 글씨를 빨갛게(테두리 없음) + 경과분 음영(진행률) */
+.tj-block.tj-now-block { z-index: 22; }
+.tj-block.tj-now-block .nm,
+.tj-block.tj-now-block .tm { color: #ff3b30; font-weight: 700; }
 .tj-block-elapsed {
   position: absolute;
   top: 0;
