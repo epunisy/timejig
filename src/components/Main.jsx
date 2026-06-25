@@ -148,6 +148,32 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     setSpotlight({ day: todayKor, blockId: spotId });
   }
 
+  // 서식 통일 — 현재 시간표 기준으로 글씨체·크기·무드·색채우기·배경을 모든 시간표에 적용
+  function handleUnifyFormat() {
+    setConfirmDialog({
+      title: '서식 통일',
+      message: '현재 시간표를 기준으로<br>글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경을<br>모든 시간표에 통일할까요?',
+      confirmText: '통일하기',
+      onYes: () => {
+        const fmt = {
+          font: config.font,
+          fontScale: config.fontScale,
+          accent: config.accent,
+          colorFill: config.colorFill,
+          bg: config.bg,
+          bgImage: config.bgImage,
+          bgColor: config.bgColor,
+          bgLuma: config.bgLuma,
+        };
+        setData({
+          ...data,
+          config: { ...data.config, ...fmt },
+          timetables: data.timetables.map(tt => ({ ...tt, config: { ...tt.config, ...fmt } })),
+        });
+      },
+    });
+  }
+
   // 앱 공유 — 웹 공유 API, 안 되면 링크 복사
   async function handleShare() {
     const url = window.location.origin;
@@ -539,6 +565,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const logoMenuItems = [
     { key: 'tut', label: '📖 튜토리얼', run: () => setShowTutorial(true) },
     { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
+    { key: 'unify', label: '🎨 서식 통일', run: handleUnifyFormat },
     { key: 'update', label: '🔄 업데이트', run: () => onLogoSync && onLogoSync() },
     { key: 'share', label: '📤 공유하기', run: handleShare },
   ];
