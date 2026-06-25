@@ -389,7 +389,6 @@ export default function Timetable({
                   onTouchStart={(e) => handleBlockStart(e, b)}
                 >
                   {bandColor && <span className="tj-block-band" style={{ background: bandColor }} />}
-                  {isNow && <span className="tj-block-elapsed" style={{ height: Math.max(0, (nowFromStart - b.start) * PX_PER_MIN) + 'px' }} />}
                   <div className="nm">{subj.name}</div>
                   <div className="tm">{fmtTime(b.start)}~<wbr />{fmtTime(b.end)}</div>
                 </div>
