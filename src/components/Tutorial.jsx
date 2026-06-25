@@ -10,7 +10,7 @@ const CELLS = [
   [0, -1, 2, 3],
 ];
 
-function MiniGrid({ memo, cost, drag, plan, lock }) {
+function MiniGrid({ memo, cost, drag, plan, lock, now, share }) {
   return (
     <div className="ttut-tt">
       <div className="ttut-grid">
@@ -49,6 +49,8 @@ function MiniGrid({ memo, cost, drag, plan, lock }) {
       )}
       {plan && <div className="ttut-badge">📷 사진 → AI 자동입력</div>}
       {lock && <div className="ttut-badge ttut-badge-lock">🔒 고정됨</div>}
+      {now && <div className="ttut-badge">🔴 오늘 · 지금 수업 강조</div>}
+      {share && <div className="ttut-badge">📤 이미지로 공유</div>}
     </div>
   );
 }
@@ -113,6 +115,7 @@ const SLIDES = [
   { title: '사진 한 장이면 자동완성', desc: '학교·학원 시간표 사진만 올리면 AI가 알아서 채워줘요.', view: <MiniGrid plan /> },
   { title: '색 무드로 분위기 바꾸기', desc: '크림·캔디·소르베 무드로 색을 한 번에! 배경색도 원하는 대로 골라요.', view: <MoodPreview /> },
   { title: '메모 · 월 교육비 한눈에', desc: '준비물 메모와 한 달 학원비를 과목 아래에서 바로 확인해요.', view: <MiniGrid memo cost /> },
+  { title: '오늘·지금을 한눈에 🔴', desc: '상단 NOW를 켜면 오늘 요일이 강조되고, 진행 중인 수업이 빨갛게 표시돼요.', view: <MiniGrid now /> },
   { title: '실수로 안 움직이게 🔒 고정', desc: '고정을 켜면 시간표가 잠겨 잘못 드래그되지 않아요.', view: <MiniGrid lock /> },
   {
     title: '잠금화면으로 저장 ✨',
@@ -126,6 +129,7 @@ const SLIDES = [
       </Phone>
     ),
   },
+  { title: '시간표 공유하기 📤', desc: '완성한 시간표를 이미지로 친구·가족에게 바로 공유해요. 앱 링크도 함께 전달돼요.', view: <MiniGrid share /> },
   { title: '로그인하면 어디서나 그대로', desc: '구글 로그인 한 번이면 기기를 바꿔도 시간표가 자동으로 따라와요.', view: <CloudSync /> },
 ];
 
