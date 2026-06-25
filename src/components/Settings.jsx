@@ -364,19 +364,6 @@ export default function Settings({
           <div style={{ fontSize: '11px', color: '#999', marginTop: '6px' }}>✨ 배경은 수시로 업데이트됩니다.</div>
         </label>
 
-        {onApplyToAll && (
-          <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
-            <button
-              type="button"
-              onClick={onApplyToAll}
-              style={{ width: '100%', minHeight: '40px', boxSizing: 'border-box', background: '#fff', border: '0.5px solid #d8d8d8', color: '#444', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer' }}
-            >🎨 이 서식을 모든 시간표에 적용하기</button>
-            <div style={{ fontSize: '10px', color: '#999', marginTop: '6px', lineHeight: 1.45 }}>
-              글씨체 · 글씨 크기 · 무드 · 색 채우기 · 배경을 모든 시간표에 동일하게 맞춰요.
-            </div>
-          </div>
-        )}
-
         <div style={{ borderTop: '0.5px solid #e5e5e5', paddingTop: '12px', marginTop: '4px' }}>
           {user && (
             <div style={{ fontSize: '11px', color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '8px' }}>
@@ -412,6 +399,9 @@ export default function Settings({
         </div>
 
         <div className="tj-modal-actions">
+          {onApplyToAll && (
+            <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요">🎨 모든 시간표에 적용</button>
+          )}
           <button className="primary" onClick={handleClose}>{t('done')}</button>
         </div>
       </div>
