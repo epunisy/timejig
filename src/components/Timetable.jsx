@@ -27,6 +27,7 @@ export default function Timetable({
   onDragEnd,
   onInternalDraggingChange,
   locked,
+  onLockedAttempt,
   nowView,
 }) {
   // 오늘 요일 (현재 보기 ON일 때만 강조)
@@ -145,7 +146,7 @@ export default function Timetable({
   }, [dragSubject, blocks, days, totalMin]);
   
   function handleBlockStart(e, block) {
-    if (locked) return; // 고정 상태면 블록이 안 움직임
+    if (locked) { onLockedAttempt && onLockedAttempt(); return; } // 고정 상태면 블록이 안 움직임
     e.preventDefault();
     setInternalDrag(block);
     onInternalDraggingChange(true);

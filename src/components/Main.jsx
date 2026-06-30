@@ -41,6 +41,14 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   useEffect(() => {
     try { localStorage.setItem('tj_locked', locked ? '1' : '0'); } catch { /* 무시 */ }
   }, [locked]);
+  // 고정 상태에서 시간표를 바꾸려 할 때 띄우는 안내 토스트
+  const [lockNotice, setLockNotice] = useState(false);
+  const lockNoticeTimer = useRef(null);
+  function notifyLocked() {
+    setLockNotice(true);
+    if (lockNoticeTimer.current) clearTimeout(lockNoticeTimer.current);
+    lockNoticeTimer.current = setTimeout(() => setLockNotice(false), 2600);
+  }
 
   const newTTInputRef = useRef(null);
   const renameInputRef = useRef(null);
@@ -354,7 +362,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   }
   
   function handleDragEnd(dropInfo) {
-    if (locked) { setDragSubject(null); return; }
+    if (locked) { if (dropInfo) notifyLocked(); setDragSubject(null); return; }
     if (dropInfo && dragSubject) {
       updateTimetable(tt => ({
         ...tt,
@@ -710,7 +718,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <span className="tj-nowbtn-dot" />NOW
           </button>
           <button
-            className={'tj-locktoggle' + (locked ? ' on' : '')}
+            className={'tj-locktoggle' + (locked ? ' on' : '') + (lockNotice ? ' attn' : '')}
             onClick={() => setLocked(l => !l)}
             aria-pressed={locked}
             title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
@@ -740,6 +748,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onDragEnd={handleDragEnd}
           onInternalDraggingChange={setInternalDragging}
           locked={locked}
+          onLockedAttempt={notifyLocked}
           nowView={nowView}
         />
         <div
@@ -826,6 +835,16 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
+      )}
+
+      {lockNotice && (
+        <div className="tj-lock-notice" role="status">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+          </svg>
+          오른쪽 상단의 고정 버튼을 해제해주세요
+        </div>
       )}
     </div>
   );
