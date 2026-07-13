@@ -906,8 +906,8 @@ html, body {
 }
 
 /* 오늘 요일 — 항상 은은하게 강조 (현재 요일을 한눈에) */
-.tj-day-col.tj-today { background: rgba(255, 213, 110, 0.16); }
-.tj-day-head.tj-today { background: #ffe7b8; color: #9a6a12; font-weight: 700; }
+.tj-day-col.tj-today { background: rgba(255, 90, 95, 0.10); }
+.tj-day-head.tj-today { background: #ffe0e1; color: #d5353b; font-weight: 700; }
 
 /* 오늘 칸 — 지난 일정은 흐리게 */
 .tj-block.tj-past { opacity: 0.4; }
