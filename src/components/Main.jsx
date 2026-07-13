@@ -18,7 +18,7 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
-export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut, onLogoSync, onPreviewWelcome, onUndo, onRedo, canUndo, canRedo }) {
+export default function Main({ data, setData, onGoExport, user, onSignIn, onSignOut, onLogoSync, onPreviewWelcome, onUndo, onRedo, canUndo, canRedo }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -93,14 +93,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     document.addEventListener('touchend', end);
   }
 
-  // 설정 완료 직후(진짜 첫 진입)에만, 메인 화면을 잠깐 본 뒤 튜토리얼을 띄운다.
-  // 일반 로드(저장된 데이터로 바로 메인) 때는 자동으로 띄우지 않음.
-  useEffect(() => {
-    if (!autoTutorial || data.tutorialDone) return;
-    const id = setTimeout(() => setShowTutorial(true), 700);
-    return () => clearTimeout(id);
-  }, [autoTutorial, data.tutorialDone]);
-  
+  // 첫 진입 튜토리얼 모달은 띄우지 않는다. 대신 과목 팔레트의 ＋ 버튼을 강조해
+  // "여기부터 눌러 과목을 만드세요"를 직접 유도한다. (튜토리얼은 📖 메뉴로만 열림)
+
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
 

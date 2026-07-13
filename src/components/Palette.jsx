@@ -177,7 +177,14 @@ export default function Palette({
             </>
           ) : (
             <>
-              <button className="tj-add-btn" onClick={onAddSubject}>+</button>
+              <span className={'tj-add-wrap' + (subjects.length === 0 ? ' attn' : '')}>
+                {subjects.length === 0 && <span className="tj-add-coach">여기부터!</span>}
+                <button
+                  className={'tj-add-btn' + (subjects.length === 0 ? ' attn' : '')}
+                  onClick={onAddSubject}
+                  title="새 과목 만들기"
+                >+</button>
+              </span>
               {subjects.length > 0 && !collapsed && (
                 <>
                   <button
@@ -196,10 +203,18 @@ export default function Palette({
           )}
         </div>
       </div>
-      <div className="tj-pal-hint">
-        이곳에 과목을 추가한 뒤, 시간표로 드래그해 보세요.<br />
-        요일, 시간 범위, 폰트, 배경 등은 설정에서 자유롭게 변경할 수 있어요.
-      </div>
+      {subjects.length === 0 ? (
+        <div className="tj-pal-hint tj-pal-hint-start">
+          <b><span className="tj-hint-plus">＋</span> 버튼부터 눌러 과목을 만드세요!</b><br />
+          그다음 만든 과목을 <b>시간표로 드래그</b>해 배치하고,<br />
+          지울 땐 <b>휴지통으로 드래그</b>하면 돼요.
+        </div>
+      ) : (
+        <div className="tj-pal-hint">
+          이곳에 과목을 추가한 뒤, 시간표로 드래그해 보세요.<br />
+          요일, 시간 범위, 폰트, 배경 등은 설정에서 자유롭게 변경할 수 있어요.
+        </div>
+      )}
       <div className="tj-pal-list" style={fontFamily ? { fontFamily } : undefined}>
         {subjects.length === 0 ? (
           <div className="tj-empty">{t('emptySubjects')}</div>
