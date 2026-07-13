@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { t } from '../i18n';
 import GoogleIcon from './GoogleIcon';
+import StartDemo from './StartDemo';
 
 const FEATURES = [
   '📋 시간표를 복사해 여러 버전으로 비교하기',
@@ -33,6 +34,7 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
       {/* 사람들이 긴 소개를 훅 넘겨버려 시작법을 몰라서 — 가장 먼저 '딱 3단계'를 크게 강조 */}
       <div className="tj-setup-start">
         <div className="tj-setup-start-title">딱 3단계면 끝!</div>
+        <StartDemo />
         <ol className="tj-setup-start-steps">
           <li>
             <span className="tj-setup-start-no">1</span>
