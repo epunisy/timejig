@@ -444,6 +444,31 @@ html, body {
 .tj-login-icon:hover { color: #555; }
 .tj-login-icon.on { background: #eaf3fd; color: #378ADD; }
 .tj-login-icon:active { transform: translateY(1px); }
+
+/* 커스텀 툴팁 — 브라우저 기본(검정 바탕) title 대신 밝은 말풍선. 버튼에 tj-tip + data-tip 사용 */
+.tj-tip { position: relative; }
+.tj-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #fff;
+  color: #3a3f46;
+  border: 1px solid #e4e7eb;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 9px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-3px);
+  pointer-events: none;
+  transition: opacity 0.13s ease, transform 0.13s ease;
+  z-index: 60;
+}
+.tj-tip:hover::after,
+.tj-tip:focus-visible::after { opacity: 1; transform: translateY(0); }
 /* 아랫줄: 메뉴 묶음 */
 .tj-topbar-r2 {
   display: flex;

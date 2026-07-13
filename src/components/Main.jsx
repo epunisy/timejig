@@ -690,9 +690,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           )}
         </div>
         <button
-          className="tj-login-icon"
+          className="tj-login-icon tj-tip"
           onClick={() => setShowTutorial(true)}
-          title="튜토리얼"
+          data-tip="튜토리얼"
           aria-label="튜토리얼"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -701,9 +701,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           </svg>
         </button>
         <button
-          className="tj-login-icon"
+          className="tj-login-icon tj-tip"
           onClick={() => onPreviewWelcome && onPreviewWelcome()}
-          title="첫 화면"
+          data-tip="첫 화면"
           aria-label="첫 화면"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -712,9 +712,9 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           </svg>
         </button>
         <button
-          className={'tj-login-icon' + (user ? ' on' : '')}
+          className={'tj-login-icon tj-tip' + (user ? ' on' : '')}
           onClick={user ? onSignOut : onSignIn}
-          title={user ? `${user.email} · 눌러서 로그아웃` : '로그인'}
+          data-tip={user ? `${user.email} · 눌러서 로그아웃` : '로그인'}
           aria-label={user ? '로그아웃' : '로그인'}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -733,22 +733,22 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             ⚙️ 서식 및 모든설정
           </button>
           <div className="tj-undoredo">
-            <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" title="되돌리기">↶</button>
-            <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기" title="되살리기">↷</button>
+            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
+            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
           </div>
           <button
-            className={'tj-nowbtn' + (nowView ? ' on' : '')}
+            className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
             aria-pressed={nowView}
-            title={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
+            data-tip={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
           >
             <span className="tj-nowbtn-dot" />NOW
           </button>
           <button
-            className={'tj-locktoggle' + (locked ? ' on' : '') + (lockNotice ? ' attn' : '')}
+            className={'tj-locktoggle tj-tip' + (locked ? ' on' : '') + (lockNotice ? ' attn' : '')}
             onClick={() => setLocked(l => !l)}
             aria-pressed={locked}
-            title={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
+            data-tip={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect x="5" y="11" width="14" height="9" rx="2" />

@@ -1,20 +1,7 @@
 import { forwardRef } from 'react';
-import qrcode from 'qrcode-generator';
 import { getFontFamily, getFontScale, getSubjectColor, textColorOn, getWeekDays, getDayLabels } from '../App';
 
 function pad(n) { return String(n).padStart(2, '0'); }
-
-// 공유 이미지용 QR (앱 주소) — 동기 생성한 GIF 데이터URL
-const APP_URL = 'https://timejig.vercel.app';
-let _qrCache = null;
-function appQrDataUrl() {
-  if (_qrCache) return _qrCache;
-  const qr = qrcode(0, 'M');
-  qr.addData(APP_URL);
-  qr.make();
-  _qrCache = qr.createDataURL(8, 0); // cellSize, margin
-  return _qrCache;
-}
 
 // 단일 시간표를 "이미지 공유"용으로 픽셀 기반 렌더 (html2canvas 호환).
 // 화면 밖에 숨겨 두고 ref로 캡쳐한다.
@@ -59,13 +46,11 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
   const timeLabelH = Math.round(timeFont * 1.2);
   const accentW = Math.max(4, Math.round(colW * 0.06));
 
-  // 앱 홍보 푸터 (좌: 브랜드/태그라인/검색 안내 · 우: 설치 QR)
+  // 앱 홍보 푸터 — 타임지그 이름(+한 줄 태그라인)만 가운데 배치
   const footGap = Math.round(PAD * 0.9);
-  const footH = Math.round(labelFont * 4.2);
-  const brandFont = Math.round(labelFont * 1.15);
-  const taglineFont = Math.round(font * 0.92);
-  const storeFont = Math.round(font * 0.78);
-  const qrSize = Math.round(footH * 0.92);
+  const footH = Math.round(labelFont * 3.2);
+  const brandFont = Math.round(labelFont * 1.4);
+  const taglineFont = Math.round(font * 0.9);
 
   const CAP_H = PAD * 2 + labelH + schedH + footGap + footH;
 
@@ -173,22 +158,15 @@ const ShareImage = forwardRef(function ShareImage({ data, tt }, ref) {
           </div>
         </div>
 
-        {/* 앱 홍보 푸터 — 좌: 텍스트, 우: 설치 QR */}
+        {/* 앱 홍보 푸터 — 타임지그 이름만 가운데 */}
         <div style={{
           marginTop: footGap + 'px', height: footH + 'px',
-          display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-          gap: Math.round(PAD * 0.5) + 'px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: Math.round(font * 0.22) + 'px',
           borderTop: '1px solid #e5e5e5',
         }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: Math.round(font * 0.28) + 'px', textAlign: 'left', minWidth: 0 }}>
-            <span style={{ fontSize: brandFont + 'px', fontWeight: 800, color: '#378ADD', letterSpacing: '0.5px', lineHeight: 1.2 }}>타임지그</span>
-            <span style={{ fontSize: taglineFont + 'px', color: '#555', lineHeight: 1.2 }}>예쁘고 편하게 만드는 시간표</span>
-            <span style={{ fontSize: storeFont + 'px', color: '#999', lineHeight: 1.2 }}>Google Play <b style={{ color: '#777' }}>'타임지그'</b> 검색</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
-            <img src={appQrDataUrl()} alt="설치 QR" style={{ width: qrSize + 'px', height: qrSize + 'px', display: 'block', imageRendering: 'pixelated' }} />
-            <span style={{ fontSize: Math.round(storeFont * 0.92) + 'px', color: '#999', lineHeight: 1 }}>스캔하면 바로 설치</span>
-          </div>
+          <span style={{ fontSize: brandFont + 'px', fontWeight: 800, color: '#378ADD', letterSpacing: '0.5px', lineHeight: 1.2 }}>타임지그</span>
+          <span style={{ fontSize: taglineFont + 'px', color: '#999', lineHeight: 1.2 }}>예쁘고 편하게 만드는 시간표</span>
         </div>
       </div>
     </div>
