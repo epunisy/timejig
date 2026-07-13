@@ -105,6 +105,62 @@ html, body {
 }
 .tj-setup-greeting b { display: block; font-size: 16px; color: #333; margin-bottom: 4px; letter-spacing: -0.2px; }
 
+/* 첫 화면 — 가장 먼저 보이는 '딱 3단계' 시작법 (긴 소개보다 앞에 크게) */
+.tj-setup-start {
+  width: 300px;
+  max-width: calc(100vw - 40px);
+  margin: 14px auto 4px;
+  padding: 14px 16px 15px;
+  background: #eef5fd;
+  border: 1px solid #d3e6fa;
+  border-radius: 14px;
+  text-align: left;
+}
+.tj-setup-start-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1f5a92;
+  letter-spacing: -0.3px;
+  margin-bottom: 11px;
+  text-align: center;
+}
+.tj-setup-start-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.tj-setup-start-steps li { display: flex; align-items: center; gap: 10px; }
+.tj-setup-start-no {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #378ADD;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(55, 138, 221, 0.35);
+}
+.tj-setup-start-tx { font-size: 12.5px; color: #445; line-height: 1.45; word-break: keep-all; }
+.tj-setup-start-tx b { color: #1f2937; font-weight: 700; }
+.tj-setup-start-plus {
+  display: inline-block;
+  background: #378ADD;
+  color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 11px;
+  vertical-align: middle;
+}
+.tj-setup-feats-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #99a3af;
+  margin: 16px 0 2px;
+}
+
 /* 첫 화면 미리보기 — 실제 캡처 두 장(시간표 → 과목/교육비) 세로 스택 */
 .tj-setup-hero {
   display: flex;
