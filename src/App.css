@@ -1702,6 +1702,123 @@ html, body {
 .tj-tut2-dot.on { background: #378ADD; width: 16px; border-radius: 3px; }
 .tj-tut2-next { background: #222; color: #fff; border: none; font-size: 13px; font-weight: 600; padding: 10px 32px; cursor: pointer; font-family: inherit; }
 
+/* ===== 첫 진입 — 한 장짜리 시작 안내 (과목 추가 → 드래그) ===== */
+.tj-start {
+  background: #fff;
+  width: 320px;
+  max-width: calc(100vw - 28px);
+  padding: 22px 20px 20px;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: tjTut2 0.4s ease;
+}
+.tj-start-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: #378ADD;
+  background: #eaf3fc;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: -0.2px;
+}
+.tj-start-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2937;
+  letter-spacing: -0.4px;
+  margin-top: 10px;
+  word-break: keep-all;
+}
+.tj-start-flow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  margin: 18px 0 14px;
+  width: 100%;
+}
+.tj-start-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.tj-start-vis {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.tj-start-plusbtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #378ADD;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(55, 138, 221, 0.4);
+  animation: tjAddPulse 1.4s ease-in-out infinite;
+}
+.tj-start-cap { font-size: 11.5px; color: #6b7280; line-height: 1.5; word-break: keep-all; }
+.tj-start-cap b { color: #374151; }
+.tj-start-plus-inline {
+  display: inline-block;
+  background: #378ADD;
+  color: #fff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  vertical-align: middle;
+}
+.tj-start-arrow { font-size: 20px; color: #cbd5e1; align-self: center; margin-top: 14px; }
+.tj-start-chip {
+  background: #fff;
+  border: 0.5px solid #cbd5e1;
+  border-left: 5px solid #FFB0BE;
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  padding: 6px 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+}
+.tj-start-drag { font-size: 16px; color: #378ADD; margin: 0 -1px; animation: tjTutDrag 1.2s ease-in-out infinite; }
+.tj-start-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 12px);
+  grid-auto-rows: 12px;
+  gap: 2px;
+}
+.tj-start-grid i { background: #eef1f4; display: block; }
+.tj-start-grid i.on { background: #FFB0BE; }
+.tj-start-note {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.5;
+  word-break: keep-all;
+  margin-bottom: 16px;
+}
+.tj-start-note b { color: #64748b; }
+.tj-start-cta {
+  background: #378ADD;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(55, 138, 221, 0.3);
+}
+.tj-start-cta:hover { background: #2f79c6; }
+
 /* 미니 시간표 mock */
 .ttut-tt { width: 196px; position: relative; }
 .ttut-grid { display: grid; grid-template-columns: 16px 1fr 1fr 1fr 1fr; background: #fff; border: 1px solid #e3e3e3; }

@@ -6,6 +6,7 @@ import Settings from './Settings';
 import SubjectModal from './SubjectModal';
 import ConfirmDialog from './ConfirmDialog';
 import Tutorial from './Tutorial';
+import StartGuide from './StartGuide';
 import ImportPlan from './ImportPlan';
 import ShareImage from './ShareImage';
 import { resolveBackground, bgStyle, CATEGORIES, getWeekDays, FULL_WEEK } from '../App';
@@ -18,7 +19,7 @@ function timeToMin(t) {
   return h * 60 + (Number.isNaN(m) ? 0 : m);
 }
 
-export default function Main({ data, setData, onGoExport, user, onSignIn, onSignOut, onLogoSync, onPreviewWelcome, onUndo, onRedo, canUndo, canRedo }) {
+export default function Main({ data, setData, onGoExport, autoTutorial, user, onSignIn, onSignOut, onLogoSync, onPreviewWelcome, onUndo, onRedo, canUndo, canRedo }) {
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -26,6 +27,7 @@ export default function Main({ data, setData, onGoExport, user, onSignIn, onSign
   const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showStart, setShowStart] = useState(false);
   const [addingTT, setAddingTT] = useState(false);
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
@@ -93,8 +95,18 @@ export default function Main({ data, setData, onGoExport, user, onSignIn, onSign
     document.addEventListener('touchend', end);
   }
 
-  // 첫 진입 튜토리얼 모달은 띄우지 않는다. 대신 과목 팔레트의 ＋ 버튼을 강조해
-  // "여기부터 눌러 과목을 만드세요"를 직접 유도한다. (튜토리얼은 📖 메뉴로만 열림)
+  // 첫 진입(진짜 첫 설정 직후)에만, 긴 튜토리얼 대신 "한 장짜리 시작 안내"를 띄운다.
+  // 긴 튜토리얼은 사람들이 훅 넘겨버려서, 가장 먼저 할 일(과목 추가→드래그) 하나만 각인.
+  // (전체 튜토리얼은 📖 메뉴로 언제든 열 수 있음)
+  useEffect(() => {
+    if (!autoTutorial || data.tutorialDone) return;
+    setShowStart(true);
+  }, [autoTutorial, data.tutorialDone]);
+
+  function handleStartClose() {
+    setShowStart(false);
+    setData({ ...data, tutorialDone: true });
+  }
 
   const activeTT = data.timetables.find(t => t.id === data.activeTT);
   if (!activeTT) return null;
@@ -828,6 +840,9 @@ export default function Main({ data, setData, onGoExport, user, onSignIn, onSign
         />
       )}
 
+      {showStart && (
+        <StartGuide onClose={handleStartClose} />
+      )}
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
       )}

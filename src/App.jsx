@@ -279,6 +279,9 @@ function App() {
   // 전체 데이터
   const [data, setData] = useState(boot.data);
 
+  // 첫 진입(저장된 데이터 없음)이면 시작 안내를 한 번 띄운다 (단, tutorialDone 이면 안 뜸)
+  const [justSetup] = useState(boot.fresh);
+
   // 로그아웃 확인 (로그아웃하면 이 기기의 로컬 데이터를 비움 — 클라우드 백업은 유지)
   const [confirmLogout, setConfirmLogout] = useState(false);
 
@@ -467,6 +470,7 @@ function App() {
         <Main
           data={data}
           setData={setData}
+          autoTutorial={justSetup}
           onGoExport={() => setMode('export')}
           user={user}
           onSignIn={handleSignIn}
