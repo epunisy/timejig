@@ -33,8 +33,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
-  // 새로고침 시 과목팔레트는 기본 접힘. 단, 맨 처음(과목이 하나도 없는 상태)일 땐 펼쳐서 추가를 유도
-  const [palCollapsed, setPalCollapsed] = useState(() => data.subjects.length > 0);
+  // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
+  const [palCollapsed, setPalCollapsed] = useState(false);
   // NOW 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
   const [nowView, setNowView] = useState(true);
   const [locked, setLocked] = useState(() => {

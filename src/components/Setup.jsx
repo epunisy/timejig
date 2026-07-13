@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { t } from '../i18n';
 import GoogleIcon from './GoogleIcon';
-import StartDemo from './StartDemo';
 
 const FEATURES = [
   '📋 시간표를 복사해 여러 버전으로 비교하기',
@@ -17,7 +16,7 @@ const FEATURES = [
 // onBack 이 있으면 미리보기(설정에서 열어본 것) → 돌아가기 버튼 표시
 export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
   const [showAllFeats, setShowAllFeats] = useState(false);
-  const visibleFeats = showAllFeats ? FEATURES : FEATURES.slice(0, 3);
+  const visibleFeats = showAllFeats ? FEATURES : FEATURES.slice(0, 4);
   return (
     <div className="tj-setup">
       {onBack && (
@@ -31,26 +30,6 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
         엄마들이 상상했던 모든 기능을{'\n'}가장 깔끔하게 담았어요.
       </div>
 
-      {/* 사람들이 긴 소개를 훅 넘겨버려 시작법을 몰라서 — 가장 먼저 '딱 3단계'를 크게 강조 */}
-      <div className="tj-setup-start">
-        <div className="tj-setup-start-title">딱 3단계면 끝!</div>
-        <StartDemo />
-        <ol className="tj-setup-start-steps">
-          <li>
-            <span className="tj-setup-start-no">1</span>
-            <span className="tj-setup-start-tx"><b>과목 팔레트</b>의 <span className="tj-setup-start-plus">＋</span> 를 눌러 <b>과목을 추가</b></span>
-          </li>
-          <li>
-            <span className="tj-setup-start-no">2</span>
-            <span className="tj-setup-start-tx">만든 과목을 <b>시간표로 드래그</b>해서 배치</span>
-          </li>
-          <li>
-            <span className="tj-setup-start-no">3</span>
-            <span className="tj-setup-start-tx">지울 땐 <b>아래 휴지통으로 드래그</b></span>
-          </li>
-        </ol>
-      </div>
-
       {/* 실제 캡처 두 장(위아래). 밤이라 빨간 현재선이 안 찍혀서, 시간표 위에 NOW선을 임의로 얹음 */}
       <div className="tj-setup-hero">
         <div className="tj-hero-shotwrap">
@@ -62,13 +41,12 @@ export default function Setup({ user, onSignIn, onFirstUse, onBack }) {
         </div>
         <img className="tj-hero-img" src="/preview-shot2.jpg" alt="과목 팔레트와 월 교육비 예시" />
       </div>
-      <div className="tj-setup-feats-label">이런 것도 할 수 있어요</div>
       <ul className="tj-setup-feats">
         {visibleFeats.map((f, i) => <li key={i}>{f}</li>)}
       </ul>
       {!showAllFeats && (
         <button className="tj-setup-more" onClick={() => setShowAllFeats(true)}>
-          + 기능 더보기 ({FEATURES.length - 3})
+          + 기능 더보기 ({FEATURES.length - 4})
         </button>
       )}
 
