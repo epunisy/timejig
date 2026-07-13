@@ -578,8 +578,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
   // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
   const logoMenuItems = [
-    { key: 'tut', label: '📖 튜토리얼', run: () => setShowTutorial(true) },
-    { key: 'home', label: '🏠 첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
     { key: 'import', label: '📷 시간표 옮겨오기', run: () => setShowImportPlan(true) },
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
     { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
@@ -691,6 +689,28 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
+        <button
+          className="tj-login-icon"
+          onClick={() => setShowTutorial(true)}
+          title="튜토리얼"
+          aria-label="튜토리얼"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+        </button>
+        <button
+          className="tj-login-icon"
+          onClick={() => onPreviewWelcome && onPreviewWelcome()}
+          title="첫 화면"
+          aria-label="첫 화면"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 9.2 12 2l9 7.2" />
+            <path d="M5 9.8V21h14V9.8" />
+          </svg>
+        </button>
         <button
           className={'tj-login-icon' + (user ? ' on' : '')}
           onClick={user ? onSignOut : onSignIn}
