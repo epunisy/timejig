@@ -34,7 +34,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const [logoMenuOpen, setLogoMenuOpen] = useState(false);
+  const [logoMenuOpen, setLogoMenuOpen] = useState(true);
   // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
   const [palCollapsed, setPalCollapsed] = useState(false);
   // NOW 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
@@ -762,10 +762,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="꾸미기">
             🎨 꾸미기
           </button>
-          <div className="tj-undoredo">
-            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
-            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
-          </div>
           <button
             className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
@@ -787,6 +783,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
+          <div className="tj-undoredo">
+            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
+            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
+          </div>
         </div>
         </div>
       </div>
