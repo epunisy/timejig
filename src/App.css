@@ -355,8 +355,8 @@ html, body {
 .tj-topbar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap;
+  gap: 6px 10px;
+  flex-wrap: wrap;
   background: #fff;
   border: 0.5px solid #d8d8d8;
   padding: 7px 4px 7px 12px;
@@ -475,8 +475,9 @@ html, body {
   flex-wrap: wrap;
   align-items: center;
   gap: 5px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   order: 1;
+  flex: 1 1 100%;   /* 전체 너비 한 줄 — 로고 밑으로도 흘러 쭉 나열, 넘치면 다음 줄로 */
 }
 /* 메뉴줄 버튼 높이 통일 — 얇고 낮게 */
 .tj-topbar-r2 .tj-cta,

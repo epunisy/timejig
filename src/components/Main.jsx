@@ -725,6 +725,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </button>
         <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="더보기" aria-expanded={logoMenuOpen}>⋯</button>
         </div>
+        </div>
         <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
           {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}
           {logoMenuItems.map(it => (
@@ -734,11 +735,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
             <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
           </div>
-          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="시간표 꾸미기">
-            🎨 시간표 꾸미기
-          </button>
           <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('schedule'); setShowSettings(true); }} aria-label="시간표 설정">
             ⚙️ 시간표 설정
+          </button>
+          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="꾸미기">
+            🎨 꾸미기
           </button>
           <button
             className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
@@ -761,7 +762,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
-        </div>
         </div>
       </div>
 
