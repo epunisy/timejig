@@ -1,4 +1,4 @@
-import { useRef, useState, Fragment } from 'react';
+import { useRef, useState, useEffect, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays, textColorOn } from '../App';
 
@@ -36,10 +36,19 @@ export default function Settings({
   onApplyToAll,
   user,
   onClose,
+  focus = 'schedule',
 }) {
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   const fileRef = useRef(null);
+  const decoRef = useRef(null);
+
+  // '시간표 꾸미기' 버튼으로 열면 꾸밈(서식) 섹션으로 바로 스크롤
+  useEffect(() => {
+    if (focus === 'deco' && decoRef.current) {
+      decoRef.current.scrollIntoView({ block: 'start' });
+    }
+  }, [focus]);
   // 색 채우기 예시용 샘플 색 (현재 무드의 한 색, 없으면 기본 민트)
   const sampleColor = (MOODS[config.accent] && MOODS[config.accent][1]) || '#9DDACF';
   const [colorPickOpen, setColorPickOpen] = useState(false);
@@ -218,7 +227,7 @@ export default function Settings({
         </label>
         </div>
 
-        <div className="tj-set-section">
+        <div className="tj-set-section" ref={decoRef} style={{ scrollMarginTop: '8px' }}>
           <span className="tj-set-section-t">꾸밈 (서식)</span>
           <span className="tj-set-section-h">색 · 글씨 · 배경. 아래 ‘모든 시간표에 적용’으로 한 번에 맞출 수 있어요.</span>
         </div>

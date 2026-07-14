@@ -23,6 +23,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [dragSubject, setDragSubject] = useState(null);
   const [internalDragging, setInternalDragging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsFocus, setSettingsFocus] = useState('schedule');
   const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
@@ -729,8 +730,11 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           {logoMenuItems.map(it => (
             <button key={it.key} className="tj-cta tj-logo-chip" onClick={it.run}>{it.label}</button>
           ))}
-          <button className="tj-cta tj-cta-settings" onClick={() => setShowSettings(true)} aria-label="서식 및 모든설정">
-            ⚙️ 서식 및 모든설정
+          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="시간표 꾸미기">
+            🎨 시간표 꾸미기
+          </button>
+          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('schedule'); setShowSettings(true); }} aria-label="시간표 설정">
+            ⚙️ 시간표 설정
           </button>
           <div className="tj-undoredo">
             <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
@@ -842,6 +846,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           onTimetableNameChange={handleTimetableNameChange}
           onApplyToAll={handleUnifyFormat}
           user={user}
+          focus={settingsFocus}
           onClose={() => setShowSettings(false)}
         />
       )}
