@@ -725,7 +725,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </button>
         <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="더보기" aria-expanded={logoMenuOpen}>⋯</button>
         </div>
-        </div>
         <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
           {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}
           {logoMenuItems.map(it => (
@@ -762,6 +761,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 : <path d="M8 11V7.5a4 4 0 0 1 7-2.4" />}
             </svg>
           </button>
+        </div>
         </div>
       </div>
 

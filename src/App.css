@@ -355,8 +355,8 @@ html, body {
 .tj-topbar {
   display: flex;
   align-items: center;
-  gap: 6px 10px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
   background: #fff;
   border: 0.5px solid #d8d8d8;
   padding: 7px 4px 7px 12px;
@@ -475,9 +475,8 @@ html, body {
   flex-wrap: wrap;
   align-items: center;
   gap: 5px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   order: 1;
-  flex: 1 1 100%;   /* 전체 너비 한 줄 — 로고 밑으로도 흘러 쭉 나열, 넘치면 다음 줄로 */
 }
 /* 메뉴줄 버튼 높이 통일 — 얇고 낮게 */
 .tj-topbar-r2 .tj-cta,
@@ -493,30 +492,6 @@ html, body {
 }
 .tj-topbar-r2 .tj-undoredo button { font-size: 13px; }
 .tj-topbar-r2 .tj-locktoggle svg { width: 15px; height: 15px; }
-
-/* 모바일 — 버튼들이 한 줄에 폭을 균등하게 나눠 꽉 차게 (어느 폰이든 딱 일렬) */
-@media (max-width: 899px) {
-  .tj-topbar-r2 { gap: 4px; }
-  .tj-topbar-r2 > .tj-cta-settings,
-  .tj-topbar-r2 > .tj-undoredo,
-  .tj-topbar-r2 > .tj-nowbtn,
-  .tj-topbar-r2 > .tj-locktoggle {
-    flex: 1 1 0;
-    min-width: 0;      /* 폭이 좁으면 줄어들어 한 줄 유지 */
-  }
-  .tj-topbar-r2 .tj-cta-settings,
-  .tj-topbar-r2 .tj-nowbtn {
-    padding-left: 6px;
-    padding-right: 6px;
-    gap: 3px;
-    font-size: 11px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .tj-undoredo { gap: 4px; }
-  .tj-topbar-r2 .tj-undoredo button { flex: 1 1 0; padding-left: 0; padding-right: 0; }
-}
 /* 시간표 이름 — 타이틀 */
 .tj-app-main .tj-tt-current {
   max-width: 100%;
