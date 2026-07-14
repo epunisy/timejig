@@ -675,6 +675,8 @@ html, body {
   font-family: inherit;
 }
 .tj-tt-addrow:hover { color: #111; }
+/* 외부 시간표 불러오기 — '새 시간표' 바로 아래에 붙게 (중복 구분선·간격 제거) */
+.tj-tt-import { border-top: none; margin-top: 0; padding-top: 6px; }
 
 .tj-tt-row.editing { gap: 4px; padding: 4px; }
 .tj-tt-row.editing input {

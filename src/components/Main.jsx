@@ -579,7 +579,6 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
   // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
   const logoMenuItems = [
-    { key: 'import', label: '📷 시간표 옮겨오기', run: () => setShowImportPlan(true) },
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
     { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
   ];
@@ -686,6 +685,10 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 ) : (
                   <button className="tj-tt-addrow" onClick={() => setAddingTT(true)}>+ 새 시간표</button>
                 )}
+                <button
+                  className="tj-tt-addrow tj-tt-import"
+                  onClick={() => { setTtMenuOpen(false); setShowImportPlan(true); }}
+                >📷 외부 시간표 불러오기</button>
               </div>
             </>
           )}
