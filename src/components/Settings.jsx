@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, Fragment } from 'react';
+import { useRef, useState, Fragment } from 'react';
 import { t } from '../i18n';
 import { FONTS, BACKGROUNDS, FONT_SCALES, MOODS, MOOD_LIST, WEEK_PARTS, FULL_WEEK, getWeekDays, textColorOn } from '../App';
 
@@ -41,14 +41,8 @@ export default function Settings({
   const ttNameRef = useRef(null);
   const composingRef = useRef(false);
   const fileRef = useRef(null);
-  const decoRef = useRef(null);
-
-  // '시간표 꾸미기' 버튼으로 열면 꾸밈(서식) 섹션으로 바로 스크롤
-  useEffect(() => {
-    if (focus === 'deco' && decoRef.current) {
-      decoRef.current.scrollIntoView({ block: 'start' });
-    }
-  }, [focus]);
+  // 설정↔꾸미기 버튼에 따라 해당 섹션만 보여준다 (겹치지 않게 분리)
+  const isDeco = focus === 'deco';
   // 색 채우기 예시용 샘플 색 (현재 무드의 한 색, 없으면 기본 민트)
   const sampleColor = (MOODS[config.accent] && MOODS[config.accent][1]) || '#9DDACF';
   const [colorPickOpen, setColorPickOpen] = useState(false);
@@ -146,10 +140,12 @@ export default function Settings({
     <div className="tj-modal-bg" onClick={handleClose}>
       <div className="tj-modal lg tj-set-modal" onClick={(e) => e.stopPropagation()}>
         <div className="tj-modal-head">
-          <h3>{t('settings')}</h3>
+          <h3>{isDeco ? '시간표 꾸미기' : '시간표 설정'}</h3>
           <button className="tj-modal-x" onClick={handleClose} aria-label="닫기">×</button>
         </div>
 
+        {!isDeco && (
+        <>
         <div className="tj-set-section tj-set-section--first">
           <span className="tj-set-section-t">시간표 설정</span>
           <span className="tj-set-section-h">이름 · 요일 · 시간은 지금 보고 있는 시간표에만 적용돼요.</span>
@@ -226,8 +222,12 @@ export default function Settings({
           </div>
         </label>
         </div>
+        </>
+        )}
 
-        <div className="tj-set-section" ref={decoRef} style={{ scrollMarginTop: '8px' }}>
+        {isDeco && (
+        <>
+        <div className="tj-set-section tj-set-section--first">
           <span className="tj-set-section-t">꾸밈 (서식)</span>
           <span className="tj-set-section-h">색 · 글씨 · 배경. 아래 ‘모든 시간표에 적용’으로 한 번에 맞출 수 있어요.</span>
         </div>
@@ -396,9 +396,11 @@ export default function Settings({
             ✨ 배경은 수시로 업데이트됩니다.
           </div>
         </div>
+        </>
+        )}
 
         <div className="tj-modal-actions">
-          {onApplyToAll && (
+          {isDeco && onApplyToAll && (
             <button type="button" onClick={onApplyToAll} title="글씨체·글씨 크기·무드·색 채우기·배경을 모든 시간표에 동일하게 맞춰요 (요일·시간은 안 바뀜)">🎨 모든 시간표를 이와 같이 꾸밈</button>
           )}
           <button className="primary" onClick={handleClose}>{t('done')}</button>
