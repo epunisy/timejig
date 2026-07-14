@@ -897,17 +897,17 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
       {shareOpen && (
         <div className="tj-modal-bg" onClick={() => setShareOpen(false)}>
-          <div className="tj-modal" style={{ width: '280px' }} onClick={(e) => e.stopPropagation()}>
+          <div className="tj-modal" style={{ width: '300px' }} onClick={(e) => e.stopPropagation()}>
             <div className="tj-modal-head">
               <h3>시간표 공유</h3>
               <button className="tj-modal-x" onClick={() => setShareOpen(false)} aria-label="닫기">×</button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-              <button className="primary" onClick={() => { setShareOpen(false); handleShare(); }}>📤 공유하기</button>
-              <button onClick={() => { setShareOpen(false); handleSaveToGallery(); }}>🖼️ 갤러리에 저장</button>
+            <div className="tj-confirm-msg">
+              공유하기는 카톡·메시지 등으로 보내고,<br />갤러리에 저장은 시간표 이미지를 사진첩에 담아요.
             </div>
-            <div style={{ fontSize: '11px', color: '#999', marginTop: '10px', lineHeight: 1.5 }}>
-              공유하기는 카톡·메시지 등으로 보내고, 갤러리에 저장은 시간표 이미지를 사진첩에 담아요.
+            <div className="tj-modal-actions">
+              <button onClick={() => { setShareOpen(false); handleSaveToGallery(); }}>🖼️ 갤러리에 저장</button>
+              <button className="primary" onClick={() => { setShareOpen(false); handleShare(); }}>📤 공유하기</button>
             </div>
           </div>
         </div>
