@@ -90,6 +90,11 @@ export default function SubjectModal({ subject, config, onSave, onCancel, onDele
               autoFocus
             />
           )}
+          {isEdit && (
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '4px' }}>
+              시간을 바꿔도 이미 시간표에 배치된 블록에는 반영되지 않아요. (새로 놓는 것부터 적용돼요)
+            </div>
+          )}
         </label>
 
         <label>
