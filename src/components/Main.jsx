@@ -58,6 +58,18 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const renameInputRef = useRef(null);
   const newTTComposingRef = useRef(false);
   const renameComposingRef = useRef(false);
+  const ttMenuRef = useRef(null);
+
+  // 시간표 목록 드롭다운이 좁은 폰에서 왼쪽으로 잘리면, 화면 안으로 밀어 넣는다.
+  useEffect(() => {
+    if (!ttMenuOpen) return;
+    const el = ttMenuRef.current;
+    if (!el) return;
+    el.style.transform = '';
+    const rect = el.getBoundingClientRect();
+    const overflowLeft = 8 - rect.left;      // 왼쪽 여백 8px 확보
+    if (overflowLeft > 0) el.style.transform = `translateX(${overflowLeft}px)`;
+  }, [ttMenuOpen]);
 
   // 모바일에서 시간표/팔레트 경계선을 드래그해 팔레트 높이를 조절 (기기마다 화면이 달라서)
   const layoutRef = useRef(null);
@@ -642,7 +654,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
                 className="tj-tt-backdrop"
                 onClick={() => { setTtMenuOpen(false); setRenamingTT(null); setAddingTT(false); }}
               />
-              <div className="tj-tt-menu">
+              <div className="tj-tt-menu" ref={ttMenuRef}>
                 {data.timetables.map(tt => {
                   const isActive = tt.id === data.activeTT;
                   if (renamingTT === tt.id) {

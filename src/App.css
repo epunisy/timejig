@@ -620,7 +620,7 @@ html, body {
   border-radius: 0;
   box-shadow: 0 8px 24px rgba(0,0,0,0.14);
   padding: 6px;
-  min-width: 240px;
+  min-width: min(240px, calc(100vw - 24px));
   max-width: calc(100vw - 24px);
   max-height: 62vh;
   overflow-y: auto;
