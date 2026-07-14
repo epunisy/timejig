@@ -33,6 +33,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [renamingTT, setRenamingTT] = useState(null);
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [showImportPlan, setShowImportPlan] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [logoMenuOpen, setLogoMenuOpen] = useState(false);
   // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
   const [palCollapsed, setPalCollapsed] = useState(false);
@@ -189,6 +190,28 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       setConfirmDialog({ title: '링크 복사됨', message: '앱 주소를 복사했어요.<br><span style="color:#888; font-size:11px;">' + url + '</span>', infoOnly: true });
     } catch {
       setConfirmDialog({ title: '앱 주소', message: url, infoOnly: true });
+    }
+  }
+
+  // 시간표 이미지를 갤러리(사진)에 저장 — 잠금화면 저장과 동일한 방식(다운로드 + 안내)
+  async function handleSaveToGallery() {
+    const tt = data.timetables.find(t => t.id === data.activeTT);
+    try {
+      const canvas = await html2canvas(shareRef.current, { scale: 2, backgroundColor: null, logging: false, useCORS: true });
+      const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
+      const link = document.createElement('a');
+      link.download = (tt?.name || '시간표') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      setConfirmDialog({
+        title: '갤러리에 저장',
+        message: isIOS
+          ? '이미지가 뜨면 <b>길게 눌러 ‘사진에 저장’</b>을 선택하세요.'
+          : '이미지를 저장했어요. <b>갤러리(사진)</b> 앱에서 확인하세요.',
+        infoOnly: true,
+      });
+    } catch {
+      setConfirmDialog({ title: '저장 실패', message: '이미지 저장 중 문제가 생겼어요. 다시 시도해 주세요.', infoOnly: true });
     }
   }
 
@@ -580,7 +603,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
   const logoMenuItems = [
     { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
-    { key: 'share', label: '📤 시간표 공유하기', run: handleShare },
+    { key: 'share', label: '📤 시간표 공유하기', run: () => setShareOpen(true) },
   ];
 
   return (
@@ -733,16 +756,16 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
           {logoMenuItems.map(it => (
             <button key={it.key} className="tj-cta tj-logo-chip" onClick={it.run}>{it.label}</button>
           ))}
-          <div className="tj-undoredo">
-            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
-            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
-          </div>
           <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('schedule'); setShowSettings(true); }} aria-label="시간표 설정">
             ⚙️ 시간표 설정
           </button>
           <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="꾸미기">
             🎨 꾸미기
           </button>
+          <div className="tj-undoredo">
+            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
+            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
+          </div>
           <button
             className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
@@ -870,6 +893,24 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
 
       {showStart && (
         <StartGuide onClose={handleStartClose} />
+      )}
+
+      {shareOpen && (
+        <div className="tj-modal-bg" onClick={() => setShareOpen(false)}>
+          <div className="tj-modal" style={{ width: '280px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="tj-modal-head">
+              <h3>시간표 공유</h3>
+              <button className="tj-modal-x" onClick={() => setShareOpen(false)} aria-label="닫기">×</button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+              <button className="primary" onClick={() => { setShareOpen(false); handleShare(); }}>📤 공유하기</button>
+              <button onClick={() => { setShareOpen(false); handleSaveToGallery(); }}>🖼️ 갤러리에 저장</button>
+            </div>
+            <div style={{ fontSize: '11px', color: '#999', marginTop: '10px', lineHeight: 1.5 }}>
+              공유하기는 카톡·메시지 등으로 보내고, 갤러리에 저장은 시간표 이미지를 사진첩에 담아요.
+            </div>
+          </div>
+        </div>
       )}
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
