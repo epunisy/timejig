@@ -162,9 +162,9 @@ export default function Palette({
   
   return (
     <div className={'tj-palette' + (collapsed ? ' collapsed' : '')}>
-      <div className="tj-pal-head">
-        <h3 style={{ cursor: 'pointer' }} onClick={onToggleCollapse} title={collapsed ? '펼치기' : '접기'}>{t('subjects')}</h3>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <div className="tj-pal-head" onClick={onToggleCollapse} style={{ cursor: 'pointer' }}>
+        <h3 title={collapsed ? '펼치기' : '접기'}>{t('subjects')}</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} onClick={(e) => e.stopPropagation()}>
           {editMode ? (
             <>
               <button className="tj-pal-edit-btn" disabled={!selected.size} onClick={handleBulkHide}>
@@ -303,9 +303,9 @@ export default function Palette({
         })}
       </div>
       <div className="tj-edu">
-          <div className="tj-edu-head">
-            <span style={{ cursor: 'pointer' }} onClick={() => setCostHidden(h => !h)} title={costHidden ? '펼치기' : '접기'}>월 교육비</span>
-            <button className="tj-eye-btn" onClick={() => setCostHidden(h => !h)} aria-label="교육비 숨기기"><Eye off={costHidden} /></button>
+          <div className="tj-edu-head" onClick={() => setCostHidden(h => !h)} style={{ cursor: 'pointer' }}>
+            <span title={costHidden ? '펼치기' : '접기'}>월 교육비</span>
+            <button className="tj-eye-btn" aria-label="교육비 숨기기"><Eye off={costHidden} /></button>
           </div>
           {!costHidden && catColors && monthlyCost > 0 && (
             <>
@@ -339,9 +339,9 @@ export default function Palette({
           <div className="tj-cost-total">{costHidden ? '₩ •••••' : '₩' + monthlyCost.toLocaleString()}</div>
       </div>
       <div className="tj-memo-box">
-        <div className="tj-memo-box-head">
-          <span style={{ cursor: 'pointer' }} onClick={() => setMemoHidden(h => !h)} title={memoHidden ? '펼치기' : '접기'}>메모</span>
-          <button className="tj-eye-btn" onClick={() => setMemoHidden(h => !h)} aria-label="메모 숨기기"><Eye off={memoHidden} /></button>
+        <div className="tj-memo-box-head" onClick={() => setMemoHidden(h => !h)} style={{ cursor: 'pointer' }}>
+          <span title={memoHidden ? '펼치기' : '접기'}>메모</span>
+          <button className="tj-eye-btn" aria-label="메모 숨기기"><Eye off={memoHidden} /></button>
         </div>
         {!memoHidden && (
           <textarea
