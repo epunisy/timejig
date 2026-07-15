@@ -33,6 +33,7 @@ body {
 
 #root {
   min-height: 100vh;
+  background: #fff;
 }
 
 button {
@@ -49,8 +50,8 @@ input, select, textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 기기가 다크모드여도 타임지그는 항상 흰 배경 + 검정 글씨로 고정 */
+/* 기기가 다크모드/초절전이어도 타임지그는 항상 흰 배경 + 검정 글씨로 고정 */
 @media (prefers-color-scheme: dark) {
-  html, body { background: #ffffff; color: #222; }
+  html, body, #root { background: #ffffff; color: #222; }
   .tj-setup { background: #ffffff; color: #222; }
 }

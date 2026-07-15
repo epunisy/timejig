@@ -11,6 +11,7 @@
   min-height: 100vh;
   position: relative;
   overflow-x: clip;
+  background: #fff;   /* 인라인 배경(테마)이 없을 때/실패 시 흰색 베이스 — 절대 검게 안 되게 */
 }
 
 html, body {

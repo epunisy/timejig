@@ -204,7 +204,9 @@ export function bgStyle(theme) {
     };
   }
   if (theme.tile) {
+    // 흰색 베이스를 먼저 깔아, 초절전/강제 다크에서 패턴(SVG)이 안 그려져도 검게 안 되게 한다.
     return {
+      backgroundColor: '#ffffff',
       backgroundImage: theme.css,
       backgroundSize: (theme.tile / 1080 * 100).toFixed(3) + '%',
       backgroundRepeat: 'repeat',
