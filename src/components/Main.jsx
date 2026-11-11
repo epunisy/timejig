@@ -36,8 +36,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [shareOpen, setShareOpen] = useState(false);
   // ☰ 메뉴 서랍 — 시간표 공간 확보를 위해 부가 기능은 모두 여기로
   const [menuOpen, setMenuOpen] = useState(false);
-  // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
-  const [palCollapsed, setPalCollapsed] = useState(false);
+  // 과목팔레트·월 교육비·메모 모두 새로고침 시 접힌 상태로 시작.
+  const [palCollapsed, setPalCollapsed] = useState(true);
   // NOW 보기 토글 — 앱을 켜면 기본 OFF. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
   const [nowView, setNowView] = useState(false);
   const [locked, setLocked] = useState(() => {
