@@ -1,0 +1,12 @@
+{
+  "appId": "com.timejig.app",
+  "appName": "타임지그",
+  "webDir": "dist",
+  "server": {
+    "url": "https://timejig.vercel.app",
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#ffffff"
+  }
+}

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">타임지그</string>
+    <string name="title_activity_main">타임지그</string>
+    <string name="package_name">com.timejig.app</string>
+    <string name="custom_url_scheme">com.timejig.app</string>
+    <string name="widget_desc">오늘 시간표와 지금 수업을 홈 화면에서 바로 확인</string>
+</resources>

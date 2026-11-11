@@ -61,16 +61,20 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const renameComposingRef = useRef(false);
   const ttMenuRef = useRef(null);
 
-  // 시간표 목록 드롭다운이 좁은 폰에서 왼쪽으로 잘리면, 화면 안으로 밀어 넣는다.
+  // 시간표 목록 드롭다운이 좁은 폰에서 화면 밖으로 잘리면, 화면 안으로 밀어 넣는다.
+  // (이름 수정·새 시간표 입력칸이 열릴 때도 다시 맞춤)
   useEffect(() => {
     if (!ttMenuOpen) return;
     const el = ttMenuRef.current;
     if (!el) return;
     el.style.transform = '';
     const rect = el.getBoundingClientRect();
-    const overflowLeft = 8 - rect.left;      // 왼쪽 여백 8px 확보
-    if (overflowLeft > 0) el.style.transform = `translateX(${overflowLeft}px)`;
-  }, [ttMenuOpen]);
+    const vw = document.documentElement.clientWidth;
+    let shift = 0;
+    if (rect.right > vw - 8) shift = (vw - 8) - rect.right;   // 오른쪽 여백 8px
+    if (rect.left + shift < 8) shift = 8 - rect.left;           // 왼쪽 여백 8px 우선
+    if (shift) el.style.transform = `translateX(${shift}px)`;
+  }, [ttMenuOpen, renamingTT, addingTT]);
 
   // 모바일에서 시간표/팔레트 경계선을 드래그해 팔레트 높이를 조절 (기기마다 화면이 달라서)
   const layoutRef = useRef(null);

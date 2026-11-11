@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { saveData, loadData, clearData } from './storage';
+import { syncWidget } from './widget';
 import Setup from './components/Setup';
 import Main from './components/Main';
 import Export from './components/Export';
@@ -294,6 +295,7 @@ function App() {
   useEffect(() => {
     if (mode === 'main' || mode === 'export') {
       saveData(data);
+      syncWidget(data, getSubjectColor); // 안드로이드 앱이면 홈 화면 위젯도 갱신
     }
   }, [data, mode]);
 

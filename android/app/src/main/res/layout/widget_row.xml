@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/r_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingEnd="6dp">
+
+    <TextView
+        android:id="@+id/r_bar"
+        android:layout_width="4dp"
+        android:layout_height="18dp"
+        android:background="#C4C9D0" />
+
+    <TextView
+        android:id="@+id/r_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="82dp"
+        android:paddingStart="8dp"
+        android:textColor="#8A9099"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/r_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#2B2F36"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/r_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="지금"
+        android:textColor="#E5484D"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</LinearLayout>

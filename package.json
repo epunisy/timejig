@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.69.0",
+    "@capacitor/android": "^7.6.10",
+    "@capacitor/core": "^7.6.10",
     "@vercel/analytics": "^2.0.1",
     "firebase": "^12.15.0",
     "html2canvas": "^1.4.1",
@@ -19,6 +21,7 @@
     "react-dom": "^19.2.6"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.6.10",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
