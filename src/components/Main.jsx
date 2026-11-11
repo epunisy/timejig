@@ -38,8 +38,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [menuOpen, setMenuOpen] = useState(false);
   // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
   const [palCollapsed, setPalCollapsed] = useState(false);
-  // NOW 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
-  const [nowView, setNowView] = useState(true);
+  // NOW 보기 토글 — 앱을 켜면 기본 OFF. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
+  const [nowView, setNowView] = useState(false);
   const [locked, setLocked] = useState(() => {
     try { return localStorage.getItem('tj_locked') === '1'; } catch { return false; }
   });
