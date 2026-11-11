@@ -745,18 +745,18 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
         </div>
         <div className="tj-topbar-tools">
           <button
-            className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
+            className={'tj-nowbtn' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
             aria-pressed={nowView}
-            data-tip={nowView ? '현재 보기 끄기' : '현재 보기 켜기'}
+            aria-label="NOW 보기"
           >
             <span className="tj-nowbtn-dot" />NOW
           </button>
           <button
-            className={'tj-locktoggle tj-tip' + (locked ? ' on' : '') + (lockNotice ? ' attn' : '')}
+            className={'tj-locktoggle' + (locked ? ' on' : '') + (lockNotice ? ' attn' : '')}
             onClick={() => setLocked(l => !l)}
             aria-pressed={locked}
-            data-tip={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
+            aria-label={locked ? '고정 해제' : '고정'}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect x="5" y="11" width="14" height="9" rx="2" />
@@ -766,8 +766,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </svg>
           </button>
           <div className="tj-undoredo">
-            <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
-            <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
+            <button onClick={onUndo} disabled={!canUndo} aria-label="되돌리기">↶</button>
+            <button onClick={onRedo} disabled={!canRedo} aria-label="되살리기">↷</button>
           </div>
           <button className="tj-menu-btn" onClick={() => setMenuOpen(true)} aria-label="메뉴" aria-expanded={menuOpen}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
