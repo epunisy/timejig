@@ -326,31 +326,85 @@ html, body {
   border-radius: 5px;
 }
 
-/* ⋯ 더보기 버튼 (로그인 옆) — 누르면 로고 메뉴 칩이 메뉴줄에 추가/제거 */
+/* ☰ 메뉴 버튼 — 누르면 오른쪽 서랍(메뉴 화면)이 열림 */
 .tj-menu-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 19px;
-  line-height: 1;
   color: #555;
-  padding: 0 6px;
+  padding: 0 2px 0 4px;
   height: 24px;
   display: inline-flex;
   align-items: center;
   font-family: inherit;
   flex-shrink: 0;
 }
+.tj-menu-btn svg { display: block; }
+.tj-menu-btn:active { opacity: 0.6; }
 
-/* 로고 메뉴 칩 — 모바일은 ☰ 눌렀을 때만(menu-open), PC는 항상 노출
-   (.tj-cta.tj-logo-chip 로 .tj-cta 통일 규칙보다 우선순위 높임) */
-.tj-topbar-r2 .tj-cta.tj-logo-chip { display: none; }
-.tj-topbar-r2.menu-open .tj-cta.tj-logo-chip { display: inline-flex; }
-
-@media (min-width: 900px) {
-  .tj-menu-btn { display: none; }                               /* PC는 ☰ 숨김 */
-  .tj-topbar-r2 .tj-cta.tj-logo-chip { display: inline-flex; }  /* PC는 항상 한 줄로 노출 */
+/* 상단 한 줄 도구 묶음: NOW · 고정 · 되돌리기 · ☰ */
+.tj-topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
 }
+.tj-topbar-tools .tj-undoredo button,
+.tj-topbar-tools .tj-locktoggle {
+  height: 23px;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tj-topbar-tools .tj-undoredo button { font-size: 13px; padding: 0 8px; }
+.tj-topbar-tools .tj-locktoggle { padding: 0 10px; }
+
+/* ☰ 메뉴 서랍 */
+.tj-drawer-bg {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 3000;
+  animation: tj-drawer-fade 0.18s ease;
+}
+.tj-drawer {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(280px, 82vw);
+  background: #fff;
+  color: #333;
+  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.18);
+  overflow-y: auto;
+  padding: 0 0 calc(16px + env(safe-area-inset-bottom));
+  animation: tj-drawer-in 0.22s ease;
+}
+.tj-drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(12px + env(safe-area-inset-top)) 14px 10px 18px;
+  font-size: 14px; font-weight: 700;
+  border-bottom: 1px solid #f0f0f0;
+}
+.tj-drawer-sec { padding: 6px 0; border-bottom: 1px solid #f2f2f2; }
+.tj-drawer-sec:last-child { border-bottom: none; }
+.tj-drawer-item {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%;
+  padding: 11px 18px;
+  background: transparent; border: none;
+  font-family: inherit; font-size: 14px; color: #333;
+  text-align: left; cursor: pointer;
+}
+.tj-drawer-item:hover { background: #f6f7f9; }
+.tj-drawer-item:active { background: #eef0f3; }
+.tj-drawer-ic { width: 22px; text-align: center; font-size: 17px; flex-shrink: 0; }
+.tj-drawer-txt { display: flex; flex-direction: column; min-width: 0; }
+.tj-drawer-txt small {
+  font-size: 11px; color: #999; margin-top: 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@keyframes tj-drawer-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tj-drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
 /* ===== 상단 바 ===== */
 .tj-topbar {
@@ -381,7 +435,7 @@ html, body {
   justify-content: flex-end;
   order: 0;
 }
-.tj-topbar-r1 .tj-ttbar { min-width: 0; }
+.tj-topbar-r1 .tj-ttbar { min-width: 0; margin-right: auto; }
 .tj-r1-right { display: flex; align-items: center; gap: 6px; min-width: 0; }
 
 /* 되돌리기 / 되살리기 — 옆 메뉴칩과 동일한 외형 */

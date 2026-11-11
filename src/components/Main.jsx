@@ -34,7 +34,8 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
   const [ttMenuOpen, setTtMenuOpen] = useState(false);
   const [showImportPlan, setShowImportPlan] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const [logoMenuOpen, setLogoMenuOpen] = useState(true);
+  // ☰ 메뉴 서랍 — 시간표 공간 확보를 위해 부가 기능은 모두 여기로
+  const [menuOpen, setMenuOpen] = useState(false);
   // 과목팔레트는 늘 펼침(기본 펼침). 사용자가 원하면 직접 접을 수는 있음.
   const [palCollapsed, setPalCollapsed] = useState(false);
   // NOW 보기 토글 — 앱을 켜면 기본 ON. 오늘 강조·현재선·진행중 빨간글씨·지난일정 흐리게
@@ -612,10 +613,24 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
     appStyle.backgroundPosition = 'center';
   }
 
-  // 로고 메뉴 항목 — 모바일은 말풍선 팝업, PC는 상단 인라인 칩으로 공용 사용
-  const logoMenuItems = [
-    { key: 'export', label: '📱 모바일 잠금화면', run: onGoExport },
-    { key: 'share', label: '📤 시간표 공유하기', run: () => setShareOpen(true) },
+  // ☰ 메뉴 서랍 항목 (구역별)
+  const menuSections = [
+    [
+      { key: 'settings', icon: '⚙️', label: '시간표 설정', run: () => { setSettingsFocus('schedule'); setShowSettings(true); } },
+      { key: 'deco', icon: '🎨', label: '꾸미기', run: () => { setSettingsFocus('deco'); setShowSettings(true); } },
+      { key: 'import', icon: '📷', label: '외부 시간표 불러오기', run: () => setShowImportPlan(true) },
+    ],
+    [
+      { key: 'export', icon: '📱', label: '모바일 잠금화면', run: onGoExport },
+      { key: 'share', icon: '📤', label: '시간표 공유하기', run: () => setShareOpen(true) },
+    ],
+    [
+      { key: 'tutorial', icon: '📖', label: '튜토리얼', run: () => setShowTutorial(true) },
+      { key: 'welcome', icon: '🏠', label: '첫 화면', run: () => onPreviewWelcome && onPreviewWelcome() },
+      user
+        ? { key: 'logout', icon: '👤', label: '로그아웃', sub: user.email, run: onSignOut }
+        : { key: 'login', icon: '👤', label: '로그인', sub: '로그인하면 기기 간 동기화', run: onSignIn },
+    ],
   ];
 
   return (
@@ -728,52 +743,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             </>
           )}
         </div>
-        <button
-          className="tj-login-icon tj-tip"
-          onClick={() => setShowTutorial(true)}
-          data-tip="튜토리얼"
-          aria-label="튜토리얼"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-          </svg>
-        </button>
-        <button
-          className="tj-login-icon tj-tip"
-          onClick={() => onPreviewWelcome && onPreviewWelcome()}
-          data-tip="첫 화면"
-          aria-label="첫 화면"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M3 9.2 12 2l9 7.2" />
-            <path d="M5 9.8V21h14V9.8" />
-          </svg>
-        </button>
-        <button
-          className={'tj-login-icon tj-tip' + (user ? ' on' : '')}
-          onClick={user ? onSignOut : onSignIn}
-          data-tip={user ? `${user.email} · 눌러서 로그아웃` : '로그인'}
-          aria-label={user ? '로그아웃' : '로그인'}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-        </button>
-        <button className="tj-menu-btn" onClick={() => setLogoMenuOpen(o => !o)} aria-label="더보기" aria-expanded={logoMenuOpen}>⋯</button>
-        </div>
-        <div className={'tj-topbar-r2' + (logoMenuOpen ? ' menu-open' : '')}>
-          {/* 로고 메뉴 칩 — 모바일은 ☰ 토글, PC는 항상 맨 앞에 노출 */}
-          {logoMenuItems.map(it => (
-            <button key={it.key} className="tj-cta tj-logo-chip" onClick={it.run}>{it.label}</button>
-          ))}
-          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('schedule'); setShowSettings(true); }} aria-label="시간표 설정">
-            ⚙️ 시간표 설정
-          </button>
-          <button className="tj-cta tj-cta-settings" onClick={() => { setSettingsFocus('deco'); setShowSettings(true); }} aria-label="꾸미기">
-            🎨 꾸미기
-          </button>
+        <div className="tj-topbar-tools">
           <button
             className={'tj-nowbtn tj-tip' + (nowView ? ' on' : '')}
             onClick={() => setNowView(v => !v)}
@@ -788,7 +758,7 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             aria-pressed={locked}
             data-tip={locked ? '고정됨 (눌러서 해제)' : '눌러서 고정'}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect x="5" y="11" width="14" height="9" rx="2" />
               {locked
                 ? <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
@@ -799,6 +769,12 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
             <button className="tj-tip" onClick={onUndo} disabled={!canUndo} aria-label="되돌리기" data-tip="되돌리기">↶</button>
             <button className="tj-tip" onClick={onRedo} disabled={!canRedo} aria-label="되살리기" data-tip="되살리기">↷</button>
           </div>
+          <button className="tj-menu-btn" onClick={() => setMenuOpen(true)} aria-label="메뉴" aria-expanded={menuOpen}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 7h16" /><path d="M4 12h16" /><path d="M4 17h16" />
+            </svg>
+          </button>
+        </div>
         </div>
         </div>
       </div>
@@ -926,6 +902,34 @@ export default function Main({ data, setData, onGoExport, autoTutorial, user, on
       )}
       {showTutorial && (
         <Tutorial onClose={handleTutorialClose} />
+      )}
+
+      {menuOpen && (
+        <div className="tj-drawer-bg" onClick={() => setMenuOpen(false)}>
+          <nav className="tj-drawer" onClick={(e) => e.stopPropagation()} aria-label="메뉴">
+            <div className="tj-drawer-head">
+              <span>메뉴</span>
+              <button className="tj-modal-x" onClick={() => setMenuOpen(false)} aria-label="닫기">×</button>
+            </div>
+            {menuSections.map((sec, i) => (
+              <div key={i} className="tj-drawer-sec">
+                {sec.map(it => (
+                  <button
+                    key={it.key}
+                    className="tj-drawer-item"
+                    onClick={() => { setMenuOpen(false); if (it.run) it.run(); }}
+                  >
+                    <span className="tj-drawer-ic">{it.icon}</span>
+                    <span className="tj-drawer-txt">
+                      {it.label}
+                      {it.sub && <small>{it.sub}</small>}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </nav>
+        </div>
       )}
 
       {lockNotice && (
